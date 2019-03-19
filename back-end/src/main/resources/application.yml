@@ -1,0 +1,31 @@
+##Don't forget to change credentials(user,pwd)
+
+# Spring Boot configuration
+spring:
+  profiles:
+    active: development
+ # Database
+  datasource:
+    url: jdbc:postgresql://localhost:5432/freelance #change to your local db name
+    username: postgres
+    password: qwerty
+
+  flyway:
+    url: jdbc:postgresql://localhost:5432/freelance
+    schemas: freelance
+    user: postgres
+    password: qwerty
+
+# JPA properties
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    database: postgresql
+    properties:
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+# Server configuration
+server:
+  port: 8080
+

@@ -1,8 +1,13 @@
 package com.freelance.project.demo.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "Person")
 public class Person {
 
@@ -14,28 +19,11 @@ public class Person {
     @Column(name = "name", nullable = false)
     private String name;
 
-
-    public Person(){
-
+    public Person() {
     }
 
     public Person(String name) {
         this.name = name;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
