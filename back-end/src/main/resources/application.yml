@@ -6,12 +6,12 @@ spring:
     active: development
  # Database
   datasource:
-    url: jdbc:postgresql://localhost:5432/freelance #change to your local db name
+    url: jdbc:postgresql://172.30.96.133:5432/freelance #change to your local db name
     username: postgres
     password: qwerty
 
   flyway:
-    url: jdbc:postgresql://localhost:5432/freelance
+    url: jdbc:postgresql://172.30.96.133:5432/freelance
     schemas: freelance
     user: postgres
     password: qwerty
