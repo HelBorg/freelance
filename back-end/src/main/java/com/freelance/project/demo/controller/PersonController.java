@@ -20,4 +20,9 @@ import java.util.Collection;
     public Collection<PersonDTO> persons() {
         return service.findAll();
     }
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "OK!";
+    }
 }
