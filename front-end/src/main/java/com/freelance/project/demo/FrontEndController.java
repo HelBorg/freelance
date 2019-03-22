@@ -1,4 +1,4 @@
-package com.MUSA.vk;
+package com.freelance.project.demo;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
