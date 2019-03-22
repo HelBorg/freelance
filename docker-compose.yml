@@ -1,0 +1,39 @@
+version: '3'
+services:
+
+  db:
+    image: "postgres:latest"
+    ports:
+    - "5433:5433"
+    environment:
+    - POSTGRES_PASSWORD=qwerty
+    - POSTGRES_DATABASE=freelance
+    healthcheck:
+      test: "/usr/bin/psql --user=postgres --password=qwerty --execute \"SHOW DATABASES;\""
+      interval: 10s
+      timeout: 20s
+      retries: 10
+
+  back-end:
+    restart: always
+    build:
+      context: ./back-end/target/
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: ./back-end/target/back-end-0.0.1.jar
+    expose:
+    - "8282"
+    command: mvn package
+    depends_on:
+    - db
+
+  front-end:
+    restart: always
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: ./front-end/target/front-end-0.0.1.jar
+    expose:
+    - "8181"
+    command: mvn spring-boot:run

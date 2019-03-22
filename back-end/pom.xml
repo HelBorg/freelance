@@ -11,8 +11,8 @@
 
     <groupId>com.freelance.project.back-end</groupId>
     <artifactId>back-end</artifactId>
-    <version>0.0.1</version>
     <description>Project backend</description>
+    <packaging>jar</packaging>
 
     <dependencies>
 
@@ -58,14 +58,24 @@
 
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>openshift</id>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>
+                                com.freelance.project.demo.DemoApplication
+                            </mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -77,6 +87,5 @@
             </plugin>
         </plugins>
     </build>
-        </profile>
-    </profiles>
+
 </project>
