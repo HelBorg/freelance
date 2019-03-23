@@ -2,6 +2,6 @@
 FROM openjdk:8-jre-alpine
 
 ## copy the spring jar
-COPY target/*.jar /opt/front-end-0.0.1.jar
+COPY target/front-end-0.0.1.jar front-end-0.0.1.jar
 
-CMD ["/usr/bin/java", "-jar", "/opt/front-end-0.0.1.jar"]
+CMD ["/usr/bin/java", "-jar", "front-end-0.0.1.jar"]

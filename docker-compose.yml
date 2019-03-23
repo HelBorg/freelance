@@ -2,38 +2,49 @@ version: '3'
 services:
 
   db:
-    image: "postgres:latest"
-    ports:
-    - "5433:5433"
+    image: postgres:11
+    container_name: db
     environment:
+    - POSTGRES_USER=postgres
     - POSTGRES_PASSWORD=qwerty
-    - POSTGRES_DATABASE=freelance
-    healthcheck:
-      test: "/usr/bin/psql --user=postgres --password=qwerty --execute \"SHOW DATABASES;\""
-      interval: 10s
-      timeout: 20s
-      retries: 10
+    - POSTGRES_DB=freelance
+    ports:
+    - '5432:5432'
+    volumes:
+    - ./db-data:/var/lib/postgresql/data
 
-  back-end:
-    restart: always
-    build:
-      context: ./back-end/target/
-      dockerfile: Dockerfile
-      args:
-        JAR_FILE: ./back-end/target/back-end-0.0.1.jar
-    expose:
-    - "8282"
-    command: mvn package
+  flyway:
+    image: boxfuse/flyway
+    restart: on-failure
+    command: -url=jdbc:postgresql://db:5432/freelance -schemas=freelance -user=postgres -password=qwerty migrate
+    volumes:
+    - ./flyway/sql:/flyway/sql
+    - ./flyway/conf:/flyway/conf
     depends_on:
     - db
 
+  back-end:
+    container_name: back-end
+    restart: on-failure
+    links:
+      - db
+    ports:
+      - 8282:8282
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: ./back-end/target/back-end-0.0.1.jar
+
   front-end:
+    container_name: front-end
     restart: always
+    links:
+      - back-end
+    ports:
+      - 8080:8080
     build:
       context: ./front-end
       dockerfile: Dockerfile
       args:
         JAR_FILE: ./front-end/target/front-end-0.0.1.jar
-    expose:
-    - "8181"
-    command: mvn spring-boot:run
