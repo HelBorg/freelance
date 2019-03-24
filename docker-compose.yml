@@ -1,8 +1,23 @@
 version: '3'
 services:
 
+  nginx:
+    image: nginx:latest
+    build:
+      context: ./ngnix
+      dockerfile: Dockerfile
+    container_name: nginx
+    restart: on-failure
+    depends_on:
+    - back-end
+    - front-end
+    ports:
+    - 80:80
+    - 443:443
+
   db:
     image: postgres:11
+    restart: on-failure
     container_name: db
     environment:
     - POSTGRES_USER=postgres
@@ -15,6 +30,7 @@ services:
 
   flyway:
     image: boxfuse/flyway
+    container_name: flyway
     restart: on-failure
     command: -url=jdbc:postgresql://db:5432/freelance -schemas=freelance -user=postgres -password=qwerty migrate
     volumes:
@@ -27,9 +43,9 @@ services:
     container_name: back-end
     restart: on-failure
     links:
-      - db
+    - db
     ports:
-      - 8282:8282
+    - 8282:8282
     build:
       context: ./back-end
       dockerfile: Dockerfile
@@ -40,9 +56,9 @@ services:
     container_name: front-end
     restart: always
     links:
-      - back-end
+    - back-end
     ports:
-      - 8080:8080
+    - 8181:8181
     build:
       context: ./front-end
       dockerfile: Dockerfile
