@@ -20,5 +20,5 @@ import java.util.Collection;
     public Collection<PersonDTO> persons() {
         return service.findAll();
     }
-    
+
 }
