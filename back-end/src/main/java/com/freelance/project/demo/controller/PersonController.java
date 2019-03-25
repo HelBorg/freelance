@@ -10,19 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/person")
     public class PersonController {
 
     @Autowired
     private PersonServiceImpl service;
 
-    @GetMapping("/person")
+    @GetMapping
     public Collection<PersonDTO> persons() {
         return service.findAll();
     }
-
-    @GetMapping("/hello")
-    public String hello() {
-        return "OK!";
-    }
+    
 }
