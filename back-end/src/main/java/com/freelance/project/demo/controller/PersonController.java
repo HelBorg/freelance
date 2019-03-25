@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/v1/person")
     public class PersonController {
 
     @Autowired
@@ -20,4 +20,5 @@ import java.util.Collection;
     public Collection<PersonDTO> persons() {
         return service.findAll();
     }
+
 }

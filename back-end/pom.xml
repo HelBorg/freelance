@@ -11,8 +11,8 @@
 
     <groupId>com.freelance.project.back-end</groupId>
     <artifactId>back-end</artifactId>
-    <version>0.0.1</version>
     <description>Project backend</description>
+    <packaging>jar</packaging>
 
     <dependencies>
 
@@ -33,13 +33,6 @@
             <version>${org.postgres.version}</version>
         </dependency>
 
-        <!-- Tools -->
-
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>5.2.4</version>
-        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -58,11 +51,24 @@
 
     </dependencies>
 
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>
+                                com.freelance.project.demo.DemoApplication
+                            </mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

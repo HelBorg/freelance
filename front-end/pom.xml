@@ -13,8 +13,8 @@
 
     <groupId>com.freelance.project.front-end</groupId>
     <artifactId>front-end</artifactId>
-    <version>0.0.1</version>
     <description>Project front-end</description>
+    <packaging>jar</packaging>
 
     <dependencies>
         
@@ -41,6 +41,18 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>
+                                com.freelance.project.demo.DemoApplication
+                            </mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
