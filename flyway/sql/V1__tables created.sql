@@ -53,7 +53,6 @@ foreign key(task_id) references public.tasks(task_id)
 );
 
 
-
 CREATE TYPE public.message_status AS ENUM ('inbox', 'outbox');
 
 create table if not exists public.message(
@@ -69,30 +68,11 @@ foreign key(receiver_id) references public.person(person_id),
 foreign key(task_id) references public.tasks(task_id)
 );
 
+alter table public.person add column review_id serial;
+ALTER TABLE public.person ADD CONSTRAINT fk_person_reviews FOREIGN KEY (review_id) REFERENCES public.reviews(review_id);
 
-create table if not exists public.user_reviews(
-  usr_review_id serial not null primary key,
-  review_id serial NOT NULL,
-  person_id serial NOT NULL,
-  FOREIGN KEY (review_id) REFERENCES public.reviews(review_id),
-  FOREIGN KEY (person_id) REFERENCES public.person(person_id)
-);
+alter table public.person add column task_id serial;
+ALTER TABLE public.person ADD CONSTRAINT fk_person_tasks FOREIGN KEY (task_id) REFERENCES public.tasks(task_id);
 
-create table if not exists public.task_candidates(
-  candidate_id serial not null primary key,
-  task_id serial NOT NULL,
-  person_id serial NOT NULL,
-  FOREIGN KEY (task_id) REFERENCES public.tasks(task_id),
-  FOREIGN KEY (person_id) REFERENCES public.person(person_id)
-);
-
-
-create table if not exists public.task_skills(
-  task_skill_id serial not null primary key,
-  task_id serial NOT NULL,
-  skill_id serial NOT NULL,
-  FOREIGN KEY (task_id) REFERENCES public.tasks(task_id),
-  FOREIGN KEY (skill_id) REFERENCES public.skills(skill_id)
-);
-
-
+alter table public.skills add column task_id serial;
+ALTER TABLE public.person ADD CONSTRAINT fk_task_skill FOREIGN KEY (task_id) REFERENCES public.tasks(task_id);
