@@ -43,13 +43,13 @@ public class Tasks implements Serializable {
     private Person assignedUser;
 
     @ManyToMany
-    @JoinTable(name = "task_skills",
+    @JoinTable(name = "skills",
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private List<Skills> taskSkills;
 
     @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "task_candidates",
+    @JoinTable(name = "person",
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
     private List<Person> candidatesList;

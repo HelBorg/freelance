@@ -28,7 +28,7 @@ public class Reviews implements Serializable {
     private Date dateTime;
 
     @ManyToMany
-    @JoinTable(name = "user_reviews",
+    @JoinTable(name = "person",
             joinColumns = @JoinColumn(name = "review_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
     private List<Person> userReviews;
