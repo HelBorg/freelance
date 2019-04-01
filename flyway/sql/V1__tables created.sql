@@ -3,6 +3,7 @@ CREATE TYPE public.user_role AS ENUM ('admin', 'user');
 create table if not exists public.person(
 person_id serial not null primary key,
 name varchar(100) not null unique,
+password varchar(100) not null,
 role user_role not null,
 rating integer not null,
 email varchar(100) not null unique

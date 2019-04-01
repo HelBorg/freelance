@@ -1,5 +1,6 @@
 package com.freelance.project.demo.models;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,9 +8,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-@Entity
-@Getter
+@Getter(AccessLevel.PUBLIC)
 @Setter
+@Entity
 @Table(name = "person")
 public class Person implements Serializable {
 
@@ -28,13 +29,16 @@ public class Person implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private UserRole role;
+    private UserRole role ;
 
     @Column(name = "rating", nullable = false)
     private int rating;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @ManyToMany(mappedBy = "userReviews")
     private List<Reviews> reviewsAboutUser;
@@ -60,19 +64,5 @@ public class Person implements Serializable {
     public Person() {
     }
 
-    public Person(String name, UserRole role, int rating, String email, List<Reviews> reviewsAboutUser,
-                  List<UserSkills> userSkills, Tasks createdTasks, List<Tasks> assignedTasks,
-                  List<Tasks> candidateTasks, List<Message> sendedMsgs, List<Message> recieveMsgs) {
-        this.name = name;
-        this.role = role;
-        this.rating = rating;
-        this.email = email;
-        this.reviewsAboutUser = reviewsAboutUser;
-        this.userSkills = userSkills;
-        this.createdTasks = createdTasks;
-        this.assignedTasks = assignedTasks;
-        this.candidateTasks = candidateTasks;
-        this.sendedMsgs = sendedMsgs;
-        this.recieveMsgs = recieveMsgs;
-    }
+
 }
