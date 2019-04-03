@@ -3,6 +3,8 @@ services:
 
   nginx:
     image: nginx:latest
+    volumes:
+      - ../front-end/target/classes/static/templates/:/etc/nginx/html
     build:
       context: ./ngnix
       dockerfile: Dockerfile

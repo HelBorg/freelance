@@ -9,10 +9,32 @@
         <version>0.0.1</version>
     </parent>
 
+
+
     <groupId>com.freelance.project.front-end</groupId>
     <artifactId>front-end</artifactId>
     <description>Project front-end</description>
     <packaging>jar</packaging>
+
+    <dependencies>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+             <version>${spring.dao.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+             <version>${spring.dao.version}</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
 
     <build>
         <plugins>
@@ -40,6 +62,44 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
+
+        <!-- npm plagin -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+        
+                <version>1.7.5</version>
+                
+                <executions>
+                        
+                  <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                             <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                              <nodeVersion>v6.9.1</nodeVersion>
+                              <npmVersion>3.10.9</npmVersion>
+                              <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
+                              <npmDownloadRoot>http://registry.npmjs.org/npm/-/</npmDownloadRoot>
+                        </configuration>
+                  </execution>
+
+                    <execution>
+                        <id>npm run build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+        </plugin>
+
+
+
         </plugins>
     </build>
 
