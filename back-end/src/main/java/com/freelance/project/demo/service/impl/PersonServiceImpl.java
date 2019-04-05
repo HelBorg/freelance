@@ -26,7 +26,6 @@ public class PersonServiceImpl implements PersonService {
                 .collect(Collectors.toList());
     }
 
-
     public Person findByEmail(String email){
         return repository.findPersonByEmail(email);
     }

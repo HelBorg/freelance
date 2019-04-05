@@ -1,6 +1,7 @@
 package com.freelance.project.demo.models;
 
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,13 +9,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-@Getter(AccessLevel.PUBLIC)
-@Setter
+@Data
 @Entity
 @Table(name = "person")
 public class Person implements Serializable {
 
-    @Getter
+
     public enum UserRole {
         ADMIN, USER
     }
@@ -31,7 +31,7 @@ public class Person implements Serializable {
     @Column(name = "role", nullable = false)
     private UserRole role ;
 
-    @Column(name = "rating", nullable = false)
+    @Column(name = "rating")
     private int rating;
 
     @Column(name = "email", nullable = false, unique = true)

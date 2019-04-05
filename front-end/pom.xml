@@ -17,12 +17,8 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-             <version>${spring.dao.version}</version>
-        </dependency>
+
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
