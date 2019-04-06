@@ -94,9 +94,20 @@
                 </executions>
         </plugin>
 
-
-
         </plugins>
+      <resources>
+        <resource>
+          <directory>src/main/resources</directory>
+        </resource>
+        <resource>
+          <filtering>false</filtering>
+          <directory>src/front/dist</directory>
+          <includes>
+            <include>**build.js</include>
+          </includes>
+          <targetPath>static/js</targetPath>
+        </resource>
+      </resources>
     </build>
 
 </project>
