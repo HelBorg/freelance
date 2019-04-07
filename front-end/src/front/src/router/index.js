@@ -2,12 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Vuex from 'vuex'
 import axios from 'axios'
-import VueAxios from 'vue-axios'
 import Home from '@/components/Home'
-import ChartRoom from '@/components/ChartRoom'
-import ErrorPage from '@/components/ErrorPage'
 import SingUp from '@/components/SingUp'
-import Count from '@/components/Count'
+import Task from '@/components/Task'
+
 
 Vue.use(Router, Vuex, axios)
 
@@ -17,19 +15,18 @@ export default new Router({
     path: '/index',
     name: 'index',
     component: Home
-  }, {
-    path: '/chartroom#:userId',
-    name: 'chartroom',
-    component: ChartRoom,
-  }, {
+  },
+    {
+      path: '/task',
+      name: 'task',
+      component: Task,
+    },
+    {
     path: '/singup',
     name: 'singup',
     component: SingUp,
-  }, {
-    path: '/count',
-    name: 'count',
-    component: Count,
-  }, {
+  },
+    {
     path: '*',
     redirect: '/index'
     // name: 'error',

@@ -1,73 +1,51 @@
 <template>
-  <div class="app">
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">歡迎 {{loginUser}}!</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <router-link :to="'index'"><a @click="beActive($event)" class="nav-link active">首頁</a></router-link>
-          </li>
-          <li class="nav-item">
-            <router-link  :to="{name:'chartroom',params: { userId: loginUser }}"><a @click="beActive($event)" class="nav-link">留言板</a></router-link>
-          </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <button class="btn btn-outline-success my-2 my-sm-0" formaction="/logout" type="submit">登出</button>
-        </form>
-      </div>
-    </nav>
-    <div class="container-fluid">
-      <div class="row"> 
-        <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
-          <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Overview <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Reports</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Analytics</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Export</a>
-            </li>
-          </ul>
-        </nav>
-      <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-        <router-view></router-view>
-      </main>
-      </div>
-    </div>
-	</div>
+  <div id="container">
+    <div id="navbar">
+    <b-navbar toggleable="lg" type="dark" variant="dark">
+      <!-- Надо найти картинку-->
+      <b-navbar-brand href="#">
+        <img src="https://placekitten.com/g/30/30" class="d-inline-block align-top" alt="Kitten">
+      </b-navbar-brand>
+
+      <b-navbar-brand href="#">Freelance</b-navbar-brand>
+
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+      <b-collapse id="nav-collapse" is-nav>
+
+        <!-- Right aligned nav items -->
+        <b-navbar-nav class="ml-auto">
+          <b-nav-form>
+            <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
+            <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+          </b-nav-form>
+
+          <b-nav-item-dropdown right>
+            <!-- Using 'button-content' slot -->
+            <template slot="button-content"><em>User</em></template>
+            <b-dropdown-item href="#">Profile</b-dropdown-item>
+            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+          </b-nav-item-dropdown>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
+  </div >
+    <div id="menu"><b-list-group>
+      <b-list-group-item href="#" active>Task</b-list-group-item>
+      <b-list-group-item button>Search</b-list-group-item>
+      <b-list-group-item button>In work</b-list-group-item>
+      <b-list-group-item button>Candidates</b-list-group-item>
+      <b-list-group-item button>Mine</b-list-group-item>
+      <b-list-group-item href="#" active>Messages</b-list-group-item>
+      <b-list-group-item button>Inbox</b-list-group-item>
+      <b-list-group-item button>Outbox</b-list-group-item>
+    </b-list-group></div>
+  </div>
 </template>
 
 <script>
-export default {
-  name: "app",
-  data() {
-    return {
-      loginUser: ""
-    };
-  },
-  methods: {
-    beActive: event => {
-      $(".nav-link").removeClass("active");
-      event.currentTarget.classList.add("active");
-    }
-  },
-  beforeCreate() {
-    let vm = this;
-    axios.post("/json/getUserInfo").then(res => {
-      vm.loginUser = res.data.loginUser;
-    });
+  export default {
+    name: "navBar"
   }
-};
 </script>
 
-<style lang="scss">
-@import "~bootstrap/scss/bootstrap";
-</style>

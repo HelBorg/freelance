@@ -4,3 +4,4 @@ export default {
     databaseURL: "https://testwithvue.firebaseio.com",
     storageBucket: "testwithvue.appspot.com"
 }
+
