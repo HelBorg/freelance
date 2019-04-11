@@ -1,9 +1,6 @@
 package com.freelance.project.demo.models;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,22 +11,16 @@ import java.util.List;
 @Table(name = "person")
 public class Person implements Serializable {
 
-
-    public enum UserRole {
-        ADMIN, USER
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_id", nullable = false)
-    private int personId;
+    int personId;
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private UserRole role ;
+    private String role ="user";
 
     @Column(name = "rating")
     private int rating;
@@ -60,9 +51,6 @@ public class Person implements Serializable {
 
     @OneToMany(mappedBy = "receiverId")
     private List<Message> recieveMsgs;
-
-    public Person() {
-    }
 
 
 }

@@ -1,19 +1,26 @@
 <template>
-  <div>
-    <tabs content-class="mt-3">
-      <b-tab title="first" active><p>I'm the first fading tab</p></b-tab>
-      <b-tab title="second"><p>I'm the second tab content</p></b-tab>
-      <b-tab title="disabled" disabled><p>Disabled tab!</p></b-tab>
-    </tabs>
+  <div id="container">
+    <div>
+      <Navbar/>
+    </div>
+    <div>
+      <Menu/>
+    </div>
+    <div>
+      <p>Welcome!</p>
+      <router-view>
+
+      </router-view>
+    </div>
   </div>
 </template>
 
 
 <script>
+  import Navbar from "./Navbar";
+  import Menu from "./Menu";
   export default {
-    name: 'about'
+    name: 'home',
+    components: {Menu, Navbar}
   }
 </script>
-<!-- styling for the component -->
-<style scouped>
-</style>

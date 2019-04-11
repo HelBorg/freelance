@@ -7,6 +7,7 @@
         <groupId>com.freelance.project</groupId>
         <artifactId>freelance.project</artifactId>
         <version>0.0.1</version>
+      <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
 
@@ -33,7 +34,92 @@
     </properties>
 
     <build>
-        <plugins>
+      <plugins>
+        <plugin>
+          <groupId>com.github.eirslett</groupId>
+          <artifactId>frontend-maven-plugin</artifactId>
+          <version>1.6</version>
+          <configuration>
+            <workingDirectory>src/front</workingDirectory>
+          </configuration>
+          <executions>
+            <execution>
+              <id>install node and npm</id>
+              <goals>
+                <goal>install-node-and-npm</goal>
+              </goals>
+              <configuration>
+                <nodeVersion>v8.4.0</nodeVersion>
+                <npmVersion>5.4.2</npmVersion>
+              </configuration>
+            </execution>
+
+            <execution>
+              <id>npm install</id>
+              <goals>
+                <goal>npm</goal>
+              </goals>
+              <configuration>
+                <arguments>install</arguments>
+              </configuration>
+            </execution>
+
+            <execution>
+              <id>npm run build</id>
+              <goals>
+                <goal>npm</goal>
+              </goals>
+              <configuration>
+                <arguments>run build</arguments>
+              </configuration>
+            </execution>
+
+          </executions>
+        </plugin>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>Copy App Content</id>
+              <phase>generate-resources</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>src/main/resources/static</outputDirectory>
+                <overwrite>true</overwrite>
+                <resources>
+                  <resource>
+                    <directory>${project.basedir}/target/dist</directory>
+                    <includes>
+                      <include>js/</include>
+                      <include>css/</include>
+                    </includes>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+            <execution>
+              <id>Copy HTML</id>
+              <phase>generate-resources</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>src/main/resources/templates</outputDirectory>
+                <overwrite>true</overwrite>
+                <resources>
+                  <resource>
+                    <directory>${project.basedir}/target/dist</directory>
+                    <includes>
+                      <include>index.html</include>
+                    </includes>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -58,56 +144,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-
-
-        <!-- npm plagin -->
-            <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-        
-                <version>1.7.5</version>
-                
-                <executions>
-                        
-                  <execution>
-                        <id>install node and npm</id>
-                        <goals>
-                             <goal>install-node-and-npm</goal>
-                        </goals>
-                        <configuration>
-                              <nodeVersion>v6.9.1</nodeVersion>
-                              <npmVersion>3.10.9</npmVersion>
-                              <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
-                              <npmDownloadRoot>http://registry.npmjs.org/npm/-/</npmDownloadRoot>
-                        </configuration>
-                  </execution>
-
-                    <execution>
-                        <id>npm run build</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>run build</arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-        </plugin>
-
-        </plugins>
-      <resources>
-        <resource>
-          <directory>src/main/resources</directory>
-        </resource>
-        <resource>
-          <filtering>false</filtering>
-          <directory>src/front/dist</directory>
-          <includes>
-            <include>**build.js</include>
-          </includes>
-          <targetPath>static/js</targetPath>
-        </resource>
-      </resources>
+      </plugins>
     </build>
 
 </project>

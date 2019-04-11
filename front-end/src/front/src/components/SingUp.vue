@@ -23,7 +23,8 @@
     </div>
   </div>
 </template>
-<<script>
+<script>
+
 export default {
   name:"singup",
   data(){
