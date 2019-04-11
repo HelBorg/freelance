@@ -3,19 +3,19 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router/index'
-import axios from 'axios'
+import axios from '../axios/index'
 import BootstrapVue from 'bootstrap-vue'
-
+import store from './store'
 
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"
 
 Vue.use(BootstrapVue,router)
-window.axios = axios;
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
+  store,
   el: '#app',
   router,
   template: '<App/>',

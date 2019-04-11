@@ -77,3 +77,6 @@ ALTER TABLE public.person ADD CONSTRAINT fk_person_tasks FOREIGN KEY (task_id) R
 
 alter table public.skills add column task_id integer;
 ALTER TABLE public.person ADD CONSTRAINT fk_task_skill FOREIGN KEY (task_id) REFERENCES public.tasks(task_id);
+
+
+insert into person(person_id, name, password, role, rating, email)values (3,'test','qwerty', 'user', 1,'example@ru.com')

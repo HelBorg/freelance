@@ -1,13 +1,13 @@
 import fetch from 'isomorphic-fetch'
 import * as types from './mutation-types'
-import router from '../src/router/index'
+import router from '../router'
 
 const login = ({ commit }, creds) => {
   commit(types.LOGIN) // show spinner
   return fetch('/api/v1/singin', {
     method: 'POST',
     headers: {
-      Accept: 'application/json'
+      'Content-Type' : 'application/json'
     },
     body: JSON.stringify(creds)
   })
@@ -18,7 +18,6 @@ const logout = ({ commit }) => {
   localStorage.removeItem('JWT')
   router.push('/login')
 }
-
 
 export default {
   [types.LOGIN]: login,

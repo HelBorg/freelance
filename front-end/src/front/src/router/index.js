@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Vuex from 'vuex'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
 import Home from '@/components/Home'
 import SingUp from '@/components/SingUp'
 import Task from '@/components/Task'
 import Login from '@/components/Login'
+import store from '../store'
+import * as types from '../store/mutation-types'
+
 
 const hasToken = (to, from, next) => {
   const token = localStorage.getItem('JWT')
@@ -27,38 +27,39 @@ const requireAuth = (to, from, next) => {
   }
 }
 
-Vue.use(Router, Vuex, axios)
+Vue.use(Router)
 
-export default new Router({
-  mode: 'history',
-  routes: [{
-    path: '/',
-    name: 'login',
-    component: Login,
-    beforeEnter: hasToken
-
-  },
+const router = new Router({
+  routes: [
     {
-      path: '/task',
-      name: 'task',
-      component: Task
+      path: '/',
+      alias: '/login',
+      name: 'Login',
+      component: Login,
+      beforeEnter: hasToken
     },
     {
       path: '/home',
-      name: 'home',
+      name: 'Home',
       component: Home,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/task',
+      name: 'task',
+      component: Task,
       beforeEnter: requireAuth
 
     },
     {
-    path: '/singup',
-    name: 'singup',
-    component: SingUp
-  },
+      path: '/singup',
+      name: 'singup',
+      component: SingUp
+    },
     {
-    path: '*',
-    redirect: '/login'
-    // name: 'error',
-    // component: ErrorPage
-  }]
+      path: '*',
+      redirect: '/login'
+    }
+  ]
 })
+export default router

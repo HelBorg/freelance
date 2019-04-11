@@ -10,7 +10,7 @@ export default {
   name: "app",
   data() {
     return {
-      msg: "找不到畫面喔！"
+      msg: "error"
     };
   }
 };

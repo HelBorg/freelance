@@ -12,19 +12,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
+
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
-
 
     @SuppressWarnings("deprecation")
     @Bean
     public static NoOpPasswordEncoder passwordEncoder() {
         return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
     }
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
     @Bean
     @Override
@@ -34,7 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //@formatter:off
         http
             .httpBasic().disable()
             .csrf().disable()
@@ -43,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
+                //test api controller
                 .antMatchers("/api/v1/person").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/v1/singin").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/singin").permitAll()
