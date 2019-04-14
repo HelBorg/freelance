@@ -3,6 +3,8 @@ services:
 
   nginx:
     image: nginx:latest
+    volumes:
+      - ../front-end/target/classes/static/templates/:/etc/nginx/html
     build:
       context: ./ngnix
       dockerfile: Dockerfile
@@ -24,7 +26,7 @@ services:
     - POSTGRES_PASSWORD=qwerty
     - POSTGRES_DB=freelance
     ports:
-    - '5432:5432'
+    - 5432:5432
     volumes:
     - ./db-data:/var/lib/postgresql/data
 

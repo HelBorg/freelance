@@ -1,6 +1,7 @@
 package com.freelance.project.demo.service.impl;
 
 import com.freelance.project.demo.dto.PersonDTO;
+import com.freelance.project.demo.models.Person;
 import com.freelance.project.demo.repository.PersonRepository;
 import com.freelance.project.demo.service.PersonService;
 import org.dozer.DozerBeanMapper;
@@ -24,6 +25,5 @@ public class PersonServiceImpl implements PersonService {
                 .map(entity -> mapper.map(entity, PersonDTO.class))
                 .collect(Collectors.toList());
     }
-
 
 }

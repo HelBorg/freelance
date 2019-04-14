@@ -1,6 +1,7 @@
 package com.freelance.project.demo.controller;
 
 import com.freelance.project.demo.dto.PersonDTO;
+import com.freelance.project.demo.models.Skills;
 import com.freelance.project.demo.service.impl.PersonServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +17,16 @@ import java.util.Collection;
     @Autowired
     private PersonServiceImpl service;
 
+
     @GetMapping
-    public Collection<PersonDTO> persons() {
+    public Collection<PersonDTO> getAllPersons() {
         return service.findAll();
     }
 
+
+
+   /* @GetMapping()
+    public Person getByEmail(String email) {
+        return service.findByEmail(email);
+    }*/
 }

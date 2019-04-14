@@ -1,40 +1,35 @@
 package com.freelance.project.demo.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+@Data
 @Entity
-@Getter
-@Setter
 @Table(name = "person")
 public class Person implements Serializable {
-
-    @Getter
-    public enum UserRole {
-        ADMIN, USER
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_id", nullable = false)
-    private int personId;
+    int personId;
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private UserRole role;
+    private String role ="user";
 
-    @Column(name = "rating", nullable = false)
+    @Column(name = "rating")
     private int rating;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @ManyToMany(mappedBy = "userReviews")
     private List<Reviews> reviewsAboutUser;
@@ -57,22 +52,5 @@ public class Person implements Serializable {
     @OneToMany(mappedBy = "receiverId")
     private List<Message> recieveMsgs;
 
-    public Person() {
-    }
 
-    public Person(String name, UserRole role, int rating, String email, List<Reviews> reviewsAboutUser,
-                  List<UserSkills> userSkills, Tasks createdTasks, List<Tasks> assignedTasks,
-                  List<Tasks> candidateTasks, List<Message> sendedMsgs, List<Message> recieveMsgs) {
-        this.name = name;
-        this.role = role;
-        this.rating = rating;
-        this.email = email;
-        this.reviewsAboutUser = reviewsAboutUser;
-        this.userSkills = userSkills;
-        this.createdTasks = createdTasks;
-        this.assignedTasks = assignedTasks;
-        this.candidateTasks = candidateTasks;
-        this.sendedMsgs = sendedMsgs;
-        this.recieveMsgs = recieveMsgs;
-    }
 }

@@ -27,3 +27,8 @@ HELP.md
 
 ### VS Code ###
 .vscode/
+
+
+/back-end/src/main/resources/application.yml
+/docker-compose.yml
+/flyway/conf/flyway.yml
