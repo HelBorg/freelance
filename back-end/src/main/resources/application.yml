@@ -9,7 +9,7 @@ spring:
   datasource:
     url: jdbc:postgresql://db:5432/freelance #change to your local db name
     username: postgres
-    password: qwerty
+    password: 568698
 
     # JPA properties
   jpa:

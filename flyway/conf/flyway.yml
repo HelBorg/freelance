@@ -2,4 +2,4 @@ flyway:
    url: jdbc:postgresql://db:5432/freelance
    schemas: freelance
    user: postgres
-   password: qwerty
+   password: 568698

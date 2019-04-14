@@ -23,10 +23,11 @@ services:
     container_name: db
     environment:
     - POSTGRES_USER=postgres
-    - POSTGRES_PASSWORD=qwerty
+    - POSTGRES_PASSWORD=568698
     - POSTGRES_DB=freelance
+    - PGDATA=/tmp
     ports:
-    - 5432:5432
+    - 5432
     volumes:
     - ./db-data:/var/lib/postgresql/data
 
@@ -34,7 +35,7 @@ services:
     image: boxfuse/flyway
     container_name: flyway
     restart: on-failure
-    command: -url=jdbc:postgresql://db:5432/freelance -schemas=freelance -user=postgres -password=qwerty migrate
+    command: -url=jdbc:postgresql://db:5432/freelance -schemas=freelance -user=postgres -password=568698 migrate
     volumes:
     - ./flyway/sql:/flyway/sql
     - ./flyway/conf:/flyway/conf
