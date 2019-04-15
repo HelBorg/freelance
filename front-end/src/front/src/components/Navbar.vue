@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="dark">
+  <b-navbar toggleable="lg" type="dark" variant="dark" class="margin-down-10">
     <!-- Надо найти картинку-->
     <b-navbar-brand>
       <img src="https://placekitten.com/g/30/30" class="d-inline-block align-top" alt="Kitten">
@@ -31,5 +31,7 @@
 </script>
 
 <style scoped>
-
+ .margin-down-10{
+   margin-bottom: 10px;
+ }
 </style>
