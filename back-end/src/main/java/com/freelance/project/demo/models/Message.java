@@ -47,16 +47,5 @@ public class Message implements Serializable {
     @JoinColumn(name = "task_id")
     private Tasks taskId;
 
-    public Message() {
-    }
 
-    public Message(String message, Date dateTime, MessageStatus status,
-                   Person senderId, Person receiverId, Tasks taskId) {
-        this.message = message;
-        this.dateTime = dateTime;
-        this.status = status;
-        this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.taskId = taskId;
-    }
 }

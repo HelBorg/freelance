@@ -37,13 +37,6 @@ public class Reviews implements Serializable {
     @JoinColumn(name = "task_id")
     private Tasks task;
 
-    public Reviews() {
-    }
 
-    public Reviews(String decription, Date dateTime, List<Person> userReviews, Tasks task) {
-        this.decription = decription;
-        this.dateTime = dateTime;
-        this.userReviews = userReviews;
-        this.task = task;
-    }
+
 }

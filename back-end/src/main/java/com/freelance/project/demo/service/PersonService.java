@@ -9,4 +9,8 @@ public interface PersonService {
 
     List<PersonDTO> findAll();
 
+    Person findByEmail(String email);
+
+    void create(Person person);
+
 }

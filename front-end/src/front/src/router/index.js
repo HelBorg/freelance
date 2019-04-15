@@ -2,15 +2,16 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import SingUp from '@/components/SingUp'
-import Task from '@/components/Task'
+import NewTask from '@/components/NewTask'
 import Login from '@/components/Login'
 import store from '../store'
 import * as types from '../store/mutation-types'
+import axios from '../../axios/index'
 
 
 const hasToken = (to, from, next) => {
   const token = localStorage.getItem('JWT')
-  const username = localStorage.getItem('username')
+  const username = localStorage.getItem('email')
   if (token) {
     store.commit(types.LOGIN_SUCCESS, { token, username })
     router.push('/home')
@@ -27,7 +28,7 @@ const requireAuth = (to, from, next) => {
   }
 }
 
-Vue.use(Router)
+Vue.use(Router,axios)
 
 const router = new Router({
   routes: [
@@ -45,9 +46,9 @@ const router = new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/task',
-      name: 'task',
-      component: Task,
+      path: '/task/new',
+      name: 'NewTask',
+      component: NewTask,
       beforeEnter: requireAuth
 
     },

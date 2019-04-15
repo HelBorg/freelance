@@ -16,6 +16,7 @@ public class DozerConfig {
             protected void configure() {
                 mapping(Person.class, PersonDTO.class)
                         .fields(field("personId").accessible(), field("id").accessible());
+
             }
         };
     }

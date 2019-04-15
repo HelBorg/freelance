@@ -7,7 +7,6 @@
       <Menu/>
     </div>
     <div>
-      <p>Welcome!</p>
       <router-view>
 
       </router-view>

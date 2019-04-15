@@ -27,12 +27,4 @@ public class Skills implements Serializable {
     @ManyToMany(mappedBy = "skills")
     private List<UserSkills> userSkills;
 
-    public Skills() {
-    }
-
-    public Skills(String name, List<Tasks> taskSkills, List<UserSkills> userSkills) {
-        this.name = name;
-        this.taskSkills = taskSkills;
-        this.userSkills = userSkills;
-    }
 }

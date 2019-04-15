@@ -21,9 +21,7 @@
 
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
-            <template slot="button-content"><em>User</em></template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item :to="'login'">Sign Out</b-dropdown-item>
+            <template slot="button-content" v-on:click='logout'><em>User</em></template>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -32,8 +30,14 @@
 </template>
 
 <script>
-    export default {
-        name: "Navbar"
+  import * as types from '../store/mutation-types'
+  export default {
+        name: "Navbar",
+        methods: {
+        logout () {
+          this.$store.dispatch(types.LOGOUT)
+        }
+    }
     }
 </script>
 

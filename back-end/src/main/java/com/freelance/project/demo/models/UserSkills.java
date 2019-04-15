@@ -39,13 +39,4 @@ public class UserSkills implements Serializable {
     private List<Skills> skills;
 
 
-    public UserSkills() {
-    }
-
-
-    public UserSkills(SkillLevel level, Person personSkills, List<Skills> skills) {
-        this.level = level;
-        this.personSkills = personSkills;
-        this.skills = skills;
-    }
 }

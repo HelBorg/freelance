@@ -16,7 +16,7 @@ public class Tasks implements Serializable {
 
     @Getter
     public enum TaskStatus {
-        PREPARING, PUBLISH, ASSIGNED, IN_WORK, DONE
+        IN_DESIGN, PUBLISH, ASSIGNED, IN_WORK, DONE
     }
 
     @Id
@@ -61,21 +61,5 @@ public class Tasks implements Serializable {
     @OneToMany(mappedBy = "task")
     private List<Reviews> taskReviews;
 
-    public Tasks() {
-    }
 
-
-    public Tasks(String name, String description, Date deadline, TaskStatus status,
-                 Person assignedUser, List<Skills> taskSkills, List<Person> candidatesList,
-                 Person taskAuthor, List<Reviews> taskReviews) {
-        this.name = name;
-        this.description = description;
-        this.deadline = deadline;
-        this.status = status;
-        this.assignedUser = assignedUser;
-        this.taskSkills = taskSkills;
-        this.candidatesList = candidatesList;
-        this.taskAuthor = taskAuthor;
-        this.taskReviews = taskReviews;
-    }
 }
