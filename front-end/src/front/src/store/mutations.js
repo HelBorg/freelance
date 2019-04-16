@@ -13,7 +13,7 @@ const mutations = {
     state.auth.token = token
     state.auth.username = username
     localStorage.setItem('JWT', token)
-    localStorage.setItem('username', username)
+    localStorage.setItem('email', username)
   },
   [types.LOGIN_WRONG_CREDENTIALS] (state) {
     state.pending = false
@@ -25,7 +25,7 @@ const mutations = {
   },
   [types.LOGOUT] (state) {
     localStorage.removeItem('JWT')
-    localStorage.removeItem('username')
+    localStorage.removeItem('email')
     state.auth.isLoggedIn = false
   }
 }

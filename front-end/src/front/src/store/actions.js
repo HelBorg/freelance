@@ -11,8 +11,7 @@ const login = ({ commit }, creds) => {
     },
     body: JSON.stringify(creds)
   })
-}
-
+};
 const logout = ({ commit }) => {
   commit(types.LOGOUT)
   localStorage.removeItem('JWT')
@@ -23,4 +22,5 @@ export default {
   [types.LOGIN]: login,
   [types.LOGOUT]: logout,
 }
+
 

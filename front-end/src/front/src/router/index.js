@@ -6,11 +6,12 @@ import Task from '@/components/Task'
 import Login from '@/components/Login'
 import store from '../store'
 import * as types from '../store/mutation-types'
+import axios from '../../axios/index'
 
 
 const hasToken = (to, from, next) => {
   const token = localStorage.getItem('JWT')
-  const username = localStorage.getItem('username')
+  const username = localStorage.getItem('email')
   if (token) {
     store.commit(types.LOGIN_SUCCESS, { token, username })
     router.push('/home')
@@ -27,7 +28,7 @@ const requireAuth = (to, from, next) => {
   }
 }
 
-Vue.use(Router)
+Vue.use(Router,axios)
 
 const router = new Router({
   routes: [
@@ -45,7 +46,7 @@ const router = new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/task',
+      path: '/task/new',
       name: 'task',
       component: Task,
       beforeEnter: requireAuth

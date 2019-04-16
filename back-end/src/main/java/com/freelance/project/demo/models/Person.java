@@ -46,11 +46,5 @@ public class Person implements Serializable {
     @ManyToMany(mappedBy = "candidatesList")
     private List<Tasks> candidateTasks;
 
-    @OneToMany(mappedBy = "senderId")
-    private List<Message> sendedMsgs;
-
-    @OneToMany(mappedBy = "receiverId")
-    private List<Message> recieveMsgs;
-
 
 }
