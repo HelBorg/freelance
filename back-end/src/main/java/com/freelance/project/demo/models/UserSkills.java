@@ -1,6 +1,7 @@
 package com.freelance.project.demo.models;
 
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,10 +9,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
-@Table(name = "user_skills")
+@Table(name = "person_skill")
 public class UserSkills implements Serializable {
 
     @Getter
@@ -21,7 +21,7 @@ public class UserSkills implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "usr_skill_id", nullable = false)
+    @Column(name = "person_skill_id", nullable = false)
     private int userSkillId;
 
     @Enumerated(EnumType.STRING)
@@ -32,8 +32,12 @@ public class UserSkills implements Serializable {
     @JoinColumn(name = "person_id")
     private Person personSkills;
 
-    @ManyToMany
-    @JoinTable(name = "user_skills",
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "person_skill",
             joinColumns = @JoinColumn(name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private List<Skills> skills;

@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "skills")
+@Table(name = "skill")
 public class Skills implements Serializable {
 
     @Id

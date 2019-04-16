@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "tasks")
+@Table(name = "task")
 public class Tasks implements Serializable {
 
     @Getter
@@ -39,17 +39,25 @@ public class Tasks implements Serializable {
     private TaskStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "assigned_user", referencedColumnName = "person_id")
+    @JoinColumn(name = "performer_id", referencedColumnName = "person_id")
     private Person assignedUser;
 
-    @ManyToMany
-    @JoinTable(name = "skills",
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "task_skill",
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private List<Skills> taskSkills;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "person",
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "candidate",
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
     private List<Person> candidatesList;

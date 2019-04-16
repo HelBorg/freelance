@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import SingUp from '@/components/SingUp'
-import NewTask from '@/components/NewTask'
+import Task from '@/components/Task'
 import Login from '@/components/Login'
 import store from '../store'
 import * as types from '../store/mutation-types'
@@ -47,8 +47,8 @@ const router = new Router({
     },
     {
       path: '/task/new',
-      name: 'NewTask',
-      component: NewTask,
+      name: 'task',
+      component: Task,
       beforeEnter: requireAuth
 
     },
