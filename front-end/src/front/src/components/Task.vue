@@ -1,15 +1,15 @@
 <template>
-  <div id="main">
+  <div id="main" style="float: right">
     <div>
       <div id="taskName">
-        <b-badge variant="danger">in design</b-badge> <!--status-->
+        <b-badge variant="danger">{{task_data.status}}</b-badge> <!--status-->
         <div style="float:right">
           <b-button v-b-modal.edit>Edit</b-button> <!--top buttons-->
           <b-button>Publish</b-button>
           <b-button v-b-modal.commit_delete>Delete</b-button>
         </div>
         <div>
-          <b-input placeholder="Enter task name.." class="ml-2 mt-3 w-75"></b-input>
+          <b-input class="ml-2 mt-3 w-75">{{task_data.name}}</b-input>
         </div>
       </div>
     </div>
@@ -23,10 +23,11 @@
     <div id="taskDesc" style="padding:10px">
       <b-form-textarea
         id="textarea"
-        placeholder="Enter something..."
         rows="3"
         max-rows="6"
-      ></b-form-textarea>
+      >
+        Description
+      </b-form-textarea>
       <hr/>
       <div id="skills">
         <h5>
@@ -90,12 +91,22 @@
 </template>
 
 <script>
+  import axios from "../../axios/axios";
+
   export default {
-    name: "NewTask",
+    created(){
+      this.createNewTask()
+    },
+    name: "Task",
     data() {
       return {
-        skill_l:  'Java<b-progress :value=25></b-progress><b-button variant="primary" class="sm-10 mt-2">Delete</b-button> ',
-        ch_skill:'',
+        task_data: {
+          id: 0,
+          name: '',
+          status: ''
+        },
+        skill_l: 'Java<b-progress :value=25></b-progress><b-button variant="primary" class="sm-10 mt-2">Delete</b-button> ',
+        ch_skill: '',
         skill: 'Choose skill',
         skills: [
           {value: 'Java', text: 'Java'},
@@ -106,6 +117,22 @@
       }
     },
     methods:{
+    createNewTask: function () {
+      axios.post('http://localhost:80/api/v1/task', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem("JWT")
+        }
+
+      }) .then(function (response) {
+        this.task_data.id = response.data.id;
+        this.task_data.name = response.data.name;
+        this.task_data.status = response.data.status;
+
+
+        console.log(task_data);
+      });
+    },
       addNewSkillLine: function(){
         let element = $('#skill_line').append(this.skill_l);
         /* compile the new content so that vue can read it */

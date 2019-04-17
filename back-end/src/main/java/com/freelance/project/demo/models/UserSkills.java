@@ -24,9 +24,9 @@ public class UserSkills implements Serializable {
     @Column(name = "person_skill_id", nullable = false)
     private int userSkillId;
 
-    @Enumerated(EnumType.STRING)
+   // @Enumerated(EnumType.STRING)
     @Column(name = "level", nullable = false)
-    private SkillLevel level;
+    private String level;
 
     @ManyToOne
     @JoinColumn(name = "person_id")

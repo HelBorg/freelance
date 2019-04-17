@@ -1,6 +1,7 @@
 package com.freelance.project.demo.controller;
 
 import com.freelance.project.demo.config.security.jwt.JwtTokenProvider;
+import com.freelance.project.demo.models.Person;
 import com.freelance.project.demo.repository.PersonRepository;
 import com.freelance.project.demo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,9 +53,8 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails){
-        Map<Object, Object> model = new HashMap<>();
         // careful!!! in custom userDetails username is EMAIL
-        model.put("id", personService.findByEmail(userDetails.getUsername()).getPersonId() );
-        return ok(model);
+       Person currentPerson = personService.findByEmail(userDetails.getUsername());
+        return ok(currentPerson);
     }
 }

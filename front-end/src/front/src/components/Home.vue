@@ -1,25 +1,18 @@
 <template>
   <div id="container">
-    <div>
       <Navbar/>
-    </div>
-    <div>
       <Menu/>
+      <Task></Task>
     </div>
-    <div>
-      <router-view>
-
-      </router-view>
-    </div>
-  </div>
 </template>
 
 
 <script>
   import Navbar from "./Navbar";
   import Menu from "./Menu";
+  import Task from "./Task";
   export default {
     name: 'home',
-    components: {Menu, Navbar}
+    components: {Menu, Navbar, Task}
   }
 </script>

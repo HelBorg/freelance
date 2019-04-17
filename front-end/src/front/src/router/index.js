@@ -11,7 +11,7 @@ import axios from '../../axios/index'
 
 const hasToken = (to, from, next) => {
   const token = localStorage.getItem('JWT')
-  const username = localStorage.getItem('email')
+  const username = localStorage.getItem('username')
   if (token) {
     store.commit(types.LOGIN_SUCCESS, { token, username })
     router.push('/home')
@@ -47,7 +47,7 @@ const router = new Router({
     },
     {
       path: '/task/new',
-      name: 'task',
+      name: 'Task',
       component: Task,
       beforeEnter: requireAuth
 

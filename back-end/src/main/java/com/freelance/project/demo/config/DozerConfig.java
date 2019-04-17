@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DozerConfig {
     @Bean
-    public BeanMappingBuilder beanMappingBuilder() {
+    public BeanMappingBuilder personMappingBuilder() {
         return new BeanMappingBuilder() {
             @Override
             protected void configure() {
@@ -24,7 +24,7 @@ public class DozerConfig {
     @Bean
     public DozerBeanMapper beanMapper() {
         DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
-        dozerBeanMapper.addMapping(beanMappingBuilder());
+        dozerBeanMapper.addMapping(personMappingBuilder());
         return dozerBeanMapper;
     }
 }

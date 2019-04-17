@@ -1,9 +1,9 @@
 <template>
-  <div id="menu" class="w-20">
+  <div id="menu" style="float: left">
     <div class="container-fluid ">
       <div class="row">
         <b-list-group>
-          <b-list-group-item :to="''">Create new</b-list-group-item>
+          <b-list-group-item v-bind:to="'Task'">Create new</b-list-group-item>
           <b-list-group-item button>Mine</b-list-group-item>
           <b-list-group-item button>Candidate
             <b-badge variant="primary" pill>4</b-badge></b-list-group-item>
@@ -21,11 +21,11 @@
 </template>
 
 <script>
+    import axios from "axios";
 
     export default {
       name: "Menu"
     }
-
 
 </script>
 
