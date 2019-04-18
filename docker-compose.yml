@@ -35,7 +35,7 @@ services:
     image: boxfuse/flyway
     container_name: flyway
     restart: on-failure
-    command: -url=jdbc:postgresql://db:5432/freelance -schemas=freelance -user=postgres -password=568698 migrate
+    command: -url=jdbc:postgresql://db:5432/freelance -schemas=public -user=postgres -password=568698 migrate
     volumes:
     - ./flyway/sql:/flyway/sql
     - ./flyway/conf:/flyway/conf

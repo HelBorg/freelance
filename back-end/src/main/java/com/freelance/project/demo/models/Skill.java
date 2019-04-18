@@ -10,8 +10,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "skills")
-public class Skills implements Serializable {
+@Table(name = "skill")
+public class Skill implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,15 +22,15 @@ public class Skills implements Serializable {
     private String name;
 
     @ManyToMany(mappedBy = "taskSkills")
-    private List<Tasks> taskSkills;
+    private List<Task> taskSkills;
 
     @ManyToMany(mappedBy = "skills")
     private List<UserSkills> userSkills;
 
-    public Skills() {
+    public Skill() {
     }
 
-    public Skills(String name, List<Tasks> taskSkills, List<UserSkills> userSkills) {
+    public Skill(String name, List<Task> taskSkills, List<UserSkills> userSkills) {
         this.name = name;
         this.taskSkills = taskSkills;
         this.userSkills = userSkills;

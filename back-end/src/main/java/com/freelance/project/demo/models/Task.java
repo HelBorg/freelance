@@ -11,12 +11,12 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "tasks")
-public class Tasks implements Serializable {
+@Table(name = "task")
+public class Task implements Serializable {
 
     @Getter
     public enum TaskStatus {
-        PREPARING, PUBLISH, ASSIGNED, IN_WORK, DONE
+        IN_DESIGN, PUBLISH, ASSIGNED, IN_WORK, DONE
     }
 
     @Id
@@ -39,17 +39,25 @@ public class Tasks implements Serializable {
     private TaskStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "assigned_user", referencedColumnName = "person_id")
+    @JoinColumn(name = "performer_id", referencedColumnName = "person_id")
     private Person assignedUser;
 
-    @ManyToMany
-    @JoinTable(name = "skills",
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "task_skill",
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "skill_id"))
-    private List<Skills> taskSkills;
+    private List<Skill> taskSkills;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "person",
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "candidate",
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
     private List<Person> candidatesList;
@@ -59,23 +67,7 @@ public class Tasks implements Serializable {
     private Person taskAuthor;
 
     @OneToMany(mappedBy = "task")
-    private List<Reviews> taskReviews;
-
-    public Tasks() {
-    }
+    private List<Review> taskReviews;
 
 
-    public Tasks(String name, String description, Date deadline, TaskStatus status,
-                 Person assignedUser, List<Skills> taskSkills, List<Person> candidatesList,
-                 Person taskAuthor, List<Reviews> taskReviews) {
-        this.name = name;
-        this.description = description;
-        this.deadline = deadline;
-        this.status = status;
-        this.assignedUser = assignedUser;
-        this.taskSkills = taskSkills;
-        this.candidatesList = candidatesList;
-        this.taskAuthor = taskAuthor;
-        this.taskReviews = taskReviews;
-    }
 }

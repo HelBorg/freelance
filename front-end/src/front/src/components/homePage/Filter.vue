@@ -59,7 +59,7 @@
       </b-form-group>
 
       <b-button type="submit" variant="primary">Submit</b-button>
-      <b-button type="addSkill" variant="success">Add Skill</b-button>
+      <b-button type="addSkill" variant="success" v-on:click="addSkill">Add Skill</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
     </b-form>
   </div>
@@ -98,6 +98,9 @@
         this.$nextTick(() => {
           this.show = true
         })
+      },
+      addSkill(skill) {
+
       }
     }
   }

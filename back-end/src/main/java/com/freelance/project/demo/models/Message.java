@@ -45,13 +45,13 @@ public class Message implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "task_id")
-    private Tasks taskId;
+    private Task taskId;
 
     public Message() {
     }
 
     public Message(String message, Date dateTime, MessageStatus status,
-                   Person senderId, Person receiverId, Tasks taskId) {
+                   Person senderId, Person receiverId, Task taskId) {
         this.message = message;
         this.dateTime = dateTime;
         this.status = status;

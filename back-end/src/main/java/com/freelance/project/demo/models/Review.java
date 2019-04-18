@@ -12,8 +12,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "reviews")
-public class Reviews implements Serializable {
+@Table(name = "review")
+public class Review implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,29 +21,26 @@ public class Reviews implements Serializable {
     private int reviewId;
 
     @Column(name = "description", nullable = false)
-    private String decription;
+    private String description;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "datetime", nullable = false)
     private Date dateTime;
 
-    @ManyToMany
-    @JoinTable(name = "person",
-            joinColumns = @JoinColumn(name = "review_id"),
-            inverseJoinColumns = @JoinColumn(name = "person_id"))
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "review",
+            joinColumns = @JoinColumn(name = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "review_id"))
     private List<Person> userReviews;
 
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "task_id")
-    private Tasks task;
+    private Task task;
 
-    public Reviews() {
-    }
 
-    public Reviews(String decription, Date dateTime, List<Person> userReviews, Tasks task) {
-        this.decription = decription;
-        this.dateTime = dateTime;
-        this.userReviews = userReviews;
-        this.task = task;
-    }
+
 }
