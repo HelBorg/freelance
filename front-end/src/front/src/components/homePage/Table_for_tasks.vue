@@ -1,15 +1,16 @@
 <template>
   <div>
     <b-col>
-      <div v-if="tasks."
-      <b-table id="tasks"
-               title="Tasks"
-               :items="tasks"
-               :fields="fields"
-               :per-page="perPage"
-               :current-page="currentPage"
-               small>
-      </b-table>
+      <div v-if="tasks.length > 0">
+        <b-table id="tasks"
+                 title="Tasks"
+                 :items="tasks"
+                 :fields="fields"
+                 :per-page="perPage"
+                 :current-page="currentPage"
+                 small>
+        </b-table>
+      </div>
       <div v-else>
         <h4>List is empty!</h4>
       </div>
@@ -45,26 +46,34 @@
           </b-form-group>
 
           <b-form-group id="input-group-2" label="Date:" label-for="input-2">
-            <b-row>
-            </b-row>
+
+            <b-form>
+              <b-row>
+<!--                <datepicker v-model="editFilter.date_from"></datepicker>-->
+              </b-row>
+            </b-form>
+            <b-form>
+              <b-row>
+<!--                <datepicker v-model="editFilter.date_to"></datepicker>-->
+              </b-row>
+            </b-form>
           </b-form-group>
 
 
           <b-form-group id="input-group-3" label="Skills:" label-for="input-3">
-            <b-container fluid v-for="skill in skills">
+            <b-container fluid v-for="skill in skillsF">
               <b-row>
                 <b-col>
-                  <b-form-input
-                    id="input-1"
-                    v-model="skill.name"
-                    type="name"
-                    placeholder="Enter skill"
-                  ></b-form-input>
+                  <b-form-select
+                    id="input-3"
+                    v-model="selected"
+                    :options="skills">
+                  </b-form-select>
                 </b-col>
                 <b-col cols="3"> Value: {{skill.value}}
                 </b-col>
                 <b-col cols='1'>
-                  <b-button type="deleteSkill" variant="primary"> -</b-button>
+                  <b-button type="deleteSkill" variant="primary"> - </b-button>
                 </b-col>
               </b-row>
               <b-row>
@@ -97,20 +106,23 @@
 
 <script>
   import axios from 'axios'
-  import DatePick from 'vue-date-pick';
-  import 'vue-date-pick/dist/vueDatePick.css';
+  // import DatePick from 'vue-date-pick';
+  // import 'vue-date-pick/dist/vueDatePick.css';
 
   export default {
     name: "Table_for_tasks",
     filter: true,
-    components: {DatePick},
+    // components: {DatePick},
+    newSkill: {
+      name: '',
+      value: ''
+    },
     data() {
       return {
-        perPage: 1,
+        perPage: 10,
         currentPage: 1,
         tasks: [],
-        name: '',
-        status: '',
+        skills: [],
 
         fields: {
           name: {
@@ -147,19 +159,16 @@
         // Filter
         editFilter: {
           name: '',
-          skills:
+          date_from: '',
+          date_to: '',
+          skillsF:
             [
               {name: '', value: '0'}
             ],
           options:
             ['author 1', 'author 2', 'author 3', 'author 4']
-
         },
         show: true,
-        newSkill: {
-          name: '',
-          value: ''
-        },
         selected:
           ['author 1', 'author 2'], // Array reference
         status: 'not_accepted'
@@ -172,21 +181,29 @@
     },
     methods: {
       getTasks() {
-        axios.get('http://localhost:8080/api/tasks')
+        axios.get('http://localhost:8080/api/{$store.state.page}')
           .then((response) => {
             console.log(response.data);
-            if (response.status === 200) {
-              setTimeout(this.close_editing_window, 3000)
-              this.submitButtonEditMeeting = true;
-              this.showAlert();
-              console.log(response);
-            } else {
-              this.tasks = response.data;
-            }
+            this.tasks = response.data;
           }).catch(function (error) {
-          alert("Ошибка. Обновление события! upDateMeeting method");
+          alert("Ошибка. Обновление события!");
           console.log(error);
         });
+      },
+
+      getSkills() {
+        axios.get('http://localhost:8080/api/skill')
+          .then((response) => {
+            console.log(response.data);
+            this.skills = response.data;
+          }).catch(function (error) {
+          alert("Ошибка. Обновление события!");
+          console.log(error);
+        });
+      },
+
+      refreshList() {
+        this.getTasks();
       },
 
       // Filter
@@ -204,11 +221,14 @@
           this.show = true
         })
       },
-      addSkill(skill) {
-
+      addSkill() {
+        this.skillsF.push(this.newSkill)
       }
+    },
+    mounted() {
+      this.getTasks();
     }
-  }
+  };
 </script>
 
 <style scoped>

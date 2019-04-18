@@ -27,6 +27,9 @@ const mutations = {
     localStorage.removeItem('JWT')
     localStorage.removeItem('username')
     state.auth.isLoggedIn = false
+  },
+  changePage(state, data) {
+    state.page = data.page
   }
 }
 

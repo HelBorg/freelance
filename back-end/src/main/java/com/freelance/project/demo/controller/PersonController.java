@@ -22,10 +22,4 @@ import java.util.Collection;
         return service.findAll();
     }
 
-
-
-   /* @GetMapping()
-    public Person getByEmail(String email) {
-        return service.findByEmail(email);
-    }*/
 }
