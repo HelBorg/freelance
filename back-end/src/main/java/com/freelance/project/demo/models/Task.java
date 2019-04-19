@@ -14,10 +14,6 @@ import java.util.List;
 @Table(name = "task")
 public class Task implements Serializable {
 
-    @Getter
-    public enum TaskStatus {
-        IN_DESIGN, PUBLISH, ASSIGNED, IN_WORK, DONE
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

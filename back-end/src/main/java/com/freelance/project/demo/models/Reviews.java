@@ -39,7 +39,7 @@ public class Reviews implements Serializable {
 
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "task_id")
-    private Tasks task;
+    private Task task;
 
 
 

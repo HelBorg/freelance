@@ -13,12 +13,12 @@ public interface TaskService {
     List<TaskDTO> findAll();
 
     List<TaskDTO> findAllByAuthor(int author_id);
-    Tasks createNew(Person person);
+    Task createNew(Person person);
 
     TaskDTO loadTask(int id);
 //    List<TaskDTO> findAllByCandidate(int candidate_id);
 
     void updateTask(TaskDTO task);
     Pager findSorted(Optional<Integer> pageSize, Optional<Integer> pageNumber);
-    Pager findSorted(PageAndSort pageAndSort);
+   // Pager findSorted(PageAndSort pageAndSort);
 }

@@ -24,43 +24,4 @@ public class Pager {
         this.pageAndSort = pageAndSort;
     }
 
-    public PageAndSort getPageAndSort() {
-        return pageAndSort;
-    }
-
-    public void setPageAndSort(PageAndSort pageAndSort) {
-        this.pageAndSort = pageAndSort;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    public void setHasNextPage(boolean hasNextPage) {
-        this.hasNextPage = hasNextPage;
-    }
-
-    public boolean isHasPreviousPage() {
-        return hasPreviousPage;
-    }
-
-    public void setHasPreviousPage(boolean hasPreviousPage) {
-        this.hasPreviousPage = hasPreviousPage;
-    }
-
-    public int getPagesCount() {
-        return pagesCount;
-    }
-
-    public void setPagesCount(int pagesCount) {
-        this.pagesCount = pagesCount;
-    }
-
-    public boolean isHasNextPage() {
-        return hasNextPage;
-    }
 }

@@ -15,8 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLOutput;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -29,12 +29,13 @@ public class TaskServiceImpl implements TaskService {
     private DozerBeanMapper mapper;
 
     @Transactional
-    public Tasks createNew(Person person) {
-        Tasks add = new Tasks();
+    public Task createNew(Person person) {
+        Task add = new Task();
         add.setName("New task");
         add.setStatus("IN_DESIGN");
-        add.setTaskAuthor(person);
+        add.setAuthor(person);
         return taskRepository.save(add);
+    }
 
     @Override
     public Pager findSorted(Optional<Integer> pageSize, Optional<Integer> pageNumber) {
@@ -47,24 +48,27 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDTO loadTask(int id) {
         return mapper.map(taskRepository.findByTaskId(id), TaskDTO.class);
-        }
-        
+    }
+
     public Pager findSorted(PageAndSort pageAndSort) {
         return findSort(pageAndSort);
     }
 
     @Transactional
-    public void updateTask(TaskDTO task){
+    public void updateTask(TaskDTO task) {
+        Task updating = taskRepository.findByTaskId(task.getId());
         updating.setName(task.getName());
         updating.setStatus(task.getStatus());
         updating.setDescription(task.getDescription());
+    }
+
     private Pager findSort(PageAndSort pageAndSort) {
         int pageId = (pageAndSort.getFind().length() > 0) ? pageAndSort.getCurrentPage() : 0;
         int size = pageAndSort.getPageSize();
         String sortParam = pageAndSort.getSort();
         String find = pageAndSort.getFind();
 
-        System.out.println("======================================"+PageRequest.of(pageId, size, Sort.by(sortParam)));
+        System.out.println("======================================" + PageRequest.of(pageId, size, Sort.by(sortParam)));
         Page<Task> page = taskRepository.findAll(PageRequest.of(pageId, size, Sort.by(sortParam)));
 
         boolean hasPreviousPage = pageId != 0;
@@ -72,7 +76,6 @@ public class TaskServiceImpl implements TaskService {
 
         return new Pager(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
-
 
     @Override
     public List<TaskDTO> findAll() {
@@ -96,3 +99,4 @@ public class TaskServiceImpl implements TaskService {
 //    }
 
 }
+

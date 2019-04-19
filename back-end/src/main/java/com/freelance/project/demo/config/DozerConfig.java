@@ -3,7 +3,7 @@ package com.freelance.project.demo.config;
 import com.freelance.project.demo.dto.PersonDTO;
 import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.Person;
-import com.freelance.project.demo.models.Tasks;
+import com.freelance.project.demo.models.Task;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +28,7 @@ public class DozerConfig {
         return new BeanMappingBuilder() {
             @Override
             protected void configure() {
-                mapping(Tasks.class, TaskDTO.class)
+                mapping(Task.class, TaskDTO.class)
                         .fields(field("taskId").accessible(), field("id").accessible())
                         .fields(field("name").accessible(), field("name").accessible())
                         .fields(field("status").accessible(), field("status").accessible())

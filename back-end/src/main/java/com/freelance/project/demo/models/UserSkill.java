@@ -2,6 +2,7 @@ package com.freelance.project.demo.models;
 
 
 import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,10 +13,6 @@ import java.util.List;
 @Table(name = "person_skill")
 public class UserSkill implements Serializable {
 
-    @Getter
-    public enum SkillLevel {
-        BAD, SEMI_GOOD, GOOD, SEMI_PROFI, PROFI
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

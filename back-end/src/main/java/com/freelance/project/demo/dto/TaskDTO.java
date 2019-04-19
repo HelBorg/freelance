@@ -1,6 +1,9 @@
 package com.freelance.project.demo.dto;
 
+import com.freelance.project.demo.models.Person;
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class TaskDTO {

@@ -31,21 +31,23 @@ public class TaskController {
 
     @PostMapping("/new")
     public ResponseEntity create(@AuthenticationPrincipal UserDetails userDetails){
-        Tasks createdTask = taskService.createNew(personService.findByEmail(userDetails.getUsername()));
+        Task createdTask = taskService.createNew(personService.findByEmail(userDetails.getUsername()));
         Map<Object, Object> model = new HashMap<>();
         model.put("id", createdTask.getTaskId());
         return ok(model);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getTaskById(@PathVariable int id){
+    public ResponseEntity getTaskById(@PathVariable int id) {
         Map<Object, Object> model = new HashMap<>();
-        model.put("task",taskService.loadTask(id));
+        model.put("task", taskService.loadTask(id));
         return ok(model);
+    }
+
     @GetMapping("/author/{id}")
     public ResponseEntity<List<TaskDTO>> getAllByAuthor(@PathVariable("id") String author_id) {
         int id = Integer.parseInt(author_id);
-        List<TaskDTO> list = service.findAllByAuthor(id);
+        List<TaskDTO> list = taskService.findAllByAuthor(id);
         return ok().body(list);
     }
 
@@ -61,8 +63,8 @@ public class TaskController {
                                         @RequestParam("page") Optional<Integer> pageNumber) {
         Map<Object, Object> map = new HashMap<>();
 
-        service.findSorted(Optional.of(1),  Optional.of(2));
-        map.put("1", service.findSorted(pageSize, pageNumber));
+        taskService.findSorted(Optional.of(1),  Optional.of(2));
+        map.put("1", taskService.findSorted(pageSize, pageNumber));
         return ok(map);
     }
 
