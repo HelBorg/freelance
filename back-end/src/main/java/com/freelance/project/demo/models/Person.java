@@ -37,8 +37,8 @@ public class Person implements Serializable {
     @OneToMany(mappedBy = "personSkills")
     private List<UserSkills> userSkills;
 
-    @OneToOne(mappedBy = "taskAuthor")
-    private Tasks createdTasks;
+    @OneToMany(mappedBy = "taskAuthor")
+    private List<Tasks> createdTasks;
 
     @OneToMany(mappedBy = "assignedUser")
     private List<Tasks> assignedTasks;

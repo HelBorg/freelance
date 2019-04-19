@@ -22,7 +22,7 @@ public class Tasks implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id", nullable = false)
-    private int taskId;
+    int taskId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -34,9 +34,8 @@ public class Tasks implements Serializable {
     @Column(name = "deadline", nullable = false)
     private Date deadline;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private TaskStatus status;
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "performer_id", referencedColumnName = "person_id")
@@ -62,7 +61,7 @@ public class Tasks implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "person_id"))
     private List<Person> candidatesList;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "person_id")
     private Person taskAuthor;
 

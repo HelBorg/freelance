@@ -5,6 +5,7 @@ import com.freelance.project.demo.models.Person;
 import com.freelance.project.demo.repository.PersonRepository;
 import com.freelance.project.demo.service.impl.PersonServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;

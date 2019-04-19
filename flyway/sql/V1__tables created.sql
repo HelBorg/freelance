@@ -1,10 +1,8 @@
-CREATE TYPE public.user_role AS ENUM ('admin', 'user');
-
 create table if not exists public.person(
 person_id serial primary key,
 name varchar(100) unique,
 password varchar(100) not null,
-role user_role not null,
+role varchar(100) not null,
 rating integer not null,
 email varchar(100) not null unique
 );
@@ -14,25 +12,25 @@ skill_id serial primary key,
 name varchar(100) not null unique
 );
 
-CREATE TYPE public.skill_level AS ENUM ('bad', 'semi_good', 'good', 'semi_profi', 'profi');
+--CREATE TYPE public.skill_level AS ENUM ('bad', 'semi_good', 'good', 'semi_profi', 'profi');
 
 create table if not exists public.person_skill(
 person_skill_id serial primary key,
-level skill_level not null,
+level varchar(100) not null,
 person_id integer not null,
 skill_id integer not null,
 foreign key(person_id) references public.person(person_id),
 foreign key(skill_id) references public.skill(skill_id)
 );
 
-CREATE TYPE public.task_status AS ENUM ('preparing', 'publish', 'assigned', 'in_work', 'done');
+--CREATE TYPE public.task_status AS ENUM ('in_design', 'publish', 'assigned', 'in_work', 'done');
 
 create table if not exists public.task(
 task_id serial primary key ,
 name varchar(100) not null,
 description varchar(100),
 deadline timestamp,
-status task_status not null,
+status varchar(100) not null,
 performer_id integer,
 author_id integer not null,
 foreign key(performer_id) references public.person(person_id),
@@ -59,7 +57,7 @@ foreign key(task_id) references public.task(task_id)
 
 create table if not exists public.task_skill(
 task_skill_id serial primary key,
-level skill_level not null,
+level varchar(100) not null,
 task_id integer not null,
 skill_id integer not null,
 foreign key(task_id) references public.task(task_id),

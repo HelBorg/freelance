@@ -1,117 +1,185 @@
 <template>
-  <div id="main">
-    <div>
-      <div id="taskName">
-        <b-badge variant="danger">in design</b-badge> <!--status-->
-        <div style="float:right">
-          <b-button v-b-modal.edit>Edit</b-button> <!--top buttons-->
-          <b-button>Publish</b-button>
-          <b-button v-b-modal.commit_delete>Delete</b-button>
-        </div>
-        <div>
-          <b-input placeholder="Enter task name.." class="ml-2 mt-3 w-75"></b-input>
-        </div>
+  <div>
+  <Navbar></Navbar>
+  <div>
+  <Menu></Menu>
+<div id="main" class="lead mt-4 mr-5" style="float:right; width:70%">
+  <div>
+    <div id="taskName">
+      <b-badge value="name" variant="danger">{{status}}</b-badge> <!--status-->
+      <div style="float:right">
+        <b-button @click="saveTask" variant="primary">Save</b-button> <!--top buttons-->
+        <b-button variant="success">Publish</b-button>
+        <b-button v-b-modal.commit_delete variant="danger">Delete</b-button>
+      </div>
+      <div>
+        <p class="mt-4 mb-1">Name</p>
+        <b-form-input v-model="name"></b-form-input>
       </div>
     </div>
-    <b-modal id="commit_delete" title="Delete task">
-      <p class="my-4">You really want to delete task?</p>
-    </b-modal>
+  </div>
+  <b-modal id="commit_delete" title="Delete task">
+    <p class="my-4">You really want to delete task?</p>
+  </b-modal>
+  <hr/>
+  <h5 class="mb-2 lead">
+    Description
+  </h5>
+  <div id="taskDesc">
+    <b-form-textarea
+      id="textarea"
+      rows="3"
+      max-rows="6"
+      v-model="description"
+    >
+    </b-form-textarea>
     <hr/>
-    <h5 class="mb-2">
-      Description
-    </h5>
-    <div id="taskDesc" style="padding:10px">
-      <b-form-textarea
-        id="textarea"
-        placeholder="Enter something..."
-        rows="3"
-        max-rows="6"
-      ></b-form-textarea>
-      <hr/>
-      <div id="skills">
-        <h5>
-          Nessesary skills level
-        </h5>
-
-        <b-form inline>
-          <label class="mr-sm-2" >Skill</label>
-          <b-form-select
-            class="mb-2 mr-sm-2 mb-sm-0"
-            :value="null"
-            :options="{ 1: 'Java', 2: 'SQL', 3: 'Javascript' }"
-            id="select-skill"
-          >
-            <option slot="first" :value="null">Choose...</option>
-          </b-form-select>
-
-          <label class="mr-sm-2">Level</label>
-          <b-form-select
-            class="mb-2 mr-sm-2 mb-sm-0"
-            :value="null"
-            :options="{ 1: 'bad', 25: 'semi-good', 50: 'good', 75: 'semi-prof', 100: 'proffesional' }"
-            id="select-level"
-          >
-            <option slot="first" :value="null">Choose...</option>
-          </b-form-select>
-          <b-button variant="primary"  v-on:click='addNewSkillLine()'>Add new skill</b-button>
-        </b-form>
-        <div id="skill_line" class="row mb-1">
-
-        </div>
-      <hr/>
-      <h5>
-        Task date range
+    <div id="skills">
+      <h5 class="lead">
+        Nessesary skills
       </h5>
-      <b-container id="datetime">
-        <div>
-          <b-row class="my-1">
-            <b-col sm="3">
-              <label>Start date:</label>
-            </b-col>
-            <b-col sm="9">
-              <b-form-input type="date"></b-form-input>
-            </b-col>
-          </b-row>
-        </div>
-        <div>
-          <b-row class="my-1">
-            <b-col sm="3">
-              <label>End date:</label>
-            </b-col>
-            <b-col sm="9">
-              <b-form-input type="date"></b-form-input>
-            </b-col>
-          </b-row>
-        </div>
-      </b-container>
+
+      <b-form-select v-model="skill_name" class="mb-3">
+        <option :value="null">Please select skill name</option>
+        <option value="java">Java</option>
+        <option value="sql">SQL</option>
+        <option value="sql">Javascript</option>
+      </b-form-select>
+      <b-form-select v-model="skill_level" class="mb-3">
+        <option :value="null">Please select skill level</option>
+        <option value="bad">Bad</option>
+        <option value="semi-good">semi-good</option>
+        <option value="good">good</option>
+        <option value="semi-profi">semi-profi</option>
+        <option value="profi">profi</option>
+      </b-form-select>
+      <b-button @click="addRow" variant="success"> Add skill </b-button>
+      <b-button @click="deleteRow" variant="danger"> Delete Selected </b-button>
+
+      <b-table selectable
+               select-mode="single"
+               selectedVariant="danger"
+               hover
+               :items="skills"
+               @row-selected="rowSelected"
+      ></b-table>
+
+
     </div>
   </div>
+  <hr/>
+  <h5 class="lead">
+    Task date range
+  </h5>
+  <p class="mb-1">Start date</p>
+  <b-form-input type="date"></b-form-input>
+  <p class="mb-1">End date</p>
+  <b-form-input type="date"></b-form-input>
+</div>
   </div>
-</template>
-
+  </div>
+  </template>
 <script>
+
+  import Navbar from "./Navbar";
+  import Menu from "./Menu";
   export default {
-    name: "NewTask",
+    beforeMount(){
+      this.loadTask()
+    },
+
+    name: "Task",
+    components:{Menu, Navbar},
     data() {
       return {
-        skill_l:  'Java<b-progress :value=25></b-progress><b-button variant="primary" class="sm-10 mt-2">Delete</b-button> ',
-        ch_skill:'',
-        skill: 'Choose skill',
-        skills: [
-          {value: 'Java', text: 'Java'},
-          {value: 'JavaScript', text: 'Javascript'},
-          {value: 'sql', text: 'SQL'},
-        ],
-        selectAll: false
+        skills:[],
+        skill_level:null,
+        skill_name:null,
+        id:'',
+        name:'',
+        status:'',
+        description: '',
       }
     },
-    methods:{
-      addNewSkillLine: function(){
+
+    methods: {
+      addRow(){
+        if(this.skill_name!=null && this.skill_level !=null){
+          this.skills.push({
+            name:this.skill_name,
+            level:this.skill_level
+          })
+        }
+      },
+      deleteRow(){
+        let index = this.skills.indexOf(this.selected[0])
+        this.skills.splice(index, 1);
+      },
+      rowSelected(skills) {
+        this.selected = skills
+      },
+      saveTask(){
+        let self = this;
+        fetch('/api/v1/task', {
+          method: 'POST',
+          headers: {
+            'Content-Type' : 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
+          },
+          body:JSON.stringify({
+            id: localStorage.getItem("loadedTask"),
+            name: self.name,
+            status:self.status,
+            description: self.description
+          })
+
+        })
+          .then(
+            function(response) {
+              if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' +
+                  response.status);
+                return;
+              }
+              alert("Success!");
+              response.json().then(function (data) {
+                console.log(data)
+              })
+            }
+          )
+
+      },
+      loadTask(){
+        let self = this;
+        fetch('/api/v1/task/' + localStorage.getItem('loadedTask'), {
+          method: 'GET',
+          headers: {
+            'Content-Type' : 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
+          }
+        })
+          .then(
+            function(response) {
+              if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' +
+                  response.status);
+                return;
+              }
+              response.json().then(function (data) {
+                self.id = data.task.id;
+                self.name = data.task.name;
+                self.status = data.task.status;
+                self.description = data.task.description;
+              })
+            }
+          )
+      },
+      addNewSkillLine: function () {
         let element = $('#skill_line').append(this.skill_l);
         /* compile the new content so that vue can read it */
         this.compile(element.get(0));
       },
-      test: function(){
+      test: function () {
         alert('Test');
       }
     }
