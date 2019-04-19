@@ -12,8 +12,7 @@ const state = {
     pending: false,
     token: null,
     username: null
-  },
-  page: null
+  }
 }
 
 const options = {

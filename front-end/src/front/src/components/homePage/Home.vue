@@ -9,7 +9,7 @@
           <Menu/>
         </b-col>
         <b-col>
-          <div v-if="$store.state.page === 'welcome'">
+          <div v-if="page==='welcome'">
             <div class="hero">
               <h1 class="display-3">Hello World</h1>
               <p class="lead">This is the homepage of our website</p>
@@ -31,10 +31,16 @@
 
   export default {
     name: 'home',
+    pageName: 'welcome',
     data() {
       return {}
     },
-    components: {Table_for_tasks, Menu, Navbar}
+    components: {Table_for_tasks, Menu, Navbar},
+    methods: {
+      getPage() {
+        this.pageName = this.$route.params.pageName
+      }
+    }
   }
 </script>
 

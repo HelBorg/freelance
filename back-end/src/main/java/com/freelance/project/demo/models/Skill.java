@@ -16,7 +16,7 @@ public class Skill implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "skill_id", nullable = false)
-    private int skillId;
+    private Long skillId;
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
@@ -25,12 +25,12 @@ public class Skill implements Serializable {
     private List<Task> taskSkills;
 
     @ManyToMany(mappedBy = "skills")
-    private List<UserSkills> userSkills;
+    private List<UserSkill> userSkills;
 
     public Skill() {
     }
 
-    public Skill(String name, List<Task> taskSkills, List<UserSkills> userSkills) {
+    public Skill(String name, List<Task> taskSkills, List<UserSkill> userSkills) {
         this.name = name;
         this.taskSkills = taskSkills;
         this.userSkills = userSkills;

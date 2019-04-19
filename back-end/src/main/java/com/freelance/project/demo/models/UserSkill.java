@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "person_skill")
-public class UserSkills implements Serializable {
+public class UserSkill implements Serializable {
 
     @Getter
     public enum SkillLevel {
@@ -21,7 +21,7 @@ public class UserSkills implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_skill_id", nullable = false)
-    private int userSkillId;
+    private Long userSkillId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "level", nullable = false)

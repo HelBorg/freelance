@@ -8,7 +8,9 @@
                  :fields="fields"
                  :per-page="perPage"
                  :current-page="currentPage"
-                 small>
+                 :filter="editFilter.name"
+                 small
+                 @row-clicked="goToTask(item.id)">
         </b-table>
       </div>
       <div v-else>
@@ -29,24 +31,20 @@
 
     <!--    Filter-->
     <b-col>
-      <div v-if="filter"
+      <div v-if="pageConf.filter"
            title="Filter">
         <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-          <b-form-group
-            id="input-group-1"
-            label="Name:"
-            label-for="input-1"
-          >
-            <b-form-input
-              id="input-1"
-              v-model="name"
-              type="name"
-              placeholder="Enter name"
-            ></b-form-input>
+
+          <b-form-group id="input-group-1" label-cols-sm="3" label="Filter" class="mb-0">
+            <b-input-group>
+              <b-form-input v-model="editFilter.name" placeholder="Type to Search"></b-form-input>
+              <b-input-group-append>
+                <b-button :disabled="!editFilter.name" @click="editFilter.name = ''">Clear</b-button>
+              </b-input-group-append>
+            </b-input-group>
           </b-form-group>
 
           <b-form-group id="input-group-2" label="Date:" label-for="input-2">
-
             <b-form>
               <b-row>
 <!--                <datepicker v-model="editFilter.date_from"></datepicker>-->
@@ -61,19 +59,19 @@
 
 
           <b-form-group id="input-group-3" label="Skills:" label-for="input-3">
-            <b-container fluid v-for="skill in skillsF">
+            <b-container fluid v-for="(skill,index) in editFilter.skillsF">
               <b-row>
                 <b-col>
                   <b-form-select
                     id="input-3"
                     v-model="selected"
-                    :options="skills">
+                    :options="editFilter.skills">
                   </b-form-select>
                 </b-col>
                 <b-col cols="3"> Value: {{skill.value}}
                 </b-col>
                 <b-col cols='1'>
-                  <b-button type="deleteSkill" variant="primary"> - </b-button>
+                  <b-button @click="deleteSkill(index)" variant="primary"> - </b-button>
                 </b-col>
               </b-row>
               <b-row>
@@ -111,17 +109,22 @@
 
   export default {
     name: "Table_for_tasks",
-    filter: true,
     // components: {DatePick},
     newSkill: {
       name: '',
       value: ''
     },
+    pageName: '',
+    pageConf: {
+      filter: true,
+      status: true,
+      author: true
+    },
     data() {
       return {
         perPage: 10,
         currentPage: 1,
-        tasks: [],
+        tasks: [{id: '1', name:'3ui'}],
         skills: [],
 
         fields: {
@@ -165,7 +168,7 @@
             [
               {name: '', value: '0'}
             ],
-          options:
+          skills:
             ['author 1', 'author 2', 'author 3', 'author 4']
         },
         show: true,
@@ -201,9 +204,15 @@
           console.log(error);
         });
       },
+      getPage() {
+        this.pageName = this.$route.params.pageName;
 
+      },
+      goToTask(id) {
+        this.$router.push('task/:{id}')
+      },
       refreshList() {
-        this.getTasks();
+        this.getTasks()
       },
 
       // Filter
@@ -222,11 +231,17 @@
         })
       },
       addSkill() {
-        this.skillsF.push(this.newSkill)
+        this.editFilter.skillsF.push(this.newSkill)
+      },
+      deleteSkill(index) {
+        this.editFilter.skillsF.splice(index, 1);
       }
     },
     mounted() {
       this.getTasks();
+    },
+    created() {
+      this.getPage();
     }
   };
 </script>

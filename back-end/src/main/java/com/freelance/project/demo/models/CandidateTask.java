@@ -1,8 +1,6 @@
-package java.com.freelance.project.demo.models;
+package com.freelance.project.demo.models;
 
 import lombok.Data;
-import com.freelance.project.demo.models.Person;
-import com.freelance.project.demo.models.Task;
 import javax.persistence.*;
 
 @Data
