@@ -16,7 +16,7 @@ public class Skill implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "skill_id", nullable = false)
-    private Long skillId;
+    private int skillId;
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;

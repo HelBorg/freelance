@@ -20,7 +20,6 @@
           </div>
         </b-col>
       </b-row>
-    </div>
   </div>
 </template>
 

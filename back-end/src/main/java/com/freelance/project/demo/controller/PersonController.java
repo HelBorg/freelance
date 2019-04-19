@@ -18,7 +18,7 @@ import java.util.Collection;
 
 
     @GetMapping
-    public Collection<PersonDTO> getAllPersons() {
+    public Collection<PersonDTO> getAll() {
         return service.findAll();
     }
 

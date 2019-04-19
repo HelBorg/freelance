@@ -4,22 +4,23 @@ import com.freelance.project.demo.models.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.awt.print.Pageable;
 import java.util.Collection;
 import java.util.List;
 
-public interface TaskRepository extends JpaRepository<Task, Long> {
+@Repository
+public interface TaskRepository extends JpaRepository<Task, Integer> {
 
-    Collection<Task> findAllByAuthor_PersonId(Long author_id);
+    Collection<Task> findAllByAuthor_PersonId(int author_id);
 
-    Collection<Task> findAll(Pageable pageable);
+//    Page<Task> findAll(PageRequest pageRequest);
 
     List<Task> findAll();
 
-    Collection<Task> findAllByCandidateId(Long candidate_id);
+//    Collection<Task> findAllByCandidateId(int );
 
-    Page<Task> findByName(String name, Pageable pageRequest);
+//    Page<Task> findByName(String );
 
-    Page<Task> findByName(String name, PageRequest pageRequest);
 }

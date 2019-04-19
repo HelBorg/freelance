@@ -18,7 +18,7 @@ public class Review implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id", nullable = false)
-    private Long reviewId;
+    private int reviewId;
 
     @Column(name = "description", nullable = false)
     private String description;
@@ -37,9 +37,9 @@ public class Review implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "review_id"))
     private List<Person> userReviews;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "task_id")
-    private Task task;
+//    @ManyToOne(cascade = {CascadeType.ALL})
+//    @JoinColumn(name = "task_id")
+//    private Task task;
 
 
 

@@ -10,9 +10,9 @@ import java.util.Optional;
 public interface TaskService {
     List<TaskDTO> findAll();
 
-    List<TaskDTO> findAllByAuthor(Long author_id);
+    List<TaskDTO> findAllByAuthor(int author_id);
 
-    List<TaskDTO> findAllByCandidate(Long candidate_id);
+//    List<TaskDTO> findAllByCandidate(int candidate_id);
 
     Pager findSorted(Optional<Integer> pageSize, Optional<Integer> pageNumber);
     Pager findSorted(PageAndSort pageAndSort);

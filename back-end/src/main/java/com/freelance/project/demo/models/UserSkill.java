@@ -21,7 +21,7 @@ public class UserSkill implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_skill_id", nullable = false)
-    private Long userSkillId;
+    private int userSkillId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "level", nullable = false)

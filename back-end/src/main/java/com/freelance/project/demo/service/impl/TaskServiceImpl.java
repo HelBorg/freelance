@@ -1,6 +1,5 @@
 package com.freelance.project.demo.service.impl;
 
-import com.freelance.project.demo.dto.PersonDTO;
 import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.PageAndSort;
 import com.freelance.project.demo.models.Pager;
@@ -14,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,11 +26,12 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private DozerBeanMapper mapper;
 
+
     @Override
     public Pager findSorted(Optional<Integer> pageSize, Optional<Integer> pageNumber) {
         int pageId = pageNumber.orElse(0);
         int size = pageSize.orElse(5);
-        PageAndSort pageAndSort = new PageAndSort("id", pageId, size, "");
+        PageAndSort pageAndSort = new PageAndSort("taskId", pageId, size, "");
         return findSort(pageAndSort);
     }
 
@@ -45,8 +46,8 @@ public class TaskServiceImpl implements TaskService {
         String sortParam = pageAndSort.getSort();
         String find = pageAndSort.getFind();
 
-        Page<Task> page = (find.length() > 0) ? taskRepository.findByName(find, PageRequest.of(pageId, size, Sort.by(sortParam))) :
-                taskRepository.findAll(PageRequest.of(pageId, size, Sort.by(sortParam)));
+        System.out.println("======================================"+PageRequest.of(pageId, size, Sort.by(sortParam)));
+        Page<Task> page = taskRepository.findAll(PageRequest.of(pageId, size, Sort.by(sortParam)));
 
         boolean hasPreviousPage = pageId != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageId;
@@ -63,17 +64,17 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDTO> findAllByAuthor(Long author_id) {
+    public List<TaskDTO> findAllByAuthor(int author_id) {
         return taskRepository.findAllByAuthor_PersonId(author_id).stream()
                 .map(entity -> mapper.map(entity, TaskDTO.class))
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<TaskDTO> findAllByCandidate(Long candidate_id) {
-        return taskRepository.findAllByCandidateId(candidate_id).stream()
-                .map(entity -> mapper.map(entity, TaskDTO.class))
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public List<TaskDTO> findAllByCandidate(int candidate_id) {
+//        return taskRepository.findAllByCandidateId(candidate_id).stream()
+//                .map(entity -> mapper.map(entity, TaskDTO.class))
+//                .collect(Collectors.toList());
+//    }
 
 }

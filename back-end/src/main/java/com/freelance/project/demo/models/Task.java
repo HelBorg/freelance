@@ -22,7 +22,7 @@ public class Task implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id", nullable = false)
-    private Long taskId;
+    private int taskId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -52,15 +52,22 @@ public class Task implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private List<Skill> taskSkills;
 
-    @OneToMany(mappedBy = "task")
-    private List<CandidateTask> candidateTask;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "candidate",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "person_id"))
+    private List<Person> candidateTasks;
 
     @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "person_id")
     private Person author;
 
-    @OneToMany(mappedBy = "task")
-    private List<Review> taskReviews;
+//    @OneToMany(mappedBy = "task")
+//    private List<Review> taskReviews;
 
 
 }
