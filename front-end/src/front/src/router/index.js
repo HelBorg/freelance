@@ -6,8 +6,6 @@ import Task from '@/components/Task'
 import Login from '@/components/Login'
 import store from '../store'
 import * as types from '../store/mutation-types'
-import axios from '../../axios/index'
-
 
 const hasToken = (to, from, next) => {
   const token = localStorage.getItem('JWT')
@@ -28,7 +26,7 @@ const requireAuth = (to, from, next) => {
   }
 }
 
-Vue.use(Router,axios)
+Vue.use(Router)
 
 const router = new Router({
   routes: [
@@ -46,7 +44,7 @@ const router = new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/task/new',
+      path: '/task',
       name: 'Task',
       component: Task,
       beforeEnter: requireAuth

@@ -14,7 +14,7 @@
       <h2 class="lead">Confirm password</h2>
       <b-input type="password" id="user_password_c" class="mb-3"></b-input>
       <div class="d-inline">
-        <b-button variant="primary" style="float:right" type="submit">Sign up</b-button>
+        <b-button variant="primary" style="float:right" type="submit" to="/login">Sign up</b-button>
       </div>
     </form>
   </div>
@@ -44,7 +44,7 @@ export default {
             console.log(response);
           })
           .catch(function (error) {
-            alert("User already exists")
+            alert("Error");
             console.log(error);
           });
     }

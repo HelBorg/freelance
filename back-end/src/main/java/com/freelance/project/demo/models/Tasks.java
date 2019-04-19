@@ -22,7 +22,7 @@ public class Tasks implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id", nullable = false)
-    private int taskId;
+    int taskId;
 
     @Column(name = "name", nullable = false)
     private String name;

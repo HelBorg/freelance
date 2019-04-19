@@ -54,7 +54,9 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails){
         // careful!!! in custom userDetails username is EMAIL
-       Person currentPerson = personService.findByEmail(userDetails.getUsername());
-        return ok(currentPerson);
+        Person currentPerson = personService.findByEmail(userDetails.getUsername());
+        Map<Object, Object> model = new HashMap<>();
+        model.put("name", currentPerson.getName());
+        return ok(model);
     }
 }
