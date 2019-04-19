@@ -14,7 +14,7 @@ public class Person implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "person_id", nullable = false)
-    int personId;
+    private int personId;
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
@@ -32,19 +32,19 @@ public class Person implements Serializable {
     private String password;
 
     @ManyToMany(mappedBy = "userReviews")
-    private List<Reviews> reviewsAboutUser;
+    private List<Review> reviewsAboutUser;
 
     @OneToMany(mappedBy = "personSkills")
-    private List<UserSkills> userSkills;
+    private List<UserSkill> userSkills;
 
-    @OneToMany(mappedBy = "taskAuthor")
-    private List<Tasks> createdTasks;
+    @OneToMany(mappedBy = "author")
+    private List<Task> createdTasks;
 
     @OneToMany(mappedBy = "assignedUser")
-    private List<Tasks> assignedTasks;
+    private List<Task> assignedTasks;
 
-    @ManyToMany(mappedBy = "candidatesList")
-    private List<Tasks> candidateTasks;
+    @ManyToMany(mappedBy = "candidateTasks")
+    private List<Task> candidateTasks;
 
 
 }

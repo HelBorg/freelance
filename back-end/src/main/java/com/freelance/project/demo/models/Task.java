@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "task")
-public class Tasks implements Serializable {
+public class Task implements Serializable {
 
     @Getter
     public enum TaskStatus {
@@ -22,7 +22,7 @@ public class Tasks implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id", nullable = false)
-    int taskId;
+    private int taskId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -49,7 +49,7 @@ public class Tasks implements Serializable {
     @JoinTable(name = "task_skill",
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "skill_id"))
-    private List<Skills> taskSkills;
+    private List<Skill> taskSkills;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -59,14 +59,14 @@ public class Tasks implements Serializable {
     @JoinTable(name = "candidate",
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
-    private List<Person> candidatesList;
+    private List<Person> candidateTasks;
 
     @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "person_id")
-    private Person taskAuthor;
+    private Person author;
 
-    @OneToMany(mappedBy = "task")
-    private List<Reviews> taskReviews;
+//    @OneToMany(mappedBy = "task")
+//    private List<Review> taskReviews;
 
 
 }

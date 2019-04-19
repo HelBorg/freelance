@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "skill")
-public class Skills implements Serializable {
+public class Skill implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +22,10 @@ public class Skills implements Serializable {
     private String name;
 
     @ManyToMany(mappedBy = "taskSkills")
-    private List<Tasks> taskSkills;
+    private List<Task> taskSkills;
 
     @ManyToMany(mappedBy = "skills")
-    private List<UserSkills> userSkills;
+    private List<UserSkill> userSkills;
 
+    public Skill() {
 }

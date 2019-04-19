@@ -38,7 +38,7 @@ const router = new Router({
       beforeEnter: hasToken
     },
     {
-      path: '/home',
+      path: '/home/:pageName',
       name: 'home',
       component: Home,
       beforeEnter: requireAuth

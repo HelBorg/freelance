@@ -2,8 +2,6 @@ package com.freelance.project.demo.models;
 
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,7 +10,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "person_skill")
-public class UserSkills implements Serializable {
+public class UserSkill implements Serializable {
 
     @Getter
     public enum SkillLevel {
@@ -40,7 +38,7 @@ public class UserSkills implements Serializable {
     @JoinTable(name = "person_skill",
             joinColumns = @JoinColumn(name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "skill_id"))
-    private List<Skills> skills;
+    private List<Skill> skills;
 
 
 }

@@ -10,5 +10,8 @@ public class TaskDTO {
     String description;
     String status;
 
+    private Date deadline;
+
+    private Person assignedUser;
 
 }
