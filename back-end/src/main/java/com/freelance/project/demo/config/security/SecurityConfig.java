@@ -40,10 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
-                //test api controller
-                .antMatchers("/api/v1/person").permitAll()
+                .antMatchers("/singup").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/v1/person").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/v1/person").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/v1/singin").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/singin").permitAll()
                 .anyRequest().authenticated()
             .and()
             .apply(new JwtConfigurer(jwtTokenProvider));

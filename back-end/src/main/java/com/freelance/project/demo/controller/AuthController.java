@@ -1,21 +1,24 @@
 package com.freelance.project.demo.controller;
 
 import com.freelance.project.demo.config.security.jwt.JwtTokenProvider;
+import com.freelance.project.demo.models.Person;
 import com.freelance.project.demo.repository.PersonRepository;
+import com.freelance.project.demo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -29,16 +32,15 @@ public class AuthController {
     JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    PersonRepository users;
+    PersonService personService;
 
 
     @PostMapping("/singin")
-    public ResponseEntity signin(@RequestBody AuthenticationRequest data) {
-
+    public ResponseEntity signin(@RequestBody AuthenticationRequest credentials) {
         try {
-            String email = data.getEmail();
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, data.getPassword()));
-            String token = jwtTokenProvider.createToken(email, this.users.findByEmail(email).getRole());
+            String email = credentials.getEmail();
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, credentials.getPassword()));
+            String token = jwtTokenProvider.createToken(email, this.personService.findByEmail(email).getRole());
 
             Map<Object, Object> model = new HashMap<>();
             model.put("email", email);
@@ -47,5 +49,14 @@ public class AuthController {
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid email/password");
         }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails){
+        // careful!!! in custom userDetails username is EMAIL
+        Person currentPerson = personService.findByEmail(userDetails.getUsername());
+        Map<Object, Object> model = new HashMap<>();
+        model.put("name", currentPerson.getName());
+        return ok(model);
     }
 }

@@ -4,6 +4,12 @@
     <b-navbar-brand>
       <img src="https://placekitten.com/g/30/30" class="d-inline-block align-top" alt="Kitten">
     </b-navbar-brand>
+  <div id="navbar">
+    <b-navbar toggleable="lg" type="dark" variant="dark">
+      <!-- Надо найти картинку-->
+      <b-navbar-brand href="#">
+        <img src="https://placekitten.com/g/30/30" class="d-inline-block align-top" alt="Kitten">
+      </b-navbar-brand>
 
     <b-navbar-brand href="#">Freelance</b-navbar-brand>
 
@@ -13,20 +19,53 @@
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
-        <b-nav-item-dropdown right>
           <!-- Using 'button-content' slot -->
-          <template slot="button-content"><em>User</em></template>
-          <b-dropdown-item href="#">Profile</b-dropdown-item>
-          <b-dropdown-item :to="'login'">Sign Out</b-dropdown-item>
-        </b-nav-item-dropdown>
+          <b-nav-item >Welcome, {{username}} </b-nav-item>
+          <b-nav-item @click="logout">Logout</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
 </template>
 
 <script>
+  import * as types from '../store/mutation-types'
   export default {
-    name: "Navbar"
+    beforeMount(){
+      this.getusername()
+    },
+        name: "Navbar",
+        data(){
+          return{
+            username:''
+          }
+        },
+        methods: {
+          getusername(){
+            let self = this;
+            fetch('/api/v1/me', {
+              method: 'GET',
+              headers: {
+                'Content-Type' : 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('JWT')
+              }
+            })
+              .then(
+                function(response) {
+                  if (response.status !== 200) {
+                    console.log('Looks like there was a problem. Status Code: ' +
+                      response.status);
+                    return;
+                  }
+                  response.json().then(function (data) {
+                    self.username = data.name
+                  })
+                }
+              )
+          },
+        logout () {
+          this.$store.dispatch(types.LOGOUT)
+        }
+    }
   }
 </script>
 

@@ -26,4 +26,21 @@ public class PersonServiceImpl implements PersonService {
                 .collect(Collectors.toList());
     }
 
+    public Person findByEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
+    public void create(Person person) {
+
+        if (findByEmail(person.getEmail()) != null) {
+            System.out.println("User already exists");
+        }
+        Person add = new Person();
+        add.setName(person.getName());
+        add.setEmail(person.getEmail());
+        add.setPassword(person.getPassword());
+        add.setRating(0);
+        add.setRole("user");
+        repository.save(add);
+    }
 }

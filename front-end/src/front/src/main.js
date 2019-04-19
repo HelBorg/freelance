@@ -3,7 +3,6 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router/index'
-import axios from '../axios/index'
 import BootstrapVue from 'bootstrap-vue'
 import store from './store'
 

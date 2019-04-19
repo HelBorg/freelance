@@ -1,55 +1,53 @@
-<<template>
-  <div class="singup">
-    <div class="col-lg-3">
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">X</span>
-                <input type="text" v-model="userId" class="form-control" placeholder="帳號" aria-label="userId" aria-describedby="basic-addon1">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">X</span>
-                <input type="password" v-model="userPwd" class="form-control" placeholder="密碼" aria-label="userPwd" aria-describedby="basic-addon1">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">X</span>
-                <input type="text" v-model="userName" class="form-control" placeholder="暱稱" aria-label="userId" aria-describedby="basic-addon1">
-            </div>
-        </div>
-        <button type="submit" v-on:click="singUp" class="btn btn-primary">Submit</button>
-    </div>
+<template>
+  <div>
+  <h3 class="lead">
+    Create new user
+  </h3>
+  <div class="ml-auto mr-auto pt-20" style="width:40%">
+    <form @submit.prevent="singup">
+      <h2 class="lead">Name</h2>
+      <b-input  v-model="usr_name" id="user_name" class="mb-3" ></b-input>
+      <h2 class="lead">Email</h2>
+      <b-input  v-model="usr_email" id="user_email" class="mb-3" ></b-input>
+      <h2 class="lead">Password</h2>
+      <b-input  v-model="usr_password" type="password" id="user_password" class="mb-3"></b-input>
+      <h2 class="lead">Confirm password</h2>
+      <b-input type="password" id="user_password_c" class="mb-3"></b-input>
+      <div class="d-inline">
+        <b-button variant="primary" style="float:right" type="submit" to="/login">Sign up</b-button>
+      </div>
+    </form>
+  </div>
   </div>
 </template>
 <script>
+
+import axios from "axios";
 
 export default {
   name:"singup",
   data(){
       return {
-          userId:"",
-          userPwd:"",
-          userName:""
+          usr_name:'',
+          usr_email:'',
+          usr_password:''
       }
   },
-  methods:{
-    singUp(){
-        let vm = this;
-        axios.post("/json/singup", {
-            userId:vm.userId,
-            userPwd:vm.userPwd,
-            userName:vm.userName
-        }).then(response => { 
-	        alert(response.data);
-        }).catch(error => {
-            console.log(error.response);
-        });
+    methods: {
+      singup() {
+        axios.post('http://localhost:80/api/v1/person', {
+          name:this.usr_name,
+          email:this.usr_email,
+          password:this.usr_password
+        })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            alert("Error");
+            console.log(error);
+          });
     }
-  },
-  watch:{
-
   }
 }
 </script>

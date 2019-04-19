@@ -3,8 +3,9 @@ import Vuex from 'vuex'
 import actions from './actions'
 import * as getters from './getters'
 import mutations from './mutations'
+import axios from '../../axios/index'
 
-Vue.use(Vuex)
+Vue.use(Vuex,axios)
 
 const state = {
   auth: {
