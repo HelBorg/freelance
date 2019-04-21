@@ -2,6 +2,7 @@
   <div>
   <Navbar></Navbar>
   <div>
+    <b-card>
   <Menu></Menu>
 <div id="main" class="lead mt-4 mr-5" style="float:right; width:70%">
   <div>
@@ -63,8 +64,6 @@
                :items="skills"
                @row-selected="rowSelected"
       ></b-table>
-
-
     </div>
   </div>
   <hr/>
@@ -76,6 +75,7 @@
   <p class="mb-1">End date</p>
   <b-form-input type="date"></b-form-input>
 </div>
+    </b-card>
   </div>
   </div>
   </template>

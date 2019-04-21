@@ -12,7 +12,7 @@ const hasToken = (to, from, next) => {
   const username = localStorage.getItem('username')
   if (token) {
     store.commit(types.LOGIN_SUCCESS, { token, username })
-    router.push('/home')
+    router.push('/home/welcome')
   } else {
     next()
   }
