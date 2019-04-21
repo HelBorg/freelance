@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 @Getter
 public class SkillDTO {
+
     private int skillId;
 
     private String name;

@@ -1,12 +1,6 @@
 <template>
   <b-navbar toggleable="lg" type="dark" variant="dark" class="margin-down-10">
     <!-- Надо найти картинку-->
-    <b-navbar-brand>
-      <img src="https://placekitten.com/g/30/30" class="d-inline-block align-top" alt="Kitten">
-    </b-navbar-brand>
-  <div id="navbar">
-    <b-navbar toggleable="lg" type="dark" variant="dark">
-      <!-- Надо найти картинку-->
       <b-navbar-brand href="#">
         <img src="https://placekitten.com/g/30/30" class="d-inline-block align-top" alt="Kitten">
       </b-navbar-brand>

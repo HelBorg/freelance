@@ -1,7 +1,7 @@
 <template>
   <div id="menu" style="float: left;width:29%">
     <div class="container-fluid ">
-      <b-list-group class="w-20">
+      <b-list-group >
         <b-list-group-item :to="'home/mine'">
           Mine
         </b-list-group-item>

@@ -4,7 +4,7 @@
     Create new user
   </h3>
   <div class="ml-auto mr-auto pt-20" style="width:40%">
-    <form @submit.prevent="singup">
+    <form>
       <h2 class="lead">Name</h2>
       <b-input  v-model="usr_name" id="user_name" class="mb-3" ></b-input>
       <h2 class="lead">Email</h2>
@@ -14,7 +14,7 @@
       <h2 class="lead">Confirm password</h2>
       <b-input type="password" id="user_password_c" class="mb-3"></b-input>
       <div class="d-inline">
-        <b-button variant="primary" style="float:right" type="submit" to="/login">Sign up</b-button>
+        <b-button variant="primary" style="float:right" type="submit" @click="singup">Sign up</b-button>
       </div>
     </form>
   </div>
@@ -23,6 +23,7 @@
 <script>
 
 import axios from "axios";
+import router from "../router";
 
 export default {
   name:"singup",
@@ -42,9 +43,10 @@ export default {
         })
           .then(function (response) {
             console.log(response);
+            this.router.go(-1)
           })
           .catch(function (error) {
-            alert("Error");
+            alert("User already exists");
             console.log(error);
           });
     }

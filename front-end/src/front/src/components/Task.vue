@@ -4,7 +4,7 @@
   <div>
     <b-card>
   <Menu></Menu>
-<div id="main" class="lead mt-4 mr-5" style="float:right; width:70%">
+<div id="main" class="lead" style="float:right; width:70%">
   <div>
     <div id="taskName">
       <b-badge value="name" variant="danger">{{status}}</b-badge> <!--status-->
@@ -64,6 +64,7 @@
                :items="skills"
                @row-selected="rowSelected"
       ></b-table>
+      {{skills}}
     </div>
   </div>
   <hr/>
@@ -71,7 +72,7 @@
     Task date range
   </h5>
   <p class="mb-1">Start date</p>
-  <b-form-input type="date"></b-form-input>
+  <b-form-input v-model=created_time type="date"></b-form-input>
   <p class="mb-1">End date</p>
   <b-form-input type="date"></b-form-input>
 </div>
@@ -95,10 +96,13 @@
         skills:[],
         skill_level:null,
         skill_name:null,
+        //-------task---------
         id:'',
         name:'',
         status:'',
         description: '',
+        created_time:''
+        //-------task---------
       }
     },
 
@@ -130,12 +134,14 @@
             id: localStorage.getItem("loadedTask"),
             name: self.name,
             status:self.status,
-            description: self.description
+            description: self.description,
+            skills: self.skills,
           })
 
         })
           .then(
             function(response) {
+              console.log(self.skills)
               if (response.status !== 200) {
                 console.log('Looks like there was a problem. Status Code: ' +
                   response.status);
@@ -170,6 +176,8 @@
                 self.name = data.task.name;
                 self.status = data.task.status;
                 self.description = data.task.description;
+                self.created_time = data.task.createdTime.substring(0,10);
+                self.skills = data.task.skills;
               })
             }
           )

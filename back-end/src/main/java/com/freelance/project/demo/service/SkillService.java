@@ -4,6 +4,8 @@ import com.freelance.project.demo.dto.SkillDTO;
 
 import java.util.List;
 
-public interface SkillService {
+public interface SkillService  {
     List<SkillDTO> findAll();
+
+
 }

@@ -34,6 +34,7 @@ public class TaskController {
         Task createdTask = taskService.createNew(personService.findByEmail(userDetails.getUsername()));
         Map<Object, Object> model = new HashMap<>();
         model.put("id", createdTask.getTaskId());
+        model.put("skills", createdTask.getTaskSkills());
         return ok(model);
     }
 
@@ -66,6 +67,11 @@ public class TaskController {
         taskService.findSorted(Optional.of(1),  Optional.of(2));
         map.put("1", taskService.findSorted(pageSize, pageNumber));
         return ok(map);
+    }
+
+    @PostMapping
+    public void updateTask(@RequestBody TaskDTO task){
+        taskService.updateTask(task);
     }
 
 }

@@ -32,9 +32,9 @@ public class DozerConfig {
                         .fields(field("taskId").accessible(), field("id").accessible())
                         .fields(field("name").accessible(), field("name").accessible())
                         .fields(field("status").accessible(), field("status").accessible())
-                        .fields(field("status").accessible(), field("status").accessible());
-
-
+                        .fields(field("description").accessible(), field("description").accessible())
+                        .fields(field("createdTime").accessible(), field("createdTime").accessible())
+                        .fields(field("taskSkills").accessible(), field("skills").accessible());
 
             }
         };

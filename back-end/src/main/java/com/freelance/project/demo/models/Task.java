@@ -30,6 +30,10 @@ public class Task implements Serializable {
     @Column(name = "deadline", nullable = false)
     private Date deadline;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "time_created", nullable = false)
+    private Date createdTime;
+
     @Column(name = "status", nullable = false)
     private String status;
 
