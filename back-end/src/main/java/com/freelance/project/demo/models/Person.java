@@ -20,7 +20,7 @@ public class Person implements Serializable {
     private String name;
 
     @Column(name = "role", nullable = false)
-    private String role ="user";
+    private String role = "user";
 
     @Column(name = "rating")
     private int rating;

@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface SkillRepository extends JpaRepository<Skill, Integer> {
     List<Skill> findAll();
+
+
 }

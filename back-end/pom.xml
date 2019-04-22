@@ -47,8 +47,9 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
-            <version>${org.postgres.version}</version>
+            <version>42.2.2</version>
         </dependency>
+
 <!--        <dependency>-->
 <!--            <groupId>postgresql</groupId>-->
 <!--            <artifactId>postgresql</artifactId>-->

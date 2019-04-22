@@ -7,9 +7,10 @@ spring:
 
   # Database
   datasource:
-    url: jdbc:postgresql://db:5432/freelance #change to your local db name
+    url: jdbc:postgresql://localhost:5432/freelance #change to your local db name
     username: postgres
-    password: qwerty
+    password: 568698
+
 
     # JPA properties
   jpa:
@@ -19,6 +20,7 @@ spring:
     database: postgresql
     properties:
       hibernate.temp.use_jdbc_metadata_defaults: false
+      hibernate.jdbc.lob.non_contextual_creation: true
       database-platform: org.hibernate.dialect.PostgreSQLDialect
 # Server configuration
 server:

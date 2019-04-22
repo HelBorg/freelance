@@ -12,7 +12,6 @@ skill_id serial primary key,
 name varchar(100) not null unique
 );
 
---CREATE TYPE public.skill_level AS ENUM ('bad', 'semi_good', 'good', 'semi_profi', 'profi');
 
 create table if not exists public.person_skill(
 person_skill_id serial primary key,
@@ -23,7 +22,6 @@ foreign key (person_id) references public.person(person_id),
 foreign key (skill_id) references public.skill(skill_id)
 );
 
---CREATE TYPE public.task_status AS ENUM ('in_design', 'publish', 'assigned', 'in_work', 'done');
 
 create table if not exists public.task(
 task_id serial primary key ,
@@ -48,7 +46,6 @@ foreign key (task_id) references public.task(task_id)
 );
 
 
---CREATE TYPE freelance.message_status AS ENUM ('inbox', 'outbox');
 
 create table if not exists public.candidate(
 candidate_id serial primary key,
@@ -56,14 +53,6 @@ task_id integer not null,
 person_id integer not null,
 foreign key(person_id) references public.person(person_id),
 foreign key(task_id) references public.task(task_id)
-);
-
-create table if not exists public.candidate(
-task_skill_id serial primary key,
-level varchar(100) not null,
-skill_id integer not null,
-foreign key (person_id) references public.person(person_id),
-foreign key (task_id) references public.task(task_id)
 );
 
 create table if not exists public.task_skill(

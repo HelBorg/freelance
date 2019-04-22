@@ -1,20 +1,20 @@
 <template>
   <div id="menu" style="float: left;width:29%">
     <div class="container-fluid ">
-      <b-list-group class="w-20">
-        <b-list-group-item :to="'home/mine'">
+      <b-list-group>
+        <b-list-group-item :to="'home/mine'" button>
           Mine
         </b-list-group-item>
-        <b-list-group-item :to="'home/candidates'">
+        <b-list-group-item :to="'home/candidates'" button>
           Candidates
         </b-list-group-item>
-        <b-list-group-item :to="'home/in_work'">
+        <b-list-group-item :to="'home/in_work'" button>
           In work
         </b-list-group-item>
         <b-list-group-item>
           <router-link @click="createNewTask" to="/task">Create New</router-link>
         </b-list-group-item>
-        <b-list-group-item :to="'home/search'">
+        <b-list-group-item :to="'home/tasks'" button>
           Search
         </b-list-group-item>
         <b-list-group-item :to="'home'">Users</b-list-group-item>

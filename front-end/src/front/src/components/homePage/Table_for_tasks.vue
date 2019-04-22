@@ -8,10 +8,9 @@
                  :fields="fields"
                  :per-page="perPage"
                  :current-page="currentPage"
-                 :filter="editFilter.name"
                  small
                  @row-clicked="goToTask(item.id)">
-        </b-table>
+      </b-table>
       </div>
       <div v-else>
         <h4>List is empty!</h4>
@@ -219,6 +218,14 @@
       onSubmit(evt) {
         evt.preventDefault()
         alert(JSON.stringify(this.form))
+        axios.get('http://localhost:8080/api/skill')
+          .then((response) => {
+            console.log(response.data);
+            this.skills = response.data;
+          }).catch(function (error) {
+          alert("Ошибка. Обновление события!");
+          console.log(error);
+        });
       },
       onReset(evt) {
         evt.preventDefault()

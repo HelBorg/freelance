@@ -10,15 +10,26 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TaskService {
-    List<TaskDTO> findAll();
+//    List<TaskDTO> findAll();
 
-    List<TaskDTO> findAllByAuthor(int author_id);
     Task createNew(Person person);
 
     TaskDTO loadTask(int id);
-//    List<TaskDTO> findAllByCandidate(int candidate_id);
 
     void updateTask(TaskDTO task);
-    Pager findSorted(Optional<Integer> pageSize, Optional<Integer> pageNumber);
-   // Pager findSorted(PageAndSort pageAndSort);
+
+
+    Pager findAll(Optional<Integer> pageSize,
+                     Optional<Integer> pageNumber,
+                     Optional<String> pageSort);
+
+    Pager findAllByAuthor(int author_id,
+                          Optional<Integer> pageSize,
+                          Optional<Integer> pageNumber,
+                          Optional<String> sortAll);
+
+    Pager findAllByCandidate(int candidate_id,
+                             Optional<Integer> pageSize,
+                             Optional<Integer> pageNumber,
+                             Optional<String> sortCan);
 }

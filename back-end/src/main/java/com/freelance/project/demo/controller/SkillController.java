@@ -21,4 +21,5 @@ public class SkillController {
     public Collection<SkillDTO> getAll() {
         return service.findAll();
     }
+
 }

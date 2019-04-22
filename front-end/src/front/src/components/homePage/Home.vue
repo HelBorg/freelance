@@ -4,23 +4,19 @@
       <Navbar/>
     </div>
     <div>
-      <b-row>
-        <b-col>
-          <Menu/>
-        </b-col>
-        <b-col>
-          <div v-if="page==='welcome'">
-            <div class="hero">
-              <h1 class="display-3">Hello World</h1>
-              <p class="lead">This is the homepage of our website</p>
-            </div>
-          </div>
-          <div v-else>
-            <Table_for_tasks/>
-          </div>
-        </b-col>
-      </b-row>
-  </div>
+      <Menu/>
+      <b-card>
+<!--      <div v-if="pageName==='welcome'">-->
+<!--        <div class="hero">-->
+<!--          <h1 class="display-3">Hello World</h1>-->
+<!--          <p class="lead">This is the homepage of our website</p>-->
+<!--        </div>-->
+<!--      </div>-->
+      <div>
+        <Table_for_tasks/>
+      </div>
+      </b-card>
+    </div>
   </div>
 </template>
 
@@ -31,7 +27,7 @@
 
   export default {
     name: 'home',
-    pageName: 'welcome',
+    pageName: 'tasks',
     data() {
       return {}
     },

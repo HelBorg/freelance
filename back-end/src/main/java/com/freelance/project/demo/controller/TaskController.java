@@ -18,7 +18,6 @@ import java.util.*;
 
 import static org.springframework.http.ResponseEntity.ok;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/task")
 public class TaskController {
@@ -45,27 +44,28 @@ public class TaskController {
     }
 
     @GetMapping("/author/{id}")
-    public ResponseEntity<List<TaskDTO>> getAllByAuthor(@PathVariable("id") String author_id) {
+    public ResponseEntity<Pager> getAllByAuthor(@PathVariable("id") String author_id,
+                                                  @RequestParam("size") Optional<Integer> pageSize,
+                                                   @RequestParam("page") Optional<Integer> pageNumber,
+                                                @RequestParam("sort") Optional<String> sort){
         int id = Integer.parseInt(author_id);
-        List<TaskDTO> list = taskService.findAllByAuthor(id);
-        return ok().body(list);
+        return ResponseEntity.ok().body(taskService.findAllByAuthor(id, pageSize, pageNumber, sort));
     }
 
-//    @GetMapping("/candidate/{id}")
-//    public ResponseEntity<List<TaskDTO>> getAllByCandidate(@PathVariable("id") String candidate_id) {
-//        int id = Integer.parseInt(candidate_id);
-//        List<TaskDTO> list = service.findAllByCandidate(id);
-//        return ResponseEntity.ok().body(list);
-//    }
+    @GetMapping("/candidate/{id}")
+    public ResponseEntity<Pager> getAllByCandidate(@PathVariable("id") String candidate_id,
+                                                   @RequestParam("size") Optional<Integer> pageSize,
+                                                   @RequestParam("page") Optional<Integer> pageNumber,
+                                                   @RequestParam("sort") Optional<String> sort) {
+        int id = Integer.parseInt(candidate_id);
+        return ResponseEntity.ok().body(taskService.findAllByCandidate(id, pageSize, pageNumber, sort));
+    }
 
     @GetMapping
-    public ResponseEntity getAll(@RequestParam("size") Optional<Integer> pageSize,
-                                        @RequestParam("page") Optional<Integer> pageNumber) {
-        Map<Object, Object> map = new HashMap<>();
-
-        taskService.findSorted(Optional.of(1),  Optional.of(2));
-        map.put("1", taskService.findSorted(pageSize, pageNumber));
-        return ok(map);
+    public ResponseEntity<Pager> getAll(@RequestParam("size") Optional<Integer> pageSize,
+                                        @RequestParam("page") Optional<Integer> pageNumber,
+                                        @RequestParam("sort") Optional<String> sort) {
+        return ResponseEntity.ok().body(taskService.findAll(pageSize, pageNumber, sort));
     }
 
 }

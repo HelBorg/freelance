@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/singup").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/v1/person").permitAll()
                 .antMatchers("/api/v1/person").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/v1/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/v1/singin").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/singin").permitAll()
                 .anyRequest().authenticated()
