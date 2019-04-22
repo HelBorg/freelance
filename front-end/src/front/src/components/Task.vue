@@ -44,7 +44,7 @@
         <option :value="null">Please select skill name</option>
         <option value="java">Java</option>
         <option value="sql">SQL</option>
-        <option value="sql">Javascript</option>
+        <option value="spring">Spring</option>
       </b-form-select>
       <b-form-select v-model="skill_level" class="mb-3">
         <option :value="null">Please select skill level</option>
@@ -54,7 +54,7 @@
         <option value="semi-profi">semi-profi</option>
         <option value="profi">profi</option>
       </b-form-select>
-      <b-button @click="addRow" variant="success"> Add skill </b-button>
+      <b-button @click="addTaskSkill" variant="success"> Add skill </b-button>
       <b-button @click="deleteRow" variant="danger"> Delete Selected </b-button>
 
       <b-table selectable
@@ -74,7 +74,7 @@
   <p class="mb-1">Start date</p>
   <b-form-input v-model=created_time type="date"></b-form-input>
   <p class="mb-1">End date</p>
-  <b-form-input type="date"></b-form-input>
+  <b-form-input v-model=deadline type="date"></b-form-input>
 </div>
     </b-card>
   </div>
@@ -93,34 +93,60 @@
     components:{Menu, Navbar},
     data() {
       return {
+        //-------task---------
         skills:[],
         skill_level:null,
-        skill_name:null,
-        //-------task---------
+        skill_name:'java',
+        loaded_skill:'',
         id:'',
         name:'',
         status:'',
         description: '',
-        created_time:''
+        created_time:'',
+        deadline:''
         //-------task---------
       }
     },
 
     methods: {
-      addRow(){
-        if(this.skill_name!=null && this.skill_level !=null){
-          this.skills.push({
-            name:this.skill_name,
-            level:this.skill_level
-          })
-        }
-      },
       deleteRow(){
         let index = this.skills.indexOf(this.selected[0])
         this.skills.splice(index, 1);
       },
       rowSelected(skills) {
         this.selected = skills
+      },
+      addTaskSkill(){
+        let self = this;
+        if (this.skill_name != null && this.skill_level != null) {
+          fetch('/api/v1/task-skill', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + localStorage.getItem('JWT')
+            },
+            body: JSON.stringify({
+              skillName: this.skill_name,
+              level: this.skill_level,
+              taskId: localStorage.getItem("loadedTask")
+            })
+
+          })
+            .then(
+              function (response) {
+                console.log(self.skills)
+                if (response.status !== 200) {
+                  console.log('Looks like there was a problem. Status Code: ' +
+                    response.status);
+                  return;
+                }
+                alert("Success!");
+                response.json().then(function (data) {
+                  console.log(data)
+                })
+              }
+            )
+        }
       },
       saveTask(){
         let self = this;
@@ -135,9 +161,8 @@
             name: self.name,
             status:self.status,
             description: self.description,
-            skills: self.skills,
+            deadline: self.deadline
           })
-
         })
           .then(
             function(response) {
@@ -177,7 +202,6 @@
                 self.status = data.task.status;
                 self.description = data.task.description;
                 self.created_time = data.task.createdTime.substring(0,10);
-                self.skills = data.task.skills;
               })
             }
           )

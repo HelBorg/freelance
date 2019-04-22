@@ -41,15 +41,8 @@ public class Task implements Serializable {
     @JoinColumn(name = "performer_id", referencedColumnName = "person_id")
     private Person assignedUser;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JoinTable(name = "task_skill",
-            joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "skill_id"))
-    private List<Skill> taskSkills;
+    @OneToMany(mappedBy = "taskId")
+    private List<TaskSkill> taskSkills;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -68,5 +61,18 @@ public class Task implements Serializable {
 //    @OneToMany(mappedBy = "task")
 //    private List<Review> taskReviews;
 
+    public Task(){
+    }
 
+    public Task(String name, String description, Date deadline, Date createdTime, String status, Person assignedUser, List<TaskSkill> taskSkills, List<Person> candidateTasks, Person author) {
+        this.name = name;
+        this.description = description;
+        this.deadline = deadline;
+        this.createdTime = createdTime;
+        this.status = status;
+        this.assignedUser = assignedUser;
+        this.taskSkills = taskSkills;
+        this.candidateTasks = candidateTasks;
+        this.author = author;
+    }
 }

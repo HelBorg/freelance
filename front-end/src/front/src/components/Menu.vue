@@ -11,8 +11,8 @@
         <b-list-group-item :to="'home/in_work'">
           In work
         </b-list-group-item>
-        <b-list-group-item>
-          <router-link @click="createNewTask" to="/task">Create New</router-link>
+        <b-list-group-item @click="createNewTask">
+          <router-link to="/task">Create New</router-link>
         </b-list-group-item>
         <b-list-group-item :to="'home/search'">
           Search
@@ -30,7 +30,8 @@
   export default {
     name: "Menu",
 data() {
-      return {}
+      return {
+      }
     },
     methods: {
       createNewTask() {
@@ -49,7 +50,7 @@ data() {
                 return;
               }
               response.json().then(function (data) {
-                console.log(data);
+                console.log(data)
                 localStorage.setItem('loadedTask', data.id)
               })
             }

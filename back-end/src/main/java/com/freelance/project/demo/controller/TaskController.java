@@ -1,9 +1,6 @@
 package com.freelance.project.demo.controller;
 
 import com.freelance.project.demo.dto.TaskDTO;
-import com.freelance.project.demo.models.Pager;
-import com.freelance.project.demo.service.impl.TaskServiceImpl;
-import com.freelance.project.demo.models.Person;
 import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.service.PersonService;
 import com.freelance.project.demo.service.TaskService;
@@ -11,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -34,7 +30,6 @@ public class TaskController {
         Task createdTask = taskService.createNew(personService.findByEmail(userDetails.getUsername()));
         Map<Object, Object> model = new HashMap<>();
         model.put("id", createdTask.getTaskId());
-        model.put("skills", createdTask.getTaskSkills());
         return ok(model);
     }
 
@@ -71,6 +66,7 @@ public class TaskController {
 
     @PostMapping
     public void updateTask(@RequestBody TaskDTO task){
+        System.out.println(task);
         taskService.updateTask(task);
     }
 

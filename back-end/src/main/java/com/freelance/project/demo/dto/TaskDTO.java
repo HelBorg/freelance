@@ -1,7 +1,6 @@
 package com.freelance.project.demo.dto;
 
-import com.freelance.project.demo.models.Person;
-import com.freelance.project.demo.models.Skill;
+import com.freelance.project.demo.models.TaskSkill;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,7 +14,8 @@ public class TaskDTO {
     String description;
     String status;
     Date createdTime;
-    List<Skill> skills;
+    Date deadline;
+    List<TaskSkill> skills;
     //private Date deadline;
    // private Person assignedUser;
 }

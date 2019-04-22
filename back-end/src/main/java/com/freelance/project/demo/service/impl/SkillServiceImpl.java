@@ -2,6 +2,7 @@ package com.freelance.project.demo.service.impl;
 
 import com.freelance.project.demo.dto.SkillDTO;
 import com.freelance.project.demo.dto.TaskDTO;
+import com.freelance.project.demo.models.Skill;
 import com.freelance.project.demo.repository.SkillRepository;
 import com.freelance.project.demo.service.SkillService;
 import org.dozer.DozerBeanMapper;
@@ -13,7 +14,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class SkillServiceImpl implements SkillService {
-    private SkillRepository repository;
+
+    private SkillRepository skillRepository;
 
 
     @Autowired
@@ -21,8 +23,13 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public List<SkillDTO> findAll() {
-        return repository.findAll().stream()
+        return skillRepository.findAll().stream()
                 .map(entity -> mapper.map(entity, SkillDTO.class))
                 .collect(Collectors.toList());
+    }
+
+
+    public Skill findByName(String name){
+        return skillRepository.findSkillByName(name);
     }
 }

@@ -17,5 +17,5 @@ public class SkillDTO {
 
     private List<Task> taskSkills;
 
-    private List<UserSkill> userSkills;
+   // private List<UserSkill> userSkills;
 }

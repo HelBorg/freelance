@@ -34,7 +34,7 @@ public class Person implements Serializable {
     @ManyToMany(mappedBy = "userReviews")
     private List<Review> reviewsAboutUser;
 
-    @OneToMany(mappedBy = "personSkills")
+    @OneToMany(mappedBy = "personId")
     private List<UserSkill> userSkills;
 
     @OneToMany(mappedBy = "author")
