@@ -11,44 +11,44 @@ services:
     container_name: nginx
     restart: on-failure
     depends_on:
-    - back-end
-    - front-end
+      - back-end
+      - front-end
     ports:
-    - 80:80
-    - 443:443
+      - 80:80
+      - 443:443
 
   db:
     image: postgres:11
     restart: on-failure
     container_name: db
     environment:
-    - POSTGRES_USER=postgres
-    - POSTGRES_PASSWORD=568698
-    - POSTGRES_DB=freelance
-    - PGDATA=/tmp
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=568698
+      - POSTGRES_DB=freelance
+      - PGDATA=/tmp
     ports:
-    - 5432
+      - 5432
     volumes:
-    - ./db-data:/var/lib/postgresql/data
+      - ./db-data:/var/lib/postgresql/data
 
   flyway:
     image: boxfuse/flyway
     container_name: flyway
     restart: on-failure
-    command: -url=jdbc:postgresql://db:5432/freelance -schemas=freelance -user=postgres -password=568698 migrate
+    command: -url=jdbc:postgresql://db:5432/freelance -schemas=freelance -user=postgres -password=568698 -connectRetries=60 migrate
     volumes:
-    - ./flyway/sql:/flyway/sql
-    - ./flyway/conf:/flyway/conf
+      - ./flyway/sql:/flyway/sql
+      - ./flyway/conf:/flyway/conf
     depends_on:
-    - db
+      - db
 
   back-end:
     container_name: back-end
     restart: on-failure
     links:
-    - db
+      - db
     ports:
-    - 8282:8282
+      - 8282:8282
     build:
       context: ./back-end
       dockerfile: Dockerfile
@@ -59,9 +59,9 @@ services:
     container_name: front-end
     restart: always
     links:
-    - back-end
+      - back-end
     ports:
-    - 8181:8181
+      - 8181:8181
     build:
       context: ./front-end
       dockerfile: Dockerfile

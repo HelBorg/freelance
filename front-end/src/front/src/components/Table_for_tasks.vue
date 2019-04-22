@@ -102,7 +102,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  import axios from 'axios/index'
   // import DatePick from 'vue-date-pick';
   // import 'vue-date-pick/dist/vueDatePick.css';
 

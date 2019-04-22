@@ -16,7 +16,7 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     @Query("SELECT t FROM Task t where t.author.personId = :id")
-    Page<Task> findAllByAuthor_PersonId(@Param("id")int author_id, Pageable pageRequest);
+    Page<Task> findAllByAuthor(@Param("id")int author_id, Pageable pageRequest);
 
 //    Page<Task> findAll(PageRequest pageRequest);
 

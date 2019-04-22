@@ -12,7 +12,7 @@ import java.util.Collection;
 
 
 @RestController
-@RequestMapping("/api/v1/person")
+@RequestMapping("/api/v1/persons")
     public class PersonController {
 
 

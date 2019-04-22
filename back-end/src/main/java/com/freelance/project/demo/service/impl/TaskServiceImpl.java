@@ -51,96 +51,54 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Pager findAll(Optional<Integer> pageSize,
+    public Pager<Task> findAll(Optional<Integer> pageSize,
                             Optional<Integer> pageNumber,
                             Optional<String> pageSort) {
         int pageId = pageNumber.orElse(0);
         int size = pageSize.orElse(5);
         String sort = pageSort.orElse("taskId");
         PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
-
         Page<Task> page = taskRepository.findAll(PageRequest.of(pageId, size, Sort.by(sort)));
 
         boolean hasPreviousPage = pageId != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageId;
-        return new Pager(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
+        return new Pager<>(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
-//    private Pager findSort(PageAndSort pageAndSort) {
-//        System.out.println(pageAndSort.getFind().length());
-//        System.out.println(pageAndSort.getCurrentPage());
-//        int pageId = (pageAndSort.getFind().length() > 0) ? 0 : pageAndSort.getCurrentPage();
-//        int size = pageAndSort.getPageSize();
-//        String sortParam = pageAndSort.getSort();
-//        String find = pageAndSort.getFind();
-//
-//        Page<Task> page = taskRepository.findAll(PageRequest.of(pageId, size, Sort.by(sortParam)));
-//
-//        boolean hasPreviousPage = pageId != 0;
-//        boolean hasNextPage = page.getTotalPages() - 1 > pageId;
-//
-//        return new Pager(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
-//    }
-
-//    @Override
-//    public List<TaskDTO> findAll() {
-//        return taskRepository.findAll().stream()
-//                .map(entity -> mapper.map(entity, TaskDTO.class))
-//                .collect(Collectors.toList());
-//    }
 
     @Override
-    public Pager findAllByAuthor(int author_id,
+    public Pager<Task> findAllByAuthor(int author_id,
                                  Optional<Integer> pageSize,
                                  Optional<Integer> pageNumber,
                                  Optional<String> sortAll) {
         int pageId = pageNumber.orElse(0);
         int size = pageSize.orElse(5);
-        String sort = sortAll.orElse("TaskId");
+        String sort = sortAll.orElse("taskId");
         PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
-        return findSortAuthor(author_id, pageAndSort);
-    }
-
-    private Pager findSortAuthor(int author_id, PageAndSort pageAndSort) {
-        int pageId = (pageAndSort.getFind().length() > 0) ? 0 : pageAndSort.getCurrentPage();
-        int size = pageAndSort.getPageSize();
-        String sortParam = pageAndSort.getSort();
-        String find = pageAndSort.getFind();
-
-        Page<Task> page = taskRepository.findAllByAuthor_PersonId(author_id, PageRequest.of(pageId, size, Sort.by(sortParam)));
+        Page<Task> page = taskRepository.findAllByAuthor(author_id, PageRequest.of(pageId, size, Sort.by(sort)));
 
         boolean hasPreviousPage = pageId != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageId;
 
-        return new Pager(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
+        return new Pager<>(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
 
-
     @Override
-    public Pager findAllByCandidate(int candidate_id,
+    public Pager<Task> findAllByCandidate(int candidate_id,
                                     Optional<Integer> pageSize,
                                     Optional<Integer> pageNumber,
                                     Optional<String> sortCand) {
         int pageId = pageNumber.orElse(0);
         int size = pageSize.orElse(5);
-        String sort = sortCand.orElse("TaskId");
+        String sort = sortCand.orElse("taskId");
         PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
-        return findSortCandidates(candidate_id, pageAndSort);
-    }
-
-    private Pager findSortCandidates(int candidate_id, PageAndSort pageAndSort) {
-        int pageId = (pageAndSort.getFind().length() > 0) ? 0 : pageAndSort.getCurrentPage();
-        int size = pageAndSort.getPageSize();
-        String sortParam = pageAndSort.getSort();
-        String find = pageAndSort.getFind();
-
-        Page<Task> page = taskRepository.findAllByCandidate(candidate_id, PageRequest.of(pageId, size, Sort.by(sortParam)));
+        Page<Task> page = taskRepository.findAllByCandidate(candidate_id, PageRequest.of(pageId, size, Sort.by(sort)));
 
         boolean hasPreviousPage = pageId != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageId;
 
-        return new Pager(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
+        return new Pager<>(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
 }

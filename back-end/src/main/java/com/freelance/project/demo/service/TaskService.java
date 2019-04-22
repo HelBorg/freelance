@@ -19,16 +19,16 @@ public interface TaskService {
     void updateTask(TaskDTO task);
 
 
-    Pager findAll(Optional<Integer> pageSize,
+    Pager<Task> findAll(Optional<Integer> pageSize,
                      Optional<Integer> pageNumber,
                      Optional<String> pageSort);
 
-    Pager findAllByAuthor(int author_id,
+    Pager<Task> findAllByAuthor(int author_id,
                           Optional<Integer> pageSize,
                           Optional<Integer> pageNumber,
                           Optional<String> sortAll);
 
-    Pager findAllByCandidate(int candidate_id,
+    Pager<Task> findAllByCandidate(int candidate_id,
                              Optional<Integer> pageSize,
                              Optional<Integer> pageNumber,
                              Optional<String> sortCan);

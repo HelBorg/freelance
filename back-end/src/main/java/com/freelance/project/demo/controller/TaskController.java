@@ -19,7 +19,7 @@ import java.util.*;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping("/api/v1/task")
+@RequestMapping("/api/v1/tasks")
 public class TaskController {
 
     @Autowired
@@ -44,7 +44,7 @@ public class TaskController {
     }
 
     @GetMapping("/author/{id}")
-    public ResponseEntity<Pager> getAllByAuthor(@PathVariable("id") String author_id,
+    public ResponseEntity<Pager<Task>> getAllByAuthor(@PathVariable("id") String author_id,
                                                   @RequestParam("size") Optional<Integer> pageSize,
                                                    @RequestParam("page") Optional<Integer> pageNumber,
                                                 @RequestParam("sort") Optional<String> sort){
@@ -53,7 +53,7 @@ public class TaskController {
     }
 
     @GetMapping("/candidate/{id}")
-    public ResponseEntity<Pager> getAllByCandidate(@PathVariable("id") String candidate_id,
+    public ResponseEntity<Pager<Task>> getAllByCandidate(@PathVariable("id") String candidate_id,
                                                    @RequestParam("size") Optional<Integer> pageSize,
                                                    @RequestParam("page") Optional<Integer> pageNumber,
                                                    @RequestParam("sort") Optional<String> sort) {
@@ -62,7 +62,7 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<Pager> getAll(@RequestParam("size") Optional<Integer> pageSize,
+    public ResponseEntity<Pager<Task>> getAll(@RequestParam("size") Optional<Integer> pageSize,
                                         @RequestParam("page") Optional<Integer> pageNumber,
                                         @RequestParam("sort") Optional<String> sort) {
         return ResponseEntity.ok().body(taskService.findAll(pageSize, pageNumber, sort));

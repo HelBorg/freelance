@@ -4,16 +4,15 @@
       <Navbar/>
     </div>
     <div>
-      <Menu/>
       <b-card>
-<!--      <div v-if="pageName==='welcome'">-->
-<!--        <div class="hero">-->
-<!--          <h1 class="display-3">Hello World</h1>-->
-<!--          <p class="lead">This is the homepage of our website</p>-->
-<!--        </div>-->
-<!--      </div>-->
+      <Menu/>
+      </b-card>
+      <b-card>
       <div>
-        <Table_for_tasks/>
+        <div class="hero">
+          <h1 class="display-3">Hello World</h1>
+          <p class="lead">This is the homepage of our website</p>
+        </div>
       </div>
       </b-card>
     </div>
@@ -21,17 +20,18 @@
 </template>
 
 <script>
-  import Navbar from "../Navbar";
-  import Menu from "../Menu";
+  import Navbar from "./Navbar";
+  import Menu from "./Menu";
   import Table_for_tasks from "./Table_for_tasks";
 
   export default {
     name: 'home',
-    pageName: 'tasks',
     data() {
-      return {}
+      return {
+        pageName: 'welcome',
+      }
     },
-    components: {Table_for_tasks, Menu, Navbar},
+    components: {Menu, Navbar},
     methods: {
       getPage() {
         this.pageName = this.$route.params.pageName

@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import actions from './actions'
 import * as getters from './getters'
 import mutations from './mutations'
-import axios from '../../axios/index'
+import axios from 'axios'
 
 Vue.use(Vuex,axios)
 

@@ -1,6 +1,7 @@
 package com.freelance.project.demo.repository;
 
 import com.freelance.project.demo.models.Skill;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

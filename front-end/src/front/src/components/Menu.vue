@@ -1,20 +1,20 @@
 <template>
   <div id="menu" style="float: left;width:29%">
     <div class="container-fluid ">
-      <b-list-group>
-        <b-list-group-item :to="'home/mine'" button>
+      <b-list-group class="w-20">
+        <b-list-group-item :to="'home/mine'">
           Mine
         </b-list-group-item>
-        <b-list-group-item :to="'home/candidates'" button>
+        <b-list-group-item :to="'home/candidates'">
           Candidates
         </b-list-group-item>
-        <b-list-group-item :to="'home/in_work'" button>
+        <b-list-group-item :to="'home/in_work'">
           In work
         </b-list-group-item>
         <b-list-group-item>
           <router-link @click="createNewTask" to="/task">Create New</router-link>
         </b-list-group-item>
-        <b-list-group-item :to="'home/tasks'" button>
+        <b-list-group-item :to="'home/search'">
           Search
         </b-list-group-item>
         <b-list-group-item :to="'home'">Users</b-list-group-item>
@@ -29,7 +29,7 @@
 
   export default {
     name: "Menu",
-data() {
+    data() {
       return {}
     },
     methods: {
