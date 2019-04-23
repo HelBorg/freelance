@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "task")
-public class Task implements Serializable {
+public class Task {
 
 
     @Id
@@ -61,8 +61,6 @@ public class Task implements Serializable {
     @JoinColumn(name = "author_id", referencedColumnName = "person_id")
     private Person author;
 
-//    @OneToMany(mappedBy = "task")
-//    private List<Review> taskReviews;
 
 
 }

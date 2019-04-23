@@ -31,11 +31,7 @@ public class DozerConfig {
                 mapping(Task.class, TaskDTO.class)
                         .fields(field("taskId").accessible(), field("id").accessible())
                         .fields(field("name").accessible(), field("name").accessible())
-                        .fields(field("status").accessible(), field("status").accessible())
                         .fields(field("status").accessible(), field("status").accessible());
-
-
-
             }
         };
     }

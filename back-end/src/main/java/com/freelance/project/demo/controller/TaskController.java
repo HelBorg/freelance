@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -66,11 +65,11 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<Pager<Task>> getAll(@RequestParam("size") Optional<Integer> pageSize,
+    public ResponseEntity<Pager<TaskDTO>> getAll(@RequestParam("size") Optional<Integer> pageSize,
                                         @RequestParam("page") Optional<Integer> pageNumber,
                                         @RequestParam("sort") Optional<String> sort) {
-        Pager<Task> pager = taskService.findAll(pageSize, pageNumber, sort);
-        logger.info("Request to get tasks: {}", pager);
+        Pager<TaskDTO> pager = taskService.findAll(pageSize, pageNumber, sort);
+//        logger.info("Request to get tasks: {}", pager);
         return ResponseEntity.ok().body(pager);
     }
 

@@ -37,10 +37,4 @@ public class Review implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "review_id"))
     private List<Person> userReviews;
 
-//    @ManyToOne(cascade = {CascadeType.ALL})
-//    @JoinColumn(name = "task_id")
-//    private Task task;
-
-
-
 }

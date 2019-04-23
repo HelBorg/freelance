@@ -1,5 +1,6 @@
 package com.freelance.project.demo.service.impl;
 
+import com.freelance.project.demo.dto.PersonDTO;
 import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.Person;
 import com.freelance.project.demo.models.PageAndSort;
@@ -51,7 +52,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Pager<Task> findAll(Optional<Integer> pageSize,
+    public Pager<TaskDTO> findAll(Optional<Integer> pageSize,
                             Optional<Integer> pageNumber,
                             Optional<String> pageSort) {
         int pageId = pageNumber.orElse(0);
@@ -62,7 +63,12 @@ public class TaskServiceImpl implements TaskService {
 
         boolean hasPreviousPage = pageId != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageId;
-        return new Pager<>(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
+        List<Task> list = page.getContent();
+
+        List<TaskDTO> listDTO = list.stream()
+                .map(entity -> mapper.map(entity, TaskDTO.class))
+                .collect(Collectors.toList());
+        return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
 

@@ -1,5 +1,6 @@
 package com.freelance.project.demo;
 
+import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.Pager;
 import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.service.TaskService;
@@ -25,15 +26,7 @@ public class  DemoApplicationTests {
 
     @Test
     public void contextLoads() {
-//        assertThat(taskService.findAll()).isNotNull();
-        Pager pager;
-        pager = taskService.findAll( Optional.of(10), Optional.of(0), Optional.of("taskId"));
-        List<Task> list = pager.getTasks();
-        System.out.println("==============");
-        for (Task task: list) {
-            System.out.println(task.getName());
-        }
-        System.out.println("==============");
+
     }
 
 }

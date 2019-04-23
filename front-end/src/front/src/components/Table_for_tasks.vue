@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-col>
-      <div >
+      <div>
         <b-table id="tasks"
                  title="Tasks"
                  :items="tasks"
