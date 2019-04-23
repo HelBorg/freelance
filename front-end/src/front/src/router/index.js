@@ -13,7 +13,7 @@ const hasToken = (to, from, next) => {
   const username = localStorage.getItem('username')
   if (token) {
     store.commit(types.LOGIN_SUCCESS, { token, username })
-    router.push('/home/welcome')
+    router.push('/home')
   } else {
     next()
   }
@@ -55,7 +55,11 @@ const router = new Router({
       name: 'Task',
       component: Task,
       beforeEnter: requireAuth
-
+    },
+    {
+      path: '/user',
+      name: 'User',
+      beforeEnter: requireAuth
     },
     {
       path: '/singup',

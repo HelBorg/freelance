@@ -58,7 +58,7 @@ public class TaskServiceImpl implements TaskService {
         int size = pageSize.orElse(5);
         String sort = pageSort.orElse("taskId");
         PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
-        Page<Task> page = taskRepository.findAll(PageRequest.of(pageId, size, Sort.by(sort)));
+        Page<Task> page = taskRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
 
         boolean hasPreviousPage = pageId != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageId;

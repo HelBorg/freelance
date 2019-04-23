@@ -1,14 +1,9 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="dark" class="margin-down-10">
-    <!-- Надо найти картинку-->
-    <b-navbar-brand>
-      <img src="https://placekitten.com/g/30/30" class="d-inline-block align-top" alt="Kitten">
-    </b-navbar-brand>
   <div id="navbar">
-    <b-navbar toggleable="lg" type="dark" variant="dark">
+    <b-navbar toggleable="lg" type="dark" variant="dark" class="margin-down-10">
       <!-- Надо найти картинку-->
       <b-navbar-brand href="#">
-        <img src="https://placekitten.com/g/30/30" class="d-inline-block align-top" alt="Kitten">
+        <img src="https://cdn3.iconfinder.com/data/icons/web-and-graphic-design-vol-2/64/Freelance-128.png" class="d-inline-block align-top" alt="Kitten">
       </b-navbar-brand>
 
     <b-navbar-brand href="#">Freelance</b-navbar-brand>
@@ -20,11 +15,11 @@
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
           <!-- Using 'button-content' slot -->
-          <b-nav-item >Welcome, {{username}} </b-nav-item>
           <b-nav-item @click="logout">Logout</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
+  </div>
 </template>
 
 <script>

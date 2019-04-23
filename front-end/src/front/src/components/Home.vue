@@ -4,17 +4,17 @@
       <Navbar/>
     </div>
     <div>
-      <b-card>
-      <Menu/>
-      </b-card>
-      <b-card>
-      <div>
-        <div class="hero">
-          <h1 class="display-3">Hello World</h1>
-          <p class="lead">This is the homepage of our website</p>
+      <b-col cols="4">
+        <Menu/>
+      </b-col>
+      <b-col>
+        <div>
+          <div class="hero">
+            <h1 class="display-3">Hello World</h1>
+            <p class="lead">This is the homepage of our website</p>
+          </div>
         </div>
-      </div>
-      </b-card>
+      </b-col>
     </div>
   </div>
 </template>
@@ -26,17 +26,7 @@
 
   export default {
     name: 'home',
-    data() {
-      return {
-        pageName: 'welcome',
-      }
-    },
-    components: {Menu, Navbar},
-    methods: {
-      getPage() {
-        this.pageName = this.$route.params.pageName
-      }
-    }
+    components: {Menu, Navbar}
   }
 </script>
 

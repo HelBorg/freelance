@@ -20,6 +20,9 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
 //    Page<Task> findAll(PageRequest pageRequest);
 
+    @Query("Select t.taskId, t.name from Task t")
+    Page<Task> find(Pageable pageRequest);
+
     List<Task> findAll();
 
     @Query("SELECT t FROM Task t join t.candidateTasks tc where tc.personId = :id")

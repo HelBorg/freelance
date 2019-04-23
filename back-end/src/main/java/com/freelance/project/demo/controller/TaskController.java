@@ -7,6 +7,8 @@ import com.freelance.project.demo.models.Person;
 import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.service.PersonService;
 import com.freelance.project.demo.service.TaskService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,6 +29,8 @@ public class TaskController {
 
     @Autowired
     PersonService personService;
+
+    protected static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
     @PostMapping("/new")
     public ResponseEntity create(@AuthenticationPrincipal UserDetails userDetails){
@@ -65,7 +69,9 @@ public class TaskController {
     public ResponseEntity<Pager<Task>> getAll(@RequestParam("size") Optional<Integer> pageSize,
                                         @RequestParam("page") Optional<Integer> pageNumber,
                                         @RequestParam("sort") Optional<String> sort) {
-        return ResponseEntity.ok().body(taskService.findAll(pageSize, pageNumber, sort));
+        Pager<Task> pager = taskService.findAll(pageSize, pageNumber, sort);
+        logger.info("Request to get tasks: {}", pager);
+        return ResponseEntity.ok().body(pager);
     }
 
 }
