@@ -86,6 +86,11 @@ public class TaskServiceImpl implements TaskService {
         boolean hasPreviousPage = pageId != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageId;
 
+//        List<Task> list = page.getContent();
+//
+//        List<TaskDTO> listDTO = list.stream()
+//                .map(entity -> mapper.map(entity, TaskDTO.class))
+//                .collect(Collectors.toList());
         return new Pager<>(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
@@ -104,6 +109,11 @@ public class TaskServiceImpl implements TaskService {
         boolean hasPreviousPage = pageId != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageId;
 
+//        List<Task> list = page.getContent();
+//
+//        List<TaskDTO> listDTO = list.stream()
+//                .map(entity -> mapper.map(entity, TaskDTO.class))
+//                .collect(Collectors.toList());
         return new Pager<>(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
