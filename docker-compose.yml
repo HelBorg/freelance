@@ -25,9 +25,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=568698
       - POSTGRES_DB=freelance
-      - PGDATA=/tmp
     ports:
-      - 5432
+      - 5432:5432
     volumes:
       - ./db-data:/var/lib/postgresql/data
 

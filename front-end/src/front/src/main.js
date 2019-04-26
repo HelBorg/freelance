@@ -9,7 +9,7 @@ import store from './store'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"
 
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue, router)
 // Vue.config.productionTip = false
 
 new Vue({

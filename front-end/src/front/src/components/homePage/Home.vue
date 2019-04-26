@@ -4,18 +4,11 @@
       <Navbar/>
     </div>
     <div>
-      <b-row>
-        <b-col>
           <Menu/>
-        </b-col>
-        <b-col>
             <div class="hero">
-              <h1 class="display-3">Hello World</h1>
-              <p class="lead">This is the homepage of our website</p>
+              <h1 class="display-3">Freelance system</h1>
+              <p class="lead">Dmitry and Elena corporated (c)</p>
             </div>
-            <Table_for_tasks/>
-        </b-col>
-      </b-row>
   </div>
   </div>
 </template>
@@ -23,7 +16,7 @@
 <script>
   import Navbar from "../Navbar";
   import Menu from "../Menu";
-  import Table_for_tasks from "./Table_for_tasks";
+  import Tasks from "../Tasks.vue";
 
   export default {
     name: 'home',
@@ -31,7 +24,7 @@
     data() {
       return {}
     },
-    components: {Table_for_tasks, Menu, Navbar},
+    components: {Tasks, Menu, Navbar},
     methods: {
       getPage() {
         this.pageName = this.$router.params.pageName

@@ -30,6 +30,7 @@ task_id serial primary key ,
 name varchar(100) not null,
 description varchar(100),
 deadline timestamp,
+time_created timestamp,
 status varchar(100) not null,
 performer_id integer ,
 author_id integer not null,
@@ -74,11 +75,3 @@ skill_id integer not null,
 foreign key (task_id) references public.task (task_id),
 foreign key (skill_id) references public.skill (skill_id)
 );
-
-insert into skill(name) values('java');
-insert into skill(name) values('sql');
-insert into skill(name) values('Javascript');
-insert into skill(name) values('vue.js');
-insert into skill(name) values('spring');
-insert into skill(name) values('pl/sql');
-

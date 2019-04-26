@@ -1,64 +1,61 @@
 <template>
   <div id="container">
     <div>
-      <Navbar/>
+      <Navbar></Navbar>
     </div>
     <div>
+    <Menu></Menu>
       <b-row>
-      <b-col cols="3">
-        <Menu/>
-      </b-col>
-      <b-col>
-        <b-card title="Tasks">
-          <div>
-            <b-table id="tasks"
-                     title="Tasks"
-                     :items="getTasks.tasks"
-                     :fields="fields"
-                     small
-                     @row-clicked="goToTask"
-            >
-            </b-table>
-          </div>
+      <b-col id="table_and_filter" style="float:right; width:54%;" class="p-1 small">
+        <div>
+          <b-table id="tasks"
+                   title="Tasks"
+                   :items="getTasks.tasks"
+                   :fields="fields"
+                   small
+                   striped
+                   @row-clicked="goToTask"
+          >
+          </b-table>
+        </div>
+        <!--Pagination-->
+        <div v-if="getTasks.pagesCount>1">
+          <b-button variant="light"
+                    @click="changePage(0)"
+                    active="getTasks.currentPage!=0">First
+          </b-button>
 
-<!--          Pagination-->
-          <div v-if="getTasks.pagesCount>1">
-            <b-button variant="light"
-                      @click="changePage(0)"
-                      active="getTasks.currentPage!=0">
-              First
-            </b-button>
-            <b-button variant="light"
-                      @click="changePage(getTasks.currentPage - 1)"
-                      active="getTasks.currentPage!=0">
-              Prev
-            </b-button>
-            <b-button variant="light"
-                      v-for="index in getTasks.pagesCount"
-                      @click="changePage(index - 1)"
-            >
-              {{index}}
-            </b-button>
-            <b-button variant="light"
-                      @click="changePage(getTasks.currentPage + 1)"
-                      active="getTasks.currentPage!=getTasks.pageCount-1">
-              Next
-            </b-button>
-            <b-button variant="light"
-                      @click="changePage(getTasks.pagesCount - 1)"
-                      active="getTasks.currentPage!=getTasks.pageCount-1">
-              Last
-            </b-button>
-          </div>
-        </b-card>
-      </b-col>
+          <b-button
+            class="p-1 small"
+            variant="light"
+            @click="changePage(getTasks.currentPage - 1)"
+            active="getTasks.currentPage!=0">Prev
+          </b-button>
 
-        <!--    Filter-->
-        <b-col>
-          <b-card title="Filter">
+          <b-button variant="light"
+                    v-for="index in getTasks.pagesCount"
+                    @click="changePage(index - 1)"
+                    class="p-1 small">{{index}}
+          </b-button>
+
+          <b-button variant="light"
+                    @click="changePage(getTasks.currentPage + 1)"
+                    active="getTasks.currentPage!=getTasks.pageCount-1"
+                    class="p-1 small"> Next
+          </b-button>
+
+          <b-button variant="light"
+                    @click="changePage(getTasks.pagesCount - 1)"
+                    active="getTasks.currentPage!=getTasks.pageCount-1"
+                    class="p-1 small">Last
+          </b-button>
+        </div>
+    </b-col>
+      <!--Filter-->
+      <b-col class="p-1 small" style="width:28%;float:right">
+        <b-card title="Filter">
           <div v-if="page.showFilter">
             <b-form @submit="onSubmit" @reset="onReset">
-
               <b-form-group id="input-group-1" label-cols-sm="3" label="Name" class="mb-0">
                 <b-input-group>
                   <b-form-input v-model="editFilter.name" placeholder="Type to Search"></b-form-input>
@@ -71,17 +68,17 @@
               <b-form-group id="input-group-2" label="Date of creation:" label-for="input-2">
                 <b-form aria-label="From:">
                   From:
-                    <datepicker v-model="editFilter.date_from"
-                                style="float: right; margin-left: 50px"
-                                monday-first=true>
-                    </datepicker>
+                  <datepicker v-model="editFilter.date_from.substring(0,10)"
+                              style="float: right; margin-left: 50px"
+                              monday-first=true>
+                  </datepicker>
                 </b-form>
                 <b-form aria-label="To:">
                   To:
-                    <datepicker v-model="editFilter.date_to"
-                                style="float: right; margin-bottom: 10px; margin-left: 50px"
-                                monday-first=true>
-                    </datepicker>
+                  <datepicker v-model="editFilter.date_to.substring(0,10)"
+                              style="float: right; margin-bottom: 10px; margin-left: 50px"
+                              monday-first=true>
+                  </datepicker>
                 </b-form>
               </b-form-group>
 
@@ -101,7 +98,7 @@
                     <b-col cols="3"> Value: {{skill.value}}
                     </b-col>
                     <b-col cols='1'>
-                      <b-button @click="deleteSkill(index)" variant="primary"> - </b-button>
+                      <b-button @click="deleteSkill(index)" variant="primary"> -</b-button>
                     </b-col>
                   </b-row>
                   <b-row>
@@ -119,7 +116,7 @@
               </b-form-group>
 
 
-              <b-form-group id="input-group-4" label="Author:" label-for="input-4">
+              <b-form-group class="p-1 small" id="input-group-4" label="Author:" label-for="input-4">
                 <b-form-select multiple v-model="selected" :select-size="4" @click="select">
                   <option v-for="user in getUsers.users"
                           @click="select(user)"
@@ -129,17 +126,16 @@
                 </b-form-select>
               </b-form-group>
 
-              <b-button type="submit" variant="primary">Submit</b-button>
-              <b-button type="addSkill" variant="success" v-on:click="addSkill">Add Skill</b-button>
-              <b-button type="reset" variant="danger">Reset</b-button>
+              <b-button type="submit" variant="primary" class="p-1 small">Submit</b-button>
+              <b-button type="addSkill" variant="success" class="p-1 small" v-on:click="addSkill">Add Skill</b-button>
+              <b-button type="reset" variant="danger" class="p-1 small">Reset</b-button>
             </b-form>
           </div>
-          </b-card>
-        </b-col>
-
+        </b-card>
+      </b-col>
       </b-row>
     </div>
-  </div>
+    </div>
 </template>
 
 <script>
@@ -150,19 +146,19 @@
 
   export default {
     name: "Tasks",
-    components: { Menu, Navbar, Datepicker},
+    components: {Menu, Navbar, Datepicker},
     data() {
       return {
-        page:{
+        page: {
           name: null,
           get: null,   //get all tasks, get by author, by candidates
           showFilter: true,
           user_id: 1,
           find: null
         },
-        errors:[],
+        errors: [],
         show: true,
-        task:{
+        task: {
           id: null,
           name: null,
           date_from: null,
@@ -183,7 +179,7 @@
           pageSize: 3,
           find: null
         },
-        getSkills:{skills: [{name:'Nothing in here yet'}]},
+        getSkills: {skills: [{name: 'Nothing in here yet'}]},
         getUsers: {users: []},
         fields: {
           name: {
@@ -242,14 +238,14 @@
           name: '',
           date_from: '',
           date_to: '',
-          newSkill:[],
+          newSkill: [],
           skillsF:
             [
               {name: '', value: '0'}
             ],
           skills:
             ['author 1'],
-          newSelect: {id:0, name: ''},
+          newSelect: {id: 0, name: ''},
           selected: [], // Array reference
           selectedSkill: []
         },
@@ -258,14 +254,15 @@
     },
     methods: {
       retrieveTasks() {
-        axios.get('http://localhost:80/api/v1/tasks',{
-          params:
-        {
-          size: this.getTasks.pageSize,
-          page: this.getTasks.currentPage,
-          pageName: this.page.get,
-          id: this.page.user_id
-        }}
+        axios.get('http://localhost:80/api/v1/task', {
+            params:
+              {
+                size: this.getTasks.pageSize,
+                page: this.getTasks.currentPage,
+                pageName: this.page.get,
+                id: this.page.user_id
+              }
+          }
         )
           .then(response => {
             console.log(response.data);
@@ -276,10 +273,10 @@
                 this.task.name = response.data.tasks[t].name;
                 this.task.status = response.data.tasks[t].status;
                 this.task.date_from = null;
-                this.task.deadline = response.data.tasks[t].deadline;
+                this.task.deadline = response.data.tasks[t].deadline.substring(0, 10);
                 this.task.rate = response.data.tasks[t].rate;
                 this.task.author = response.data.tasks[t].author.name;
-                for(let skill in response.data.tasks[t].taskSkills) {
+                for (let skill in response.data.tasks[t].taskSkills) {
                   this.task.skills.push(skill.name);
                 }
                 for (let assign in response.data.tasks[t].assignedUser) {
@@ -296,32 +293,34 @@
               this.getTasks.find = response.data.find;
             }
           })
-        .catch(e => {
-          this.errors.push(e)
-      });
+          .catch(e => {
+            this.errors.push(e)
+          });
       },
       retrieveSkills() {
-        axios.get('http://localhost:80/api/v1/skills')
+        axios.get('http://localhost:80/api/v1/skill')
           .then(response => {
             console.log(response.data);
             if (response) {
               this.getSkills.skills = response.data;
-            }})
+            }
+          })
           .catch(e => {
             this.errors.push(e)
           });
       },
       retrieveUsers() {
-        axios.get('http://localhost:80/api/v1/persons')
+        axios.get('http://localhost:80/api/v1/person')
           .then(response => {
             console.log(response.data);
             if (response) {
               this.getUsers.users = response.data;
-            }})
+            }
+          })
           .catch(e => {
             this.errors.push(e)
           });
-        for(let user in this.getUsers.users) {
+        for (let user in this.getUsers.users) {
           let state = false;
           user.push(state);
         }
@@ -340,7 +339,7 @@
       },
       extractPageParam() {
         this.page.name = this.$route.params.pageName;
-        switch(this.page.name) {
+        switch (this.page.name) {
           case 'search':
             this.fields.status.thClass = 'd-none';
             this.fields.status.tdClass = 'd-none';
@@ -357,11 +356,12 @@
           case 'in_work':
             this.page.get = 'assigned';
             break;
-          default: break;
+          default:
+            break;
         }
       },
       goToTask(record) {
-        this.$router.push({name:'Task', params: {id: record.id}});
+        this.$router.push({name: 'Task', params: {id: record.id}});
       },
 
 
@@ -413,7 +413,7 @@
     mounted() {
       this.extractPageParam();
       this.retrieveTasks();
-      if(this.page.showFilter) {
+      if (this.page.showFilter) {
         this.retrieveSkills();
         this.retrieveUsers();
       }

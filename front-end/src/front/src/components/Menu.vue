@@ -1,7 +1,7 @@
 <template>
-  <div id="menu" style="float: left;width:29%">
+  <div id="menu" style="float:left; width:15%">
     <div class="container-fluid ">
-      <b-list-group >
+      <b-list-group>
         <b-list-group-item :to="'tasks/mine'">
           Mine
         </b-list-group-item>
@@ -12,10 +12,7 @@
           In work
         </b-list-group-item>
         <b-list-group-item @click="createNewTask">
-
-            Create New
-
-
+          Create New
         </b-list-group-item>
         <b-list-group-item :to="'tasks/search'">
           Search
@@ -29,10 +26,10 @@
 </template>
 
 <script>
- import router from "../router";
+  import router from "../router";
   export default {
     name: "Menu",
-data() {
+    data() {
       return {
         id:'',
       }
@@ -56,15 +53,13 @@ data() {
               response.json().then(function (data) {
                 console.log(data)
                 router.push('/task/' + data.id);
-                })
+              })
             }
           )
       }
     }
   }
-
 </script>
 
 <style scoped>
-
 </style>
