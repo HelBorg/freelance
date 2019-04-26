@@ -51,7 +51,7 @@ const router = new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/task',
+      path: '/task/:id',
       name: 'Task',
       component: Task,
       beforeEnter: requireAuth

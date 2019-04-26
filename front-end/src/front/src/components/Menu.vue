@@ -16,7 +16,7 @@
           <b-list-group-item :to="'tasks/search'">
             Search
           </b-list-group-item>
-          <b-list-group-item :to="'localhost:80/users'">Users</b-list-group-item>
+          <b-list-group-item :to="'users'">Users</b-list-group-item>
         </b-list-group>
   </b-card>
 </template>
