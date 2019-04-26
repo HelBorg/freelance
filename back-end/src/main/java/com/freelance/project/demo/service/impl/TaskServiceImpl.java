@@ -52,14 +52,29 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Pager<TaskDTO> findAll(Optional<Integer> pageSize,
+    public Pager<TaskDTO> findAll(Optional<Integer> id,
+                            Optional<Integer> pageSize,
                             Optional<Integer> pageNumber,
-                            Optional<String> pageSort) {
+                            Optional<String> pageSort,
+                            Optional<String> pageName) {
         int pageId = pageNumber.orElse(0);
         int size = pageSize.orElse(5);
+        int idN = id.orElse(0);
+        String pageN = pageName.orElse("tasks");
         String sort = pageSort.orElse("taskId");
         PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
-        Page<Task> page = taskRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
+        Page<Task> page;
+        switch(pageN) {
+            case "candidate":
+                page = taskRepository.findAllByCandidate(idN, PageRequest.of(pageId, size, Sort.by(sort)));
+                break;
+            case "author":
+                page = taskRepository.findAllByAuthor(idN, PageRequest.of(pageId, size, Sort.by(sort)));
+                break;
+            default:    page = taskRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
+                 break;
+        }
+
 
         boolean hasPreviousPage = pageId != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageId;
@@ -70,52 +85,5 @@ public class TaskServiceImpl implements TaskService {
                 .collect(Collectors.toList());
         return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
-
-
-    @Override
-    public Pager<Task> findAllByAuthor(int author_id,
-                                 Optional<Integer> pageSize,
-                                 Optional<Integer> pageNumber,
-                                 Optional<String> sortAll) {
-        int pageId = pageNumber.orElse(0);
-        int size = pageSize.orElse(5);
-        String sort = sortAll.orElse("taskId");
-        PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
-        Page<Task> page = taskRepository.findAllByAuthor(author_id, PageRequest.of(pageId, size, Sort.by(sort)));
-
-        boolean hasPreviousPage = pageId != 0;
-        boolean hasNextPage = page.getTotalPages() - 1 > pageId;
-
-//        List<Task> list = page.getContent();
-//
-//        List<TaskDTO> listDTO = list.stream()
-//                .map(entity -> mapper.map(entity, TaskDTO.class))
-//                .collect(Collectors.toList());
-        return new Pager<>(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
-    }
-
-
-    @Override
-    public Pager<Task> findAllByCandidate(int candidate_id,
-                                    Optional<Integer> pageSize,
-                                    Optional<Integer> pageNumber,
-                                    Optional<String> sortCand) {
-        int pageId = pageNumber.orElse(0);
-        int size = pageSize.orElse(5);
-        String sort = sortCand.orElse("taskId");
-        PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
-        Page<Task> page = taskRepository.findAllByCandidate(candidate_id, PageRequest.of(pageId, size, Sort.by(sort)));
-
-        boolean hasPreviousPage = pageId != 0;
-        boolean hasNextPage = page.getTotalPages() - 1 > pageId;
-
-//        List<Task> list = page.getContent();
-//
-//        List<TaskDTO> listDTO = list.stream()
-//                .map(entity -> mapper.map(entity, TaskDTO.class))
-//                .collect(Collectors.toList());
-        return new Pager<>(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
-    }
-
 }
 

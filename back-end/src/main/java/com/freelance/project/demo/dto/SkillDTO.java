@@ -14,7 +14,7 @@ public class SkillDTO {
 
     private String name;
 
-    private List<Task> taskSkills;
+    private List<TaskDTO> taskSkills;
 
     private List<UserSkill> userSkills;
 }

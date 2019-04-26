@@ -46,30 +46,14 @@ public class TaskController {
         return ok(model);
     }
 
-    @GetMapping("/author/{id}")
-    public ResponseEntity<Pager<Task>> getAllByAuthor(@PathVariable("id") String author_id,
-                                                  @RequestParam("size") Optional<Integer> pageSize,
-                                                   @RequestParam("page") Optional<Integer> pageNumber,
-                                                @RequestParam("sort") Optional<String> sort){
-        int id = Integer.parseInt(author_id);
-        return ResponseEntity.ok().body(taskService.findAllByAuthor(id, pageSize, pageNumber, sort));
-    }
-
-    @GetMapping("/candidate/{id}")
-    public ResponseEntity<Pager<Task>> getAllByCandidate(@PathVariable("id") String candidate_id,
-                                                   @RequestParam("size") Optional<Integer> pageSize,
-                                                   @RequestParam("page") Optional<Integer> pageNumber,
-                                                   @RequestParam("sort") Optional<String> sort) {
-        int id = Integer.parseInt(candidate_id);
-        return ResponseEntity.ok().body(taskService.findAllByCandidate(id, pageSize, pageNumber, sort));
-    }
-
     @GetMapping
-    public ResponseEntity<Pager<TaskDTO>> getAll(@RequestParam("size") Optional<Integer> pageSize,
+    public ResponseEntity<Pager<TaskDTO>> getAll(@RequestParam("id") Optional<Integer> id,
+                                        @RequestParam("size") Optional<Integer> pageSize,
                                         @RequestParam("page") Optional<Integer> pageNumber,
-                                        @RequestParam("sort") Optional<String> sort) {
-        Pager<TaskDTO> pager = taskService.findAll(pageSize, pageNumber, sort);
-//        logger.info("Request to get tasks: {}", pager);
+                                        @RequestParam("sort") Optional<String> sort,
+                                        @RequestParam("pageName") Optional<String> pageName) {
+        Pager<TaskDTO> pager = taskService.findAll(id,pageSize, pageNumber, sort, pageName);
+        logger.info("Request to get tasks: {}", pager);
         return ResponseEntity.ok().body(pager);
     }
 
