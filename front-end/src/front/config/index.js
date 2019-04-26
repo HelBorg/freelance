@@ -44,11 +44,11 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../../../target/dist/index.html'), //為了Maven Install 可以產生index.html檔案至 target
+    index: path.resolve(__dirname, '../../../target/dist/index.html'), //Maven Install target
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../../../target/dist'), //為了Maven Install 可以產生js和css檔案至 target
-    assetsSubDirectory: '', //js css 資料夾預設路徑
+    assetsRoot: path.resolve(__dirname, '../../../target/dist'), //為了Maven Install target
+    assetsSubDirectory: '', //js css
     assetsPublicPath: '/',
 
     /**

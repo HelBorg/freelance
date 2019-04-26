@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../components/homePage/Home'
 import SingUp from '../components/SingUp'
-import Task from '../components/Task'
+import Task from '../components/Task/Task'
 import Login from '../components/Login'
 import store from '../store'
 import * as types from '../store/mutation-types'
@@ -17,18 +17,18 @@ const hasToken = (to, from, next) => {
     next()
   }
 }
-
 const requireAuth = (to, from, next) => {
   if (store.getters.isLoggedIn) {
     next()
   } else {
-    router.push('/')
+    router.replace('/')
   }
 }
 
 Vue.use(Router)
 
 const router = new Router({
+  mode: 'hash',
   routes: [
     {
       path: '/',
@@ -44,10 +44,9 @@ const router = new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/task',
+      path: '/task/:id',
       name: 'Task',
       component: Task,
-      beforeEnter: requireAuth
 
     },
     {

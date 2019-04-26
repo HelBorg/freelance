@@ -4,9 +4,11 @@ import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.service.PersonService;
 import com.freelance.project.demo.service.TaskService;
+import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +27,15 @@ public class TaskController {
     @Autowired
     PersonService personService;
 
+    @Autowired
+    private DozerBeanMapper mapper;
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id){
+        taskService.deleteTask(id);
+    }
+
+
     @PostMapping("/new")
     public ResponseEntity create(@AuthenticationPrincipal UserDetails userDetails){
         Task createdTask = taskService.createNew(personService.findByEmail(userDetails.getUsername()));
@@ -33,11 +44,21 @@ public class TaskController {
         return ok(model);
     }
 
+    @PostMapping("/update/status/{id}/{status}")
+    public String updateStatus(@PathVariable int id, @PathVariable String status){
+        return taskService.updateStatus(id,status);
+    }
+
+
+    @PostMapping("/update/assigned/{taskId}/{userId}")
+    public void updateAssignedUser(@PathVariable int taskId, @PathVariable int userId){
+        taskService.updateAssignedUser(userId,taskId);
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity getTaskById(@PathVariable int id) {
-        Map<Object, Object> model = new HashMap<>();
-        model.put("task", taskService.loadTask(id));
-        return ok(model);
+    public TaskDTO getTaskById(@PathVariable int id) {
+       return taskService.loadTask(id);
+
     }
 
     @GetMapping("/author/{id}")

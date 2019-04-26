@@ -31,7 +31,7 @@ public class Person implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @ManyToMany(mappedBy = "userReviews")
+    @OneToMany(mappedBy = "userId")
     private List<Review> reviewsAboutUser;
 
     @OneToMany(mappedBy = "personId")

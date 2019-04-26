@@ -1,6 +1,7 @@
 package com.freelance.project.demo.models;
 
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,8 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "review")
 public class Review implements Serializable {
@@ -27,19 +27,13 @@ public class Review implements Serializable {
     @Column(name = "datetime", nullable = false)
     private Date dateTime;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JoinTable(name = "review",
-            joinColumns = @JoinColumn(name = "person_id"),
-            inverseJoinColumns = @JoinColumn(name = "review_id"))
-    private List<Person> userReviews;
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "person_id")
+    private Person userId;
 
-//    @ManyToOne(cascade = {CascadeType.ALL})
-//    @JoinColumn(name = "task_id")
-//    private Task task;
+   @ManyToOne(cascade = {CascadeType.ALL})
+   @JoinColumn(name = "task_id")
+   private Task taskId;
 
 
 

@@ -12,9 +12,7 @@ import java.util.List;
 @Repository
 public interface TaskSkillRepository extends JpaRepository<TaskSkill, Integer> {
 
-    @Modifying
-    @Query("select ts from TaskSkill ts where ts.taskId = :id")
-    List<TaskSkill> taskSkills(@Param("id") int id);
+    TaskSkill findByTaskSkillId(int id);
 
-    //void saveListOfSkills();
+
 }

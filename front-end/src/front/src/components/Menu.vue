@@ -12,7 +12,10 @@
           In work
         </b-list-group-item>
         <b-list-group-item @click="createNewTask">
-          <router-link to="/task">Create New</router-link>
+
+            Create New
+
+
         </b-list-group-item>
         <b-list-group-item :to="'home/search'">
           Search
@@ -26,11 +29,12 @@
 </template>
 
 <script>
-
+ import router from "../router";
   export default {
     name: "Menu",
 data() {
       return {
+        id:'',
       }
     },
     methods: {
@@ -51,8 +55,8 @@ data() {
               }
               response.json().then(function (data) {
                 console.log(data)
-                localStorage.setItem('loadedTask', data.id)
-              })
+                router.push('/task/' + data.id);
+                })
             }
           )
       }

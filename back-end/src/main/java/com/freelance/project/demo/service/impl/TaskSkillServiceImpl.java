@@ -22,16 +22,19 @@ public class TaskSkillServiceImpl implements TaskSkillService {
     TaskSkillRepository taskSkillRepository;
 
 
-    public TaskSkill addNewTaskSkill(TaskSkillDTO taskSkillDTO) {
+    public void deleteTaskSkill(int id){
+        taskSkillRepository.delete(taskSkillRepository.findByTaskSkillId(id));
+    }
 
-        TaskSkill taskSkill = new TaskSkill();
-        System.out.println("1111111111111111111111"+taskRepository.findByTaskId(taskSkillDTO.getTaskId()));
-        taskSkill.setTaskId(taskRepository.findByTaskId(taskSkillDTO.getTaskId()));
-        taskSkill.setLevel(taskSkillDTO.getLevel());
-        System.out.println("12312312312312312312313"+skillRepository.findSkillByName(taskSkillDTO.getSkillName()));
-        taskSkill.setSkillId(skillRepository.findSkillByName(taskSkillDTO.getSkillName()));
-        System.out.println(taskSkillDTO);
-        return taskSkillRepository.save(taskSkill);
+
+    public void addNewTaskSkill(TaskSkillDTO taskSkillDTO, int taskId) {
+
+        TaskSkill newTaskSkill = new TaskSkill();
+        newTaskSkill.setTaskId(taskRepository.findByTaskId(taskId));
+        newTaskSkill.setLevel(taskSkillDTO.getLevel());
+        newTaskSkill.setSkillId(skillRepository.findSkillByName(taskSkillDTO.getSkillName().getName()));
+
+        taskSkillRepository.save(newTaskSkill);
 
     }
 }

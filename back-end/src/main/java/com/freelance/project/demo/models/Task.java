@@ -58,8 +58,8 @@ public class Task implements Serializable {
     @JoinColumn(name = "author_id", referencedColumnName = "person_id")
     private Person author;
 
-//    @OneToMany(mappedBy = "task")
-//    private List<Review> taskReviews;
+    @OneToMany(mappedBy = "taskId")
+    private List<Review> taskReviews;
 
     public Task(){
     }

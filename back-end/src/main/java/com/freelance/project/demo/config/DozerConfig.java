@@ -1,11 +1,7 @@
 package com.freelance.project.demo.config;
 
-import com.freelance.project.demo.dto.PersonDTO;
-import com.freelance.project.demo.dto.TaskDTO;
-import com.freelance.project.demo.dto.TaskSkillDTO;
-import com.freelance.project.demo.models.Person;
-import com.freelance.project.demo.models.Task;
-import com.freelance.project.demo.models.TaskSkill;
+import com.freelance.project.demo.dto.*;
+import com.freelance.project.demo.models.*;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +33,31 @@ public class DozerConfig {
                         .fields(field("description").accessible(), field("description").accessible())
                         .fields(field("createdTime").accessible(), field("createdTime").accessible())
                         .fields(field("deadline").accessible(), field("deadline").accessible())
-                        .fields(field("taskSkills").accessible(), field("skills").accessible());
+                        .fields(field("taskSkills").accessible(), field("skills").accessible())
+                        .fields(field("taskReviews").accessible(), field("reviews").accessible())
+                        .fields(field("author").accessible(), field("author").accessible())
+                        .fields(field("assignedUser").accessible(), field("assignedUser").accessible());
+               /* mapping(TaskSkillDTO.class, TaskDTO.class)
+                        .fields(field("id").accessible(), field("taskSkillsId").accessible());
+                mapping(ReviewDTO.class, TaskDTO.class)
+                        .fields(field("id").accessible(), field("taskSkillsId").accessible());*/
+
+            }
+        };
+    }
+    @Bean
+    public BeanMappingBuilder reviewMappingBuilder() {
+        return new BeanMappingBuilder() {
+            @Override
+            protected void configure() {
+                mapping(Review.class, ReviewDTO.class)
+                        .fields(field("reviewId").accessible(), field("id").accessible())
+                        .fields(field("description").accessible(), field("description").accessible())
+                        .fields(field("dateTime").accessible(), field("createdTime").accessible())
+                        .fields(field("userId").accessible(), field("user").accessible());
+
+
+
 
             }
         };
@@ -50,9 +70,19 @@ public class DozerConfig {
                 mapping(TaskSkill.class, TaskSkillDTO.class)
                         .fields(field("taskSkillId").accessible(), field("id").accessible())
                         .fields(field("level").accessible(), field("level").accessible())
-                        .fields(field("taskId").accessible(), field("taskId").accessible())
                         .fields(field("skillId").accessible(), field("skillName").accessible());
 
+            }
+        };
+
+    }
+    @Bean
+    public BeanMappingBuilder skillMappingBuilder() {
+        return new BeanMappingBuilder() {
+            @Override
+            protected void configure() {
+                mapping(Skill.class, SkillDTO.class)
+                        .fields(field("name").accessible(), field("name").accessible());
 
             }
         };
@@ -65,6 +95,8 @@ public class DozerConfig {
         dozerBeanMapper.addMapping(personMappingBuilder());
         dozerBeanMapper.addMapping(taskMappingBuilder());
         dozerBeanMapper.addMapping(taskSkillMappingBuilder());
+        dozerBeanMapper.addMapping(reviewMappingBuilder());
+        dozerBeanMapper.addMapping(skillMappingBuilder());
 
         return dozerBeanMapper;
     }

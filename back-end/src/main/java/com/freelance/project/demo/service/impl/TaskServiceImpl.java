@@ -2,9 +2,8 @@ package com.freelance.project.demo.service.impl;
 
 import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.*;
-import com.freelance.project.demo.repository.SkillRepository;
+import com.freelance.project.demo.repository.PersonRepository;
 import com.freelance.project.demo.repository.TaskRepository;
-import com.freelance.project.demo.repository.TaskSkillRepository;
 import com.freelance.project.demo.service.TaskService;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +24,28 @@ public class TaskServiceImpl implements TaskService {
     private TaskRepository taskRepository;
 
     @Autowired
-    private SkillRepository skillRepository;
-
-    @Autowired
-    private TaskSkillRepository taskSkillRepository;
+    private PersonRepository personRepository;
 
     @Autowired
     private DozerBeanMapper mapper;
+
+
+    public void deleteTask(int id) {
+        taskRepository.delete(taskRepository.findByTaskId(id));
+    }
+
+    public String updateStatus(int id, String status) {
+        String nextStatus = selectNextTaskStatus(status);
+        taskRepository.updateStatus(id,nextStatus);
+        return nextStatus;
+    }
+
+    @Transactional
+    public void updateAssignedUser(int personId, int taskId){
+        taskRepository.updateAssignedUser(personRepository.findByPersonId(personId), taskId);
+       /* System.out.println("!!!!!!!!!!!!!!!!!!!!!!!" + taskRepository.findByTaskId(taskId).getStatus());
+        updateStatus(taskId, taskRepository.findByTaskId(taskId).getStatus());*/
+    }
 
 
     @Transactional
@@ -44,10 +58,11 @@ public class TaskServiceImpl implements TaskService {
         add.setDescription("Description");
         add.setAuthor(person);
         add.setCreatedTime(new Date());
-        Task saved = taskRepository.save(add);
-        saved.setTaskSkills(Collections.EMPTY_LIST);
+        add.setTaskSkills(Collections.EMPTY_LIST);
+        add.setTaskReviews(Collections.EMPTY_LIST);
+        add.setDeadline(new Date());
 
-        return saved;
+        return taskRepository.save(add);
     }
 
     @Transactional
@@ -112,6 +127,17 @@ public class TaskServiceImpl implements TaskService {
 //                .map(entity -> mapper.map(entity, TaskDTO.class))
 //                .collect(Collectors.toList());
 //    }
+
+    private String selectNextTaskStatus(String status){
+        LinkedList<String> statuses = new LinkedList<>();
+        statuses.add("IN_DESIGN");
+        statuses.add("PUBLISH");
+        statuses.add("ASSIGNED");
+        statuses.add("IN_WORK");
+        statuses.add("DONE");
+        if(!status.equals("DONE")) return statuses.get(statuses.indexOf(status)+1);
+        return null;
+    }
 }
 
 

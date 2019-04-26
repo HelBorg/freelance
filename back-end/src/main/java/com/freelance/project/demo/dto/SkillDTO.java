@@ -11,11 +11,6 @@ import java.util.List;
 @Getter
 public class SkillDTO {
 
-    private int skillId;
-
     private String name;
 
-    private List<Task> taskSkills;
-
-   // private List<UserSkill> userSkills;
 }

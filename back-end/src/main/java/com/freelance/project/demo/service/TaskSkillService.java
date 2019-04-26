@@ -6,6 +6,8 @@ import com.freelance.project.demo.models.TaskSkill;
 
 public interface TaskSkillService {
 
-    TaskSkill addNewTaskSkill(TaskSkillDTO taskSkillDTO);
+    void deleteTaskSkill(int id);
+
+    void addNewTaskSkill(TaskSkillDTO taskSkillDTO, int taskId);
 
 }

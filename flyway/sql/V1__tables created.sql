@@ -48,7 +48,6 @@ foreign key (person_id) references public.person(person_id),
 foreign key (task_id) references public.task(task_id)
 );
 
-
 --CREATE TYPE freelance.message_status AS ENUM ('inbox', 'outbox');
 
 create table if not exists public.candidate(

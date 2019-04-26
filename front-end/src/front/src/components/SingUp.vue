@@ -14,7 +14,8 @@
       <h2 class="lead">Confirm password</h2>
       <b-input type="password" id="user_password_c" class="mb-3"></b-input>
       <div class="d-inline">
-        <b-button variant="primary" style="float:right" type="submit" @click="singup">Sign up</b-button>
+        <b-button variant="primary" style="float:right" type="submit" @click="singup">Sign up
+        </b-button>
       </div>
     </form>
   </div>
@@ -43,7 +44,7 @@ export default {
         })
           .then(function (response) {
             console.log(response);
-            this.router.go(-1)
+            router.push('/');
           })
           .catch(function (error) {
             alert("User already exists");
