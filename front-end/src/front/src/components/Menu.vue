@@ -2,13 +2,13 @@
   <div id="menu" style="float: left;width:29%">
     <div class="container-fluid ">
       <b-list-group >
-        <b-list-group-item :to="'home/mine'">
+        <b-list-group-item :to="'tasks/mine'">
           Mine
         </b-list-group-item>
-        <b-list-group-item :to="'home/candidates'">
+        <b-list-group-item :to="'tasks/candidates'">
           Candidates
         </b-list-group-item>
-        <b-list-group-item :to="'home/in_work'">
+        <b-list-group-item :to="'tasks/in_work'">
           In work
         </b-list-group-item>
         <b-list-group-item @click="createNewTask">
@@ -17,10 +17,10 @@
 
 
         </b-list-group-item>
-        <b-list-group-item :to="'home/search'">
+        <b-list-group-item :to="'tasks/search'">
           Search
         </b-list-group-item>
-        <b-list-group-item :to="'home'">Users</b-list-group-item>
+        <b-list-group-item :to="'users'">Users</b-list-group-item>
       </b-list-group>
       <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
       </main>

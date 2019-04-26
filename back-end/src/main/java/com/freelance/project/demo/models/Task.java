@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "task")
-public class Task implements Serializable {
+public class Task {
 
 
     @Id

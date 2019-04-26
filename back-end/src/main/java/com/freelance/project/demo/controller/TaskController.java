@@ -1,14 +1,16 @@
 package com.freelance.project.demo.controller;
 
 import com.freelance.project.demo.dto.TaskDTO;
+import com.freelance.project.demo.models.Pager;
 import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.service.PersonService;
 import com.freelance.project.demo.service.TaskService;
 import org.dozer.DozerBeanMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +18,6 @@ import java.util.*;
 
 import static org.springframework.http.ResponseEntity.ok;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/task")
 public class TaskController {
@@ -29,6 +30,9 @@ public class TaskController {
 
     @Autowired
     private DozerBeanMapper mapper;
+
+    protected static final Logger logger = LoggerFactory.getLogger(TaskController.class);
+
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id){
@@ -61,28 +65,16 @@ public class TaskController {
 
     }
 
-    @GetMapping("/author/{id}")
-    public ResponseEntity<List<TaskDTO>> getAllByAuthor(@PathVariable("id") String author_id) {
-        int id = Integer.parseInt(author_id);
-        List<TaskDTO> list = taskService.findAllByAuthor(id);
-        return ok().body(list);
-    }
-
-//    @GetMapping("/candidate/{id}")
-//    public ResponseEntity<List<TaskDTO>> getAllByCandidate(@PathVariable("id") String candidate_id) {
-//        int id = Integer.parseInt(candidate_id);
-//        List<TaskDTO> list = service.findAllByCandidate(id);
-//        return ResponseEntity.ok().body(list);
-//    }
 
     @GetMapping
-    public ResponseEntity getAll(@RequestParam("size") Optional<Integer> pageSize,
-                                        @RequestParam("page") Optional<Integer> pageNumber) {
-        Map<Object, Object> map = new HashMap<>();
-
-        taskService.findSorted(Optional.of(1),  Optional.of(2));
-        map.put("1", taskService.findSorted(pageSize, pageNumber));
-        return ok(map);
+    public ResponseEntity<Pager<TaskDTO>> getAll(@RequestParam("id") Optional<Integer> id,
+                                                 @RequestParam("size") Optional<Integer> pageSize,
+                                                 @RequestParam("page") Optional<Integer> pageNumber,
+                                                 @RequestParam("sort") Optional<String> sort,
+                                                 @RequestParam("pageName") Optional<String> pageName) {
+        Pager<TaskDTO> pager = taskService.findAll(id,pageSize, pageNumber, sort, pageName);
+        logger.info("Request to get tasks: {}", pager);
+        return ResponseEntity.ok().body(pager);
     }
 
     @PostMapping

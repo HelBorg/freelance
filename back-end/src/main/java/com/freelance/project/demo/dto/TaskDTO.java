@@ -1,12 +1,10 @@
 package com.freelance.project.demo.dto;
 
-import com.freelance.project.demo.models.Review;
-import com.freelance.project.demo.models.TaskSkill;
+
 import lombok.Data;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Data
 public class TaskDTO {

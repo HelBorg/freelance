@@ -13,7 +13,6 @@ public class PageAndSort {
     }
 
     public PageAndSort(String sort, int currentPage, int pageSize, String find) {
-
         this.sort = sort;
         this.currentPage = currentPage;
         this.pageSize = pageSize;

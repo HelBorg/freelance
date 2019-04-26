@@ -1,23 +1,24 @@
-  <template>
-    <div class="ml-auto mr-auto pt-20" style="width:40%">
-      <form @submit.prevent="login">
-        <h2 class="lead">Enter your credentials</h2>
-        <b-input  v-model="email" type="email" id="text-password" class="mb-3 " placeholder="Input email"></b-input>
-        <b-input  v-model="password" type="password" id="text-password"  placeholder="Input password" class="mb-3"></b-input>
-        <div class="d-inline">
-          <b-button variant="outline-secondary" type="submit" :to="'singup'">Not a member? Sing Up</b-button>
-          <b-button  style="float:right" variant="primary" type="submit">Login</b-button>
-        </div>
-      </form>
-    </div>
-  </template>
+<template>
+  <div class="ml-auto mr-auto pt-20" style="width:40%">
+    <form @submit.prevent="login">
+      <h2 class="lead">Enter your credentials</h2>
+      <b-input v-model="email" type="email" id="text-password" class="mb-3 " placeholder="Input email"></b-input>
+      <b-input v-model="password" type="password" id="text-password" placeholder="Input password"
+               class="mb-3"></b-input>
+      <div class="d-inline">
+        <b-button variant="outline-secondary" type="submit" :to="'singup'">Not a member? Sing Up</b-button>
+        <b-button style="float:right" variant="primary" type="submit">Login</b-button>
+      </div>
+    </form>
+  </div>
+</template>
 <script>
 
   import * as types from '../store/mutation-types'
 
   export default {
     name: 'Login',
-    data () {
+    data() {
       return {
         email: '',
         password: '',
@@ -25,7 +26,7 @@
       }
     },
     methods: {
-      login () {
+      login() {
         const self = this;
         this.$store.dispatch(types.LOGIN, {
           email: this.email,

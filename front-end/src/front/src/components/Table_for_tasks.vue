@@ -1,21 +1,22 @@
 <template>
   <div>
     <b-col>
-      <div v-if="tasks.length > 0">
+      <div>
         <b-table id="tasks"
                  title="Tasks"
                  :items="tasks"
                  :fields="fields"
                  :per-page="perPage"
                  :current-page="currentPage"
-                 :filter="editFilter.name"
                  small
                  @row-clicked="goToTask(item.id)">
-        </b-table>
+      </b-table>
       </div>
       <div v-else>
         <h4>List is empty!</h4>
       </div>
+
+<!--      Pagination-->
       <b-pagination
         v-model="currentPage"
         :total-rows="rows"
@@ -103,7 +104,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  // import axios from '../../axios/'
   // import DatePick from 'vue-date-pick';
   // import 'vue-date-pick/dist/vueDatePick.css';
 
@@ -184,25 +185,25 @@
     },
     methods: {
       getTasks() {
-        axios.get('http://localhost:8080/api/{$store.state.page}')
-          .then((response) => {
-            console.log(response.data);
-            this.tasks = response.data;
-          }).catch(function (error) {
-          alert("Ошибка. Обновление события!");
-          console.log(error);
-        });
+        // axios.get('http://localhost:8080/api/{$store.state.page}')
+        //   .then((response) => {
+        //     console.log(response.data);
+        //     this.tasks = response.data;
+        //   }).catch(function (error) {
+        //   alert("Ошибка. Обновление события!");
+        //   console.log(error);
+        // });
       },
 
       getSkills() {
-        axios.get('http://localhost:8080/api/skill')
-          .then((response) => {
-            console.log(response.data);
-            this.skills = response.data;
-          }).catch(function (error) {
-          alert("Ошибка. Обновление события!");
-          console.log(error);
-        });
+        // axios.get('http://localhost:8080/api/skill')
+        //   .then((response) => {
+        //     console.log(response.data);
+        //     this.skills = response.data;
+        //   }).catch(function (error) {
+        //   alert("Ошибка. Обновление события!");
+        //   console.log(error);
+        // });
       },
       getPage() {
         this.pageName = this.$route.params.pageName;
@@ -219,6 +220,14 @@
       onSubmit(evt) {
         evt.preventDefault()
         alert(JSON.stringify(this.form))
+        // axios.get('http://localhost:8080/api/skill')
+        //   .then((response) => {
+        //     console.log(response.data);
+        //     this.skills = response.data;
+        //   }).catch(function (error) {
+        //   alert("Ошибка. Обновление события!");
+        //   console.log(error);
+        // });
       },
       onReset(evt) {
         evt.preventDefault()

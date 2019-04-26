@@ -81,53 +81,39 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public Pager findSorted(Optional<Integer> pageSize, Optional<Integer> pageNumber) {
+    public Pager<TaskDTO> findAll(Optional<Integer> id,
+                                  Optional<Integer> pageSize,
+                                  Optional<Integer> pageNumber,
+                                  Optional<String> pageSort,
+                                  Optional<String> pageName) {
         int pageId = pageNumber.orElse(0);
         int size = pageSize.orElse(5);
-        PageAndSort pageAndSort = new PageAndSort("taskId", pageId, size, "");
-        return findSort(pageAndSort);
-    }
-
-    public Pager findSorted(PageAndSort pageAndSort) {
-        return findSort(pageAndSort);
-    }
-
-    private Pager findSort(PageAndSort pageAndSort) {
-        int pageId = (pageAndSort.getFind().length() > 0) ? pageAndSort.getCurrentPage() : 0;
-        int size = pageAndSort.getPageSize();
-        String sortParam = pageAndSort.getSort();
-        String find = pageAndSort.getFind();
-
-        System.out.println("======================================" + PageRequest.of(pageId, size, Sort.by(sortParam)));
-        Page<Task> page = taskRepository.findAll(PageRequest.of(pageId, size, Sort.by(sortParam)));
+        int idN = id.orElse(0);
+        String pageN = pageName.orElse("tasks");
+        String sort = pageSort.orElse("taskId");
+        PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
+        Page<Task> page;
+        switch (pageN) {
+            case "candidate":
+                page = taskRepository.findAllByCandidate(idN, PageRequest.of(pageId, size, Sort.by(sort)));
+                break;
+            case "author":
+                page = taskRepository.findAllByAuthor(idN, PageRequest.of(pageId, size, Sort.by(sort)));
+                break;
+            default:
+                page = taskRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
+                break;
+        }
 
         boolean hasPreviousPage = pageId != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageId;
 
-        return new Pager(page.getContent(), hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
-    }
-
-    @Override
-    public List<TaskDTO> findAll() {
-        return taskRepository.findAll().stream()
+        List<Task> list = page.getContent();
+        List<TaskDTO> listDTO = list.stream()
                 .map(entity -> mapper.map(entity, TaskDTO.class))
                 .collect(Collectors.toList());
+        return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
-
-    @Override
-    public List<TaskDTO> findAllByAuthor(int author_id) {
-        return taskRepository.findAllByAuthor_PersonId(author_id).stream()
-                .map(entity -> mapper.map(entity, TaskDTO.class))
-                .collect(Collectors.toList());
-    }
-
-//    @Override
-//    public List<TaskDTO> findAllByCandidate(int candidate_id) {
-//        return taskRepository.findAllByCandidateId(candidate_id).stream()
-//                .map(entity -> mapper.map(entity, TaskDTO.class))
-//                .collect(Collectors.toList());
-//    }
-
     private String selectNextTaskStatus(String status){
         LinkedList<String> statuses = new LinkedList<>();
         statuses.add("IN_DESIGN");
@@ -139,5 +125,4 @@ public class TaskServiceImpl implements TaskService {
         return null;
     }
 }
-
 

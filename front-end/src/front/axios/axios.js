@@ -1,10 +1,8 @@
-import axios from 'axios'
-
-const API_URL = process.env.API_URL || 'http://localhost:80/api/v1'
+import axios from 'axios';
 
 export default axios.create({
-  baseURL: API_URL,
+  baseURL: "http://localhost:8080/api/v1",
   headers: {
-    'Content-Type': 'application/json'
+    "Content-type": "application/json",
   }
-})
+});

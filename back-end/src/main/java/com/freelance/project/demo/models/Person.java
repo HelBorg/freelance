@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "person")
-public class Person implements Serializable {
+public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,7 @@ public class Person implements Serializable {
     private String name;
 
     @Column(name = "role", nullable = false)
-    private String role ="user";
+    private String role = "user";
 
     @Column(name = "rating")
     private int rating;
@@ -45,6 +45,4 @@ public class Person implements Serializable {
 
     @ManyToMany(mappedBy = "candidateTasks")
     private List<Task> candidateTasks;
-
-
 }

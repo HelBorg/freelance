@@ -30,7 +30,6 @@ task_id serial primary key ,
 name varchar(100) not null,
 description varchar(100),
 deadline timestamp,
-time_created timestamp,
 status varchar(100) not null,
 performer_id integer ,
 author_id integer not null,
@@ -48,6 +47,7 @@ foreign key (person_id) references public.person(person_id),
 foreign key (task_id) references public.task(task_id)
 );
 
+
 --CREATE TYPE freelance.message_status AS ENUM ('inbox', 'outbox');
 
 create table if not exists public.candidate(
@@ -58,9 +58,16 @@ foreign key(person_id) references public.person(person_id),
 foreign key(task_id) references public.task(task_id)
 );
 
+create table if not exists public.candidate(
+task_skill_id serial primary key,
+level varchar(100) not null,
+skill_id integer not null,
+foreign key (person_id) references public.person(person_id),
+foreign key (task_id) references public.task(task_id)
+);
 
 create table if not exists public.task_skill(
-task_skill_id serial  primary key,
+task_skill_id integer  primary key null,
 level varchar(100) not null,
 task_id integer not null,
 skill_id integer not null,
