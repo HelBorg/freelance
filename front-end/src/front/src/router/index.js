@@ -7,6 +7,7 @@ import Login from '../components/Login'
 import store from '../store'
 import * as types from '../store/mutation-types'
 import Tasks from "../components/Tasks"
+import User from "../components/User"
 
 const hasToken = (to, from, next) => {
   const token = localStorage.getItem('JWT')
@@ -23,7 +24,7 @@ const requireAuth = (to, from, next) => {
   if (store.getters.isLoggedIn) {
     next()
   } else {
-    router.replace('/')
+    router.push('/')
   }
 }
 
@@ -59,6 +60,7 @@ const router = new Router({
     {
       path: '/user',
       name: 'User',
+      component: User
     },
     {
       path: '/singup',

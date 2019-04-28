@@ -23,6 +23,8 @@ public interface TaskService {
 
     void updateAssignedUser(int personId, int taskId);
 
+    void deleteAssignAndRevertStatus(int taskId);
+
     Pager<TaskDTO> findAll(Optional<Integer> id,
                      Optional<Integer> pageSize,
                      Optional<Integer> pageNumber,

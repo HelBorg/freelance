@@ -12,7 +12,7 @@
       <h2 class="lead">Password</h2>
       <b-input  v-model="usr_password" type="password" id="user_password" class="mb-3"></b-input>
       <h2 class="lead">Confirm password</h2>
-      <b-input type="password" id="user_password_c" class="mb-3"></b-input>
+      <b-input v-model="confirm_password" type="password" id="user_password_c" class="mb-3"></b-input>
       <div class="d-inline">
         <b-button variant="primary" style="float:right" type="submit" @click="singup">Sign up
         </b-button>
@@ -30,26 +30,34 @@ export default {
   name:"singup",
   data(){
       return {
+
           usr_name:'',
           usr_email:'',
-          usr_password:''
+          usr_password:'',
+          confirm_password:''
       }
   },
     methods: {
       singup() {
-        axios.post('http://localhost:80/api/v1/person', {
-          name:this.usr_name,
-          email:this.usr_email,
-          password:this.usr_password
-        })
-          .then(function (response) {
-            console.log(response);
-            router.push('/');
+        let self = this
+        if(self.usr_password === self.confirm_password) {
+          axios.post('http://localhost:80/api/v1/person', {
+            name: this.usr_name,
+            email: this.usr_email,
+            password: this.usr_password
           })
-          .catch(function (error) {
-            alert("User already exists");
-            console.log(error);
-          });
+            .then(function (response) {
+              console.log(response);
+              router.replace('/');
+            })
+            .catch(function (error) {
+              alert("User already exists");
+              console.log(error);
+            });
+        }else{
+          alert('Passwords not matches')
+        }
+
     }
   }
 }

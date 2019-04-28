@@ -32,11 +32,7 @@
                       response.status);
                     return;
                   }
-                  alert("Success!");
-                  response.json().then(function (data) {
-                    self.status = data;
-                    console.log(data)
-                  })
+                  window.location.reload()
                 }
               )
         }

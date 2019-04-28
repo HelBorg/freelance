@@ -40,12 +40,15 @@ public class TaskServiceImpl implements TaskService {
         return nextStatus;
     }
 
-    @Transactional
     public void updateAssignedUser(int personId, int taskId){
         taskRepository.updateAssignedUser(personRepository.findByPersonId(personId), taskId);
-       /* System.out.println("!!!!!!!!!!!!!!!!!!!!!!!" + taskRepository.findByTaskId(taskId).getStatus());
-        updateStatus(taskId, taskRepository.findByTaskId(taskId).getStatus());*/
+        updateStatus(taskId, "PUBLISH");
     }
+
+    public void deleteAssignAndRevertStatus(int taskId){
+        taskRepository.deleteAssignAndRevertStatus(taskId);
+    }
+
 
 
     @Transactional
@@ -114,6 +117,7 @@ public class TaskServiceImpl implements TaskService {
                 .collect(Collectors.toList());
         return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
+
     private String selectNextTaskStatus(String status){
         LinkedList<String> statuses = new LinkedList<>();
         statuses.add("IN_DESIGN");

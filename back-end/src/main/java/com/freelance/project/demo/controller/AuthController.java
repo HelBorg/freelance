@@ -56,6 +56,7 @@ public class AuthController {
         // careful!!! in custom userDetails username is EMAIL
         Person currentPerson = personService.findByEmail(userDetails.getUsername());
         Map<Object, Object> model = new HashMap<>();
+        model.put("id", currentPerson.getPersonId());
         model.put("name", currentPerson.getName());
         return ok(model);
     }

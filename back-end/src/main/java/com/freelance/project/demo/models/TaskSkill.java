@@ -17,13 +17,13 @@ public class TaskSkill {
 
     // @Enumerated(EnumType.STRING)
     @Column(name = "level", nullable = false)
-    private String level;
+    private int level;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "task_id")
     private Task taskId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "skill_id")
     private Skill skillId;
 }

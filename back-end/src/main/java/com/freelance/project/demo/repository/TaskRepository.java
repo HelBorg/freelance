@@ -42,4 +42,11 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Modifying
     @Query("UPDATE Task t SET t.assignedUser = :person WHERE t.taskId = :taskId")
     void updateAssignedUser(@Param("person") Person person, @Param("taskId") int taskId);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Task t SET t.assignedUser = null, t.status = 'PUBLISH' WHERE t.taskId = :taskId")
+    void deleteAssignAndRevertStatus(@Param("taskId") int taskId);
+
+    
 }

@@ -17,7 +17,7 @@
         <b-list-group-item :to="'tasks/search'">
           Search
         </b-list-group-item>
-        <b-list-group-item :to="'users'">Users</b-list-group-item>
+        <b-list-group-item :to="'user'">Users</b-list-group-item>
       </b-list-group>
       <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
       </main>
@@ -53,9 +53,10 @@
               response.json().then(function (data) {
                 console.log(data)
                 router.push('/task/' + data.id);
+                window.location.reload()
               })
             }
-          )
+      )
       }
     }
   }

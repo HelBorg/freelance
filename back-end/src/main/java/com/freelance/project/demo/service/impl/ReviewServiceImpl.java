@@ -12,6 +12,7 @@ import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private DozerBeanMapper mapper;
 
+    @Transactional
     public void createReview(Review review, UserDetails userDetails){
 
         review.setDescription(review.getDescription());
@@ -39,6 +41,11 @@ public class ReviewServiceImpl implements ReviewService {
         review.setTaskId(taskRepository.findByTaskId(review.getTaskId().getTaskId()));
         review.setUserId(personRepository.findByEmail(userDetails.getUsername()));
         reviewRepository.save(review);
+        //Many to many candidate tasks
+        taskRepository.findByTaskId(review.getTaskId().getTaskId())
+                .getCandidateTasks().add(personRepository.findByEmail(userDetails.getUsername()));
+        personRepository.findByEmail(userDetails.getUsername())
+                .getCandidateTasks().add(taskRepository.findByTaskId(review.getTaskId().getTaskId()));
     }
 
     public List<ReviewDTO> getAllByTask(int taskId){

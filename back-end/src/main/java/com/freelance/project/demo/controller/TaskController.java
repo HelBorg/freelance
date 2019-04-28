@@ -59,6 +59,11 @@ public class TaskController {
         taskService.updateAssignedUser(userId,taskId);
     }
 
+    @PostMapping("/delete/assigned/{taskId}")
+    public void deleteAssignAndRevertStatus(@PathVariable int taskId){
+        taskService.deleteAssignAndRevertStatus(taskId);
+    }
+
     @GetMapping("/{id}")
     public TaskDTO getTaskById(@PathVariable int id) {
        return taskService.loadTask(id);

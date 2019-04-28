@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "skill")
-public class Skill implements Serializable {
+public class Skill {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,21 +22,12 @@ public class Skill implements Serializable {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "skillId")
+    @OneToMany(mappedBy = "skillId", cascade = CascadeType.ALL)
     private List<TaskSkill> taskSkills;
 
 
-    @ManyToMany(mappedBy = "skillId")
+    @ManyToMany(mappedBy = "skillId", cascade = CascadeType.ALL)
     private List<UserSkill> userSkills;
-
-    public Skill(){
-
-    }
-    public Skill(String name, List<TaskSkill> taskSkills, List<UserSkill> userSkills) {
-        this.name = name;
-        this.taskSkills = taskSkills;
-        this.userSkills = userSkills;
-    }
 
 
 }

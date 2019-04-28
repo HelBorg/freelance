@@ -41,7 +41,7 @@ public class Task {
     @JoinColumn(name = "performer_id", referencedColumnName = "person_id")
     private Person assignedUser;
 
-    @OneToMany(mappedBy = "taskId")
+    @OneToMany(mappedBy = "taskId",cascade = CascadeType.ALL)
     private List<TaskSkill> taskSkills;
 
     @ManyToMany(fetch = FetchType.LAZY,
@@ -58,7 +58,7 @@ public class Task {
     @JoinColumn(name = "author_id", referencedColumnName = "person_id")
     private Person author;
 
-    @OneToMany(mappedBy = "taskId")
+    @OneToMany(mappedBy = "taskId", cascade = CascadeType.ALL)
     private List<Review> taskReviews;
 
     public Task(){

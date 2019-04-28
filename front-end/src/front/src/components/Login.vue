@@ -38,7 +38,7 @@
                 token: json.token,
                 email: self.email
               });
-              this.$router.replace('/home/welcome')
+              this.$router.replace('/home')
             })
           } else if (response.status === 401) {
             this.log = 401;

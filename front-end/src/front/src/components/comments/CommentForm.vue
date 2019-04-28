@@ -21,14 +21,14 @@
     <hr>
 
     <div>
-    <div class="d-inline-block">
-      <b-button @click="$refs['add_comment'].show();">Add new comment</b-button>
-      <h5 class="lead">Comments</h5>
-    </div>
+      <div class="d-inline-block">
+        <b-button @click="$refs['add_comment'].show();">Add new comment</b-button>
+        <h5 class="lead">Comments</h5>
+      </div>
 
-    <div class="column">
-      <Comment v-for="comment in comments" :comment="comment" :status="status"></Comment>
-    </div>
+      <div class="column">
+        <Comment v-for="comment in comments" :load="load" :comment="comment" :status="status"></Comment>
+      </div>
     </div>
   </div>
 </template>
@@ -39,7 +39,7 @@
   export default {
     props: {
       comments: Object,
-      status: Object
+      status: Object,
     },
     components: {Comment},
     data() {
@@ -49,6 +49,7 @@
     },
     methods: {
       saveComment() {
+        let self = this
         fetch('/api/v1/review', {
           method: 'POST',
           headers: {
@@ -56,9 +57,9 @@
             'Authorization': 'Bearer ' + localStorage.getItem('JWT')
           },
           body: JSON.stringify({
-            description: this.newComment,
+            description: self.newComment,
             taskId: {
-              taskId: this.$route.params.id
+              taskId: self.$route.params.id
             }
           })
         })
@@ -67,45 +68,12 @@
               if (response.status !== 200) {
                 console.log('Looks like there was a problem. Status Code: ' +
                   response.status);
-                this.newComment = '';
                 return;
               }
-              alert("Success!");
-              response.json().then(function (data) {
-                console.log(data)
-                this.newComment = '';
-              })
+              window.location.reload()
             }
           )
-
-      },
-      loadComments() {
-        let self = this;
-        fetch('/api/v1/review/' + this.$route.params.id, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          }
-        })
-          .then(
-            function (response) {
-              if (response.status !== 200) {
-                console.log('Looks like there was a problem. Status Code: ' +
-                  response.status);
-                return;
-              }
-              response.json().then(function (data) {
-                console.log(data)
-                self.comments = data
-                console.log(self.comments)
-              })
-            }
-          )
-      },
-      updateComment(comment) {
-        this.comments.push(comment);
-      },
+      }
     }
   }
 </script>
