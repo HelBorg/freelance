@@ -3,19 +3,19 @@ package com.freelance.project.demo.models;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 @Data
 @Entity
 @Table(name = "task_skill")
-public class TaskSkill {
+public class TaskSkill implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_skill_id", nullable = false)
     private int taskSkillId;
 
-    // @Enumerated(EnumType.STRING)
     @Column(name = "level", nullable = false)
     private int level;
 

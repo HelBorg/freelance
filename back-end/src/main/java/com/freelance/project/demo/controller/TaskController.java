@@ -28,8 +28,6 @@ public class TaskController {
     @Autowired
     PersonService personService;
 
-    @Autowired
-    private DozerBeanMapper mapper;
 
     protected static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 

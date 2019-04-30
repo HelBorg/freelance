@@ -1,15 +1,14 @@
 <template>
-  <div id="container">
+  <div id="container" class="bg">
     <div>
       <Navbar/>
     </div>
     <div>
           <Menu/>
+    </div>
             <div class="hero">
-              <h1 class="display-3">Freelance system</h1>
-              <p class="lead">Dmitry and Elena corporated (c)</p>
+              <h2 class="display-3" style="color:dimgrey">Freelance system of your company</h2>
             </div>
-  </div>
   </div>
 </template>
 
@@ -35,15 +34,19 @@
 
 <style scoped>
   .hero {
-    height: 90vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    float:right;
+    width: 80%;
+    margin-right: 5%;
+    margin-top:15%;
     text-align: center;
   }
 
   .hero .lead {
     font-weight: 200;
     font-size: 1.5rem;
+  }
+
+  .bg{
+    background-image: url("https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80")
   }
 </style>

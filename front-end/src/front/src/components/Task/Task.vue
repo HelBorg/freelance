@@ -6,9 +6,8 @@
       <div id="main" class="lead mr-2" style="float:right; width:80%">
         <!--Top buttons task name and status area-->
         <div id="header">
-          <a >
-          <b-badge value="name" variant="danger"><strong><a v-if="status === 'ASSIGNED'" href="../homePage/Home.vue"> - {{assignedUser.name}}</a></strong> {{status}} </b-badge>
-          </a>
+          <b-badge value="name" variant="danger">{{status}} </b-badge>
+            <router-link v-if="status === 'ASSIGNED'">Performer - {{assignedUser.name}}</router-link>
 
           <div id="headerButtons" style="float:right">
             <!--top buttons-->
@@ -91,10 +90,12 @@
   import CommentForm from "../comments/CommentForm.vue"
   import Comment from "../comments/Comment.vue"
   import Skill from "../../components/Task/Skill.vue"
+  import router from "../../router";
+
 
 
   export default {
-    created() {
+    beforeMount() {
       this.loadTask(),
         this.getCurrentUserId()
     },
@@ -106,18 +107,21 @@
         newComment: '',
         //-------task---------
         loaded_skills: [],
-        id: '',
+        taskId: '',
         name: '',
         status: '',
         author_id:'',
         description: '',
         created_time: '',
         deadline: '',
-        assignedUser:[]
+        assignedUser:Object
         //-------task---------
       }
     },
     methods: {
+      goToUserPage(id){
+        router.replace('/user/' + id)
+      },
       revertStatus(){
         let self = this;
         fetch('/api/v1/task/delete/assigned/'+ self.$route.params.id, {
@@ -175,7 +179,6 @@
               }
               alert("Success!");
               response.json().then(function (data) {
-                console.log(data)
                 self.router.push('tasks/mine')
               })
             }
@@ -190,7 +193,7 @@
             'Authorization': 'Bearer ' + localStorage.getItem('JWT')
           },
           body: JSON.stringify({
-            id: self.$route.params.id,
+            taskId: self.$route.params.id,
             name: self.name,
             status: self.status,
             description: self.description,
@@ -213,7 +216,7 @@
           )
 
       },
-      loadTask: function() {
+      loadTask() {
         let self = this;
         fetch('/api/v1/task/' + self.$route.params.id, {
           method: 'GET',
@@ -230,7 +233,7 @@
                 return;
               }
               response.json().then(function (data) {
-                self.id = data.id;
+                self.taskId = data.id;
                 self.name = data.name;
                 self.status = data.status;
                 self.description = data.description;
@@ -240,6 +243,11 @@
                 self.loaded_skills = data.skills;
                 self.comments = data.reviews;
                 self.assignedUser = data.assignedUser
+                console.log(data.assignedUser.id)
+                console.log(data.assignedUser.name)
+
+
+
               })
             }
           )
@@ -273,5 +281,7 @@
     }
   }
 </script>
+<style>
+</style>
 
 

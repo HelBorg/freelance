@@ -1,7 +1,10 @@
 <template>
-
+  <div>
+    <Navbar></Navbar>
+    <div>
+      <Menu></Menu>
   <!-- Modal -->
-  <div  id="profile">
+  <div  id="profile" style="float:right; width:80%">
     <div>
       <div>
         <div class="modal-header">
@@ -10,31 +13,74 @@
         <div class="modal-body">
           <div style="text-align: center;">
             <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R" width="140" height="140" class="circle">
-            <h3>Joe Sixpack</h3>
+            <h3>{{userName}}</h3>
             <p>
-              Email: Jon@jon.com
+              Email: {{userEmail}}
             </p>
             <p>
-              Rating:<b-badge class="label" variant="success">1495</b-badge>
+              Rating:<b-badge class="label" variant="success">{{userRating}}</b-badge>
+            </p>
 
-            </p>
-            <span><strong>Skills: </strong></span>
-            <b-badge class="label" variant="warning">HTML5/CSS</b-badge>
-            <b-badge class="label" variant="warning">HTML5/CSS</b-badge>
-            <b-badge class="label" variant="warning">HTML5/CSS</b-badge>
-            <b-badge class="label" variant="warning">HTML5/CSS</b-badge>
           </div>
           <hr>
+          <SkillForm :skills="userSkills" ></SkillForm>
         </div>
       </div>
+    </div>
+  </div>
     </div>
   </div>
 
 </template>
 
 <script>
-    export default {
+  import Navbar from "./Navbar.vue";
+  import Menu from "./Menu.vue";
+  import SkillForm from "./Task/SkillForm.vue";
 
+  export default {
+
+    created(){
+      this.loadUser()
+    },
+    components: {Menu, Navbar, SkillForm},
+    data(){
+      return{
+        userId:'',
+        userName:'',
+        userEmail:'',
+        userRating:'',
+        userSkills:[]
+      }
+    },
+    methods: {
+      loadUser: function () {
+        let self = this;
+        fetch('/api/v1/person/' + self.$route.params.id, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
+          }
+        })
+          .then(
+            function (response) {
+              if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' +
+                  response.status);
+                return;
+              }
+              response.json().then(function (data) {
+                self.userId = data.id;
+                self.userName = data.name;
+                self.userRating = data.rating;
+                self.userEmail = data.email;
+                self.userSkills = data.skills;
+              })
+            }
+          )
+      }
+    }
     }
 </script>
 

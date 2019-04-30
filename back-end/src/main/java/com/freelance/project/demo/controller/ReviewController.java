@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/review")
@@ -21,11 +20,6 @@ public class ReviewController {
 
     @Autowired
     private ReviewService reviewService;
-
-    @Autowired
-    private DozerBeanMapper mapper;
-
-
 
     @PostMapping
     public void create(@RequestBody Review review, @AuthenticationPrincipal UserDetails userDetails){

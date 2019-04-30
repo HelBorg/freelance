@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "person_skill")
-public class UserSkill implements Serializable {
+public class UserSkill implements Serializable{
 
 
     @Id
@@ -19,15 +19,14 @@ public class UserSkill implements Serializable {
     @Column(name = "person_skill_id", nullable = false)
     private int userSkillId;
 
-   // @Enumerated(EnumType.STRING)
     @Column(name = "level", nullable = false)
     private String level;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id")
     private Person personId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "skill_id")
     private Skill skillId;
 

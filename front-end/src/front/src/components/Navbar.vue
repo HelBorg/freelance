@@ -1,11 +1,8 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="dark" class="margin-down-10">
+  <b-navbar toggleable="lg" type="dark" variant="secondary">
     <!-- Надо найти картинку-->
-      <b-navbar-brand href="#">
-        <img src="https://placekitten.com/g/30/30" class="d-inline-block align-top" alt="Kitten">
-      </b-navbar-brand>
 
-    <b-navbar-brand href="#">Freelance</b-navbar-brand>
+    <b-navbar-brand href="#">Web-free</b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -14,7 +11,7 @@
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
           <!-- Using 'button-content' slot -->
-          <b-nav-item >Welcome, {{username}} </b-nav-item>
+          <b-nav-item @click="goToUserPage" >Welcome, {{username}} </b-nav-item>
           <b-nav-item @click="logout">Logout</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
@@ -23,6 +20,8 @@
 
 <script>
   import * as types from '../store/mutation-types'
+  import router from "../router";
+
   export default {
     beforeMount(){
       this.getusername()
@@ -30,7 +29,8 @@
         name: "Navbar",
         data(){
           return{
-            username:''
+            username:'',
+            id:''
           }
         },
         methods: {
@@ -51,6 +51,7 @@
                     return;
                   }
                   response.json().then(function (data) {
+                    self.id = data.id;
                     self.username = data.name
                   })
                 }
@@ -58,7 +59,10 @@
           },
         logout () {
           this.$store.dispatch(types.LOGOUT)
-        }
+        },
+          goToUserPage(){
+            router.replace('/user/' + this.id)
+          }
     }
   }
 </script>

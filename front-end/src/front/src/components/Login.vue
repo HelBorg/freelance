@@ -1,17 +1,31 @@
 <template>
-  <div class="ml-auto mr-auto pt-20" style="width:40%">
-    <form @submit.prevent="login">
-      <h2 class="lead">Enter your credentials</h2>
-      <b-input v-model="email" type="email" id="text-password" class="mb-3 " placeholder="Input email"></b-input>
-      <b-input v-model="password" type="password" id="text-password" placeholder="Input password"
-               class="mb-3"></b-input>
-      <div class="d-inline">
-        <b-button variant="outline-secondary" type="submit" :to="'singup'">Not a member? Sing Up</b-button>
-        <b-button style="float:right" variant="primary" type="submit">Login</b-button>
+  <div class="container">
+    <div class="col-md-6 mx-auto text-center">
+      <div class="header-title">
+        <h1 class="wv-heading--title">
+          Welcome, login please!
+        </h1>
       </div>
-    </form>
+    </div>
+    <div class="row">
+      <div class="col-md-4 mx-auto">
+        <div class="myform form ">
+            <div class="form-group">
+              <b-input v-model="email" type="email" name="email"  class="form-control my-input" id="email" placeholder="Email"></b-input>
+            </div>
+            <div class="form-group">
+              <b-input v-model="password" type="password" min="0" name="password" id="password"  class="form-control my-input" placeholder="Password"></b-input>
+            </div>
+            <div class="text-center ">
+              <b-button @click="login" type="submit" variant="primary" class=" btn btn-block send-button tx-tfm">Log In</b-button>
+              <b-button variant="outline-secondary" type="submit" class="mt-2" :to="'singup'">Not a member? Sing Up</b-button>
+            </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
 <script>
 
   import * as types from '../store/mutation-types'

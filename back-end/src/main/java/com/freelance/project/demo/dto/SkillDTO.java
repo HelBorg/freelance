@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 public class SkillDTO {
 
-    private String name;
+     String name;
 
 }
