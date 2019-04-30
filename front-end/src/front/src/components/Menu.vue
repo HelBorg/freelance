@@ -12,10 +12,7 @@
           In work
         </b-list-group-item>
         <b-list-group-item @click="createNewTask">
-
             Create New
-
-
         </b-list-group-item>
         <b-list-group-item :to="'tasks/search'">
           Search

@@ -1,7 +1,6 @@
 <template>
   <div>
     <b-col>
-      <div>
         <b-table id="tasks"
                  title="Tasks"
                  :items="tasks"
@@ -11,7 +10,6 @@
                  small
                  @row-clicked="goToTask(item.id)">
       </b-table>
-      </div>
       <div v-else>
         <h4>List is empty!</h4>
       </div>

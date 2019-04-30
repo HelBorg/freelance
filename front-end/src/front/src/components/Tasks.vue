@@ -5,10 +5,10 @@
     </div>
     <div>
       <b-row>
-      <b-col cols="3">
+      <b-col style="width:25%">
         <Menu/>
       </b-col>
-      <b-col>
+      <b-col style="width:">
         <b-card title="Tasks">
           <div>
             <b-table id="tasks"
@@ -258,7 +258,7 @@
     },
     methods: {
       retrieveTasks() {
-        axios.get('http://localhost:80/api/v1/tasks',{
+        axios.get('http://localhost:80/api/v1/task',{
           params:
         {
           size: this.getTasks.pageSize,
@@ -301,7 +301,7 @@
       });
       },
       retrieveSkills() {
-        axios.get('http://localhost:80/api/v1/skills')
+        axios.get('http://localhost:80/api/v1/skill')
           .then(response => {
             console.log(response.data);
             if (response) {
@@ -312,7 +312,7 @@
           });
       },
       retrieveUsers() {
-        axios.get('http://localhost:80/api/v1/persons')
+        axios.get('http://localhost:80/api/v1/person')
           .then(response => {
             console.log(response.data);
             if (response) {
