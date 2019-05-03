@@ -8,7 +8,7 @@
       <b-col style="width:25%">
         <Menu/>
       </b-col>
-      <b-col style="width:">
+      <b-col style="width:29%">
         <b-card title="Tasks">
           <div>
             <b-table id="tasks"
