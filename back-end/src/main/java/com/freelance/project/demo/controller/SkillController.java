@@ -3,6 +3,7 @@ package com.freelance.project.demo.controller;
 import com.freelance.project.demo.dto.SkillDTO;
 import com.freelance.project.demo.models.Skill;
 import com.freelance.project.demo.repository.SkillRepository;
+import com.freelance.project.demo.service.SkillService;
 import com.freelance.project.demo.service.impl.SkillServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +26,15 @@ public class SkillController {
     @Autowired
     private SkillRepository repository;
 
+    @Autowired
+    private SkillService service;
+
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
     @GetMapping
-    public Collection<Skill> getAll() {
+    public Collection<SkillDTO> getAll() {
         logger.info("Request to get all skills");
-        return repository.findAll();
+        return service.findAll();
     }
 
     @GetMapping("/{name}")
