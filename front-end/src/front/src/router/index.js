@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '../components/Home'
+import Home from '../components/homePage/Home'
 import SingUp from '../components/SingUp'
 import Task from '../components/Task/Task'
 import Login from '../components/Login'
