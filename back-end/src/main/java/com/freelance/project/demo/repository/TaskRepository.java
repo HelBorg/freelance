@@ -33,7 +33,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("Select t from Task t where t.name = :name")
     Page<Task> findByName(@Param("name") String name, Pageable pageRequest);
 
-    @Query("SELECT t FROM Task t join t.candidateTasks tc where tc.personId = :id")
+    @Query("SELECT DISTINCT t FROM Task t join t.candidateTasks tc where tc.personId = :id")
     Page<Task> findAllByCandidate(@Param("id")int candidate_id, Pageable pageRequest);
 
     Task findByTaskId(int id);

@@ -81,8 +81,8 @@ public class TaskController {
                                                  @RequestParam("pageName") Optional<String> pageName,
                                                  @RequestParam("find_name") Optional<String> findName,
                                                  @RequestParam("date_from")Optional<Date> date_from,
-                                                 @RequestParam("date_to") Optional<Date> date_to,
-                                                 @RequestParam("skills") Optional<List<Pair<String, Integer>>> skillsList) {
+                                                 @RequestParam("date_to") Optional<Date> date_to
+                                                /* @RequestParam("skills") Optional<List<Pair<String, Integer>>> skillsList*/) {
         Pager<TaskDTO> pager = taskService.findAll(id, pageSize, pageNumber, sort, pageName, findName, date_from, date_to);
         logger.info("Request to get tasks: {}", pager);
         return ResponseEntity.ok().body(pager);
