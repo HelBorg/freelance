@@ -62,6 +62,7 @@ public class AuthController {
         Person currentPerson = personService.findByEmail(userDetails.getUsername());
         Map<Object, Object> model = new HashMap<>();
         model.put("name", currentPerson.getName());
+        model.put("id", currentPerson.getPersonId());
         return ok(model);
     }
 }

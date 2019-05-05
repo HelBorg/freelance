@@ -7,6 +7,7 @@ import Login from '../components/Login'
 import store from '../store'
 import * as types from '../store/mutation-types'
 import Tasks from "../components/tasks/Tasks"
+import Users from "../components/Users";
 
 const hasToken = (to, from, next) => {
   const token = localStorage.getItem('JWT')
@@ -57,8 +58,8 @@ const router = new Router({
 
     },
     {
-      path: '/user',
-      name: 'User',
+      path: '/users',
+      name: 'Users',
     },
     {
       path: '/singup',

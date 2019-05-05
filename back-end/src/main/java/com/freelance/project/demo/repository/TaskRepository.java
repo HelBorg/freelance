@@ -1,6 +1,7 @@
 package com.freelance.project.demo.repository;
 
 import com.freelance.project.demo.dto.TaskDTO;
+import com.freelance.project.demo.models.Pager;
 import com.freelance.project.demo.models.Person;
 import com.freelance.project.demo.models.Skill;
 import com.freelance.project.demo.models.Task;
@@ -27,6 +28,10 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     Page<Task> find(Pageable pageRequest);
 
     List<Task> findAll();
+
+
+    @Query("Select t from Task t where t.name = :name")
+    Page<Task> findByName(@Param("name") String name, Pageable pageRequest);
 
     @Query("SELECT t FROM Task t join t.candidateTasks tc where tc.personId = :id")
     Page<Task> findAllByCandidate(@Param("id")int candidate_id, Pageable pageRequest);

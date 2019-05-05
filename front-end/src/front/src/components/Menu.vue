@@ -1,6 +1,6 @@
 <template>
   <div id="menu"
-       style="float: left;width:29%"
+       style="float: left;width:25%"
        class="container-fluid ">
       <b-list-group title="Menu">
         <b-list-group-item :to="'tasks/mine'">
