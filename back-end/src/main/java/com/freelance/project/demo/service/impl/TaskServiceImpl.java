@@ -92,14 +92,16 @@ public class TaskServiceImpl implements TaskService {
         int pageId = pageNumber.orElse(0);
         int size = pageSize.orElse(5);
         int idN = id.orElse(0);
-        Date from = date_from.orElse(new Date(2019, 5, 5));
+        Date from = date_from.orElse(new Date(2019, Calendar.MARCH, 5));
         Date to = date_to.orElse(new Date());
         String name = findName.orElse("");
-        System.out.println(to);
         String pageN = pageName.orElse("tasks");
         String sort = pageSort.orElse("taskId");
         PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
         Page<Task> page;
+        if(name.equals("")){
+            System.out.println("ggggg");
+        }
 //        if(!(findName.equals(Optional.of("")))) {
 //            page = taskRepository.findByName(findName.orElse(""), PageRequest.of(pageId, size, Sort.by(sort)));
 //        } else {
