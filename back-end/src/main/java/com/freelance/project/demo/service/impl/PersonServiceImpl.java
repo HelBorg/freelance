@@ -1,16 +1,21 @@
 package com.freelance.project.demo.service.impl;
 
 import com.freelance.project.demo.dto.PersonDTO;
+import com.freelance.project.demo.models.PageAndSort;
+import com.freelance.project.demo.models.Pager;
 import com.freelance.project.demo.models.Person;
 import com.freelance.project.demo.repository.PersonRepository;
 import com.freelance.project.demo.service.PersonService;
 import org.dozer.DozerBeanMapper;
-import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,10 +33,25 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<PersonDTO> findAll() {
-        return personRepository.findAll().stream()
+    public Pager<PersonDTO> findAll(Optional<Integer> pageSize,
+                                   Optional<Integer> pageNumber,
+                                   Optional<String> pageSort) {
+        int pageId = pageNumber.orElse(0);
+        int size = pageSize.orElse(5);
+        String sort = pageSort.orElse("personId");
+        PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
+        Page<Person> page = personRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
+
+
+        boolean hasPreviousPage = pageId != 0;
+        boolean hasNextPage = page.getTotalPages() - 1 > pageId;
+
+        List<Person> list = page.getContent();
+        List<PersonDTO> listDTO = list.stream()
                 .map(entity -> mapper.map(entity, PersonDTO.class))
                 .collect(Collectors.toList());
+        return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
+
     }
 
     public Person getById(int id){

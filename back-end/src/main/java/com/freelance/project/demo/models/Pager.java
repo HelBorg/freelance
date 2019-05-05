@@ -10,15 +10,15 @@ public class Pager<T> implements Serializable {
     private boolean hasPreviousPage;
     private boolean hasNextPage;
     private int pagesCount;
-    private List<T> tasks;
+    private List<T> items;
 
     PageAndSort pageAndSort;
 
     public Pager() {
     }
 
-    public Pager(List<T> tasks, boolean hasPreviousPage, boolean hasNextPage, int pagesCount, PageAndSort pageAndSort) {
-        this.tasks = tasks;
+    public Pager(List<T> items, boolean hasPreviousPage, boolean hasNextPage, int pagesCount, PageAndSort pageAndSort) {
+        this.items = items;
         this.hasNextPage = hasNextPage;
         this.hasPreviousPage = hasPreviousPage;
         this.pagesCount = pagesCount;

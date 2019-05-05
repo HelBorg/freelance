@@ -89,25 +89,35 @@ public class TaskServiceImpl implements TaskService {
                                   Optional<Integer> pageSize,
                                   Optional<Integer> pageNumber,
                                   Optional<String> pageSort,
-                                  Optional<String> pageName) {
+                                  Optional<String> pageName,
+                                  Optional<String> findName,
+                                  Optional<Date> date_from,
+                                  Optional<Date> date_to) {
         int pageId = pageNumber.orElse(0);
         int size = pageSize.orElse(5);
         int idN = id.orElse(0);
+        Date from = date_from.orElse(new Date(2019, 5, 5));
+        Date to = date_to.orElse(new Date());
+        System.out.println(to);
         String pageN = pageName.orElse("tasks");
         String sort = pageSort.orElse("taskId");
         PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
         Page<Task> page;
-        switch (pageN) {
-            case "candidate":
-                page = taskRepository.findAllByCandidate(idN, PageRequest.of(pageId, size, Sort.by(sort)));
-                break;
-            case "author":
-                page = taskRepository.findAllByAuthor(idN, PageRequest.of(pageId, size, Sort.by(sort)));
-                break;
-            default:
-                page = taskRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
-                break;
-        }
+//        if(!(findName.equals(Optional.of("")))) {
+//            page = taskRepository.findByName(findName.orElse(""), PageRequest.of(pageId, size, Sort.by(sort)));
+//        } else {
+            switch (pageN) {
+                case "candidate":
+                    page = taskRepository.findAllByCandidate(idN, PageRequest.of(pageId, size, Sort.by(sort)));
+                    break;
+                case "author":
+                    page = taskRepository.findAllByAuthor(idN, PageRequest.of(pageId, size, Sort.by(sort)));
+                    break;
+                default:
+                    page = taskRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
+                    break;
+            }
+//        }
 
         boolean hasPreviousPage = pageId != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageId;

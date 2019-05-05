@@ -6,6 +6,7 @@ import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.models.PageAndSort;
 import com.freelance.project.demo.models.Pager;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,9 +27,12 @@ public interface TaskService {
     void deleteAssignAndRevertStatus(int taskId);
 
     Pager<TaskDTO> findAll(Optional<Integer> id,
-                     Optional<Integer> pageSize,
-                     Optional<Integer> pageNumber,
-                     Optional<String> pageSort,
-                     Optional<String> pageName);
+                           Optional<Integer> pageSize,
+                           Optional<Integer> pageNumber,
+                           Optional<String> pageSort,
+                           Optional<String> pageName,
+                           Optional<String> find_name,
+                           Optional<Date> date_from,
+                           Optional<Date> date_to);
 
 }
