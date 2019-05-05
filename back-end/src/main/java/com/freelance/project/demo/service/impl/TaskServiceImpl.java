@@ -98,6 +98,7 @@ public class TaskServiceImpl implements TaskService {
         int idN = id.orElse(0);
         Date from = date_from.orElse(new Date(2019, 5, 5));
         Date to = date_to.orElse(new Date());
+        String name = findName.orElse("");
         System.out.println(to);
         String pageN = pageName.orElse("tasks");
         String sort = pageSort.orElse("taskId");
