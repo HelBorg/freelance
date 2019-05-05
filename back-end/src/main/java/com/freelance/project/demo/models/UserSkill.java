@@ -22,11 +22,11 @@ public class UserSkill implements Serializable{
     @Column(name = "level", nullable = false)
     private String level;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "person_id")
     private Person personId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "skill_id")
     private Skill skillId;
 

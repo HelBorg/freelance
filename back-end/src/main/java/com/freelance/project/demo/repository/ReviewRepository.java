@@ -14,4 +14,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     @Query("select r from Review r join r.taskId tr where tr.taskId = :taskId")
     List<Review> findAllForTask(@Param("taskId") int taskId);
+
+    @Query("select r from Review r join r.userId ur where ur.personId = :userId and r.done='t' ")
+    List<Review> findAllAboutUser(@Param("userId") int userId);
 }

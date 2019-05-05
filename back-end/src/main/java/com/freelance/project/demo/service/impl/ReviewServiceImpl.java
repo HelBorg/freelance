@@ -37,6 +37,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void createReview(Review review, UserDetails userDetails){
 
         review.setDescription(review.getDescription());
+        review.setDone(review.isDone());
         review.setDateTime(new Date());
         review.setTaskId(taskRepository.findByTaskId(review.getTaskId().getTaskId()));
         review.setUserId(personRepository.findByEmail(userDetails.getUsername()));
@@ -50,6 +51,12 @@ public class ReviewServiceImpl implements ReviewService {
 
     public List<ReviewDTO> getAllByTask(int taskId){
         return reviewRepository.findAllForTask(taskId).stream()
+                .map(entity -> mapper.map(entity, ReviewDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<ReviewDTO> getAllForUser(int userId){
+        return reviewRepository.findAllAboutUser(userId).stream()
                 .map(entity -> mapper.map(entity, ReviewDTO.class))
                 .collect(Collectors.toList());
     }

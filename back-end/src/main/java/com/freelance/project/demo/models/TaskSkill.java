@@ -17,13 +17,13 @@ public class TaskSkill implements Serializable{
     private int taskSkillId;
 
     @Column(name = "level", nullable = false)
-    private int level;
+    private String level;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "task_id")
     private Task taskId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "skill_id")
     private Skill skillId;
 }

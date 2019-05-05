@@ -1,23 +1,17 @@
 <template>
-  <b-card  style="border:0">
-    <b-card-header class="p-1">
-      {{skill.skillName.name}}
-      <b-button v-if="status === 'IN_DESIGN'" class="p-1 ml-3" variant="danger" @click="deleteTaskSkill">Delete</b-button>
-    </b-card-header>
-    <b-progress :max="100" height="2rem">
-      <b-progress-bar  :value="skill.level" >
-        <strong>{{skill.level}}%</strong>
-      </b-progress-bar>
-    </b-progress>
-  </b-card>
+  <b-badge variant="warning" class="ml-2 mr-2">
+    {{skill.skillName.name}} - {{skill.level}}<span @click="deleteTaskSkill" v-if="status === 'IN_DESIGN' || status === 'CURRENT'" class="ml-1" style="cursor: pointer;color:red">x</span>
+  </b-badge>
 </template>
 
 <script>
-
     export default {
+
       props: {
+        route: Object,
         skill: Object,
-        status: Object
+        status: Object,
+        curs:Object
       },
       methods:{
         deleteTaskSkill() {

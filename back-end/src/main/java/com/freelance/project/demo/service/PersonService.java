@@ -16,4 +16,6 @@ public interface PersonService {
 
     Person getById(int id);
 
+    void updateRating(int id, int rate);
+
 }

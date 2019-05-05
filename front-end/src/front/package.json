@@ -33,6 +33,7 @@
     "vue-axios": "^2.1.4",
     "vue-date-pick": "^1.1.0",
     "vue-loader": "^13.3.0",
+    "vue-rate": "^2.2.0",
     "vue-router": "^3.0.1",
     "vue-style-loader": "^3.0.1",
     "vuejs-datepicker": "^1.5.4",

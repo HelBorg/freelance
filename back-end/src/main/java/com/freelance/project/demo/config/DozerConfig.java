@@ -51,6 +51,7 @@ public class DozerConfig {
                         .fields(field("reviewId").accessible(), field("id").accessible())
                         .fields(field("description").accessible(), field("description").accessible())
                         .fields(field("dateTime").accessible(), field("createdTime").accessible())
+                        .fields(field("done").accessible(), field("done").accessible())
                         .fields(field("userId").accessible(), field("user").accessible());
 
 

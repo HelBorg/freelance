@@ -8,7 +8,7 @@ import lombok.Data;
 public class TaskSkillDTO {
 
     int id;
-    int level;
+    String level;
     SkillDTO skillName;
 
 }

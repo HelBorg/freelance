@@ -1,21 +1,51 @@
 <template>
   <div>
     <Navbar></Navbar>
-    <div>
+    <div class="bg">
       <Menu></Menu>
-      <div id="main" class="lead mr-2" style="float:right; width:80%">
+      <div id="main" class="lead mr-5" style="float:right; width:80%">
         <!--Top buttons task name and status area-->
         <div id="header">
-          <b-badge value="name" variant="danger">{{status}} </b-badge>
-            <router-link v-if="status === 'ASSIGNED'">Performer - {{assignedUser.name}}</router-link>
+          <b-badge value="name" variant="danger" class="mt-4">{{status}} </b-badge>
+          <b-badge variant="light" @click="goToUserPage(assignedUser.id)" v-if="status === 'ASSIGNED'
+              || status === 'IN_WORK' || status === 'DONE'" style="cursor: pointer" >
+            performer - {{assignedName}}</b-badge>
 
-          <div id="headerButtons" style="float:right">
+
+          <div id="headerButtons" style="float:right" class="mt-2">
             <!--top buttons-->
-            <b-button v-if="status === 'IN_WORK' && author_id === userId" @click="updateStatus" variant="primary">Done</b-button>
+
+            <b-button v-if="status === 'IN_WORK' && author_id === userId" @click="$refs['task_done'].show();" variant="primary">Done</b-button>
+
+            <b-modal ref="task_done" id="task_done" hide-footer>
+              <template slot="modal-header">Please, write review about performer</template>
+              <b-form-select class="mt-2" v-model="settedRate">
+                <option :value="null">Work rate</option>
+                <option value=1>bad</option>
+                <option value=2>semi-good</option>
+                <option value=3>good</option>
+                <option value=4>semi-profi</option>
+                <option value=5>profi</option>
+              </b-form-select>
+              <b-form-textarea
+                id="area_text"
+                size="sm"
+                rows="1"
+                max-rows="8"
+                class="mt-2"
+                v-modal="userReview"
+              >
+              </b-form-textarea>
+
+              <div style="float:right">
+                <b-button @click="$refs['task_done'].hide();" class="mt-3">Cansel</b-button>
+                <b-button class="mt-3" v-on:click="taskDone" variant="success">Done
+                </b-button>
+              </div>
+            </b-modal>
 
             <b-button v-if="status === 'ASSIGNED' && assignedUser.id === userId" @click="updateStatus" variant="primary">Apply</b-button>
             <b-button v-if="status === 'ASSIGNED' && assignedUser.id === userId" @click="revertStatus" variant="primary">Decline</b-button>
-
 
             <b-button v-if="status === 'IN_DESIGN'" @click="saveTask" variant="primary">Save</b-button>
 
@@ -31,7 +61,7 @@
           <b-modal ref="commit_delete" id="commit_delete" hide-footer>
             <template slot="modal-title">You really want to delete task?</template>
             <div style="float:right">
-              <b-button @click="$refs['commit_delete'].hide();" class="mt-3">Close</b-button>
+              <b-button @click="$refs['commit_delete'].hide();" class="mt-3">Cansel</b-button>
               <b-button class="mt-3" v-on:click="acceptDeleteHandler" variant="danger">Delete
               </b-button>
             </div>
@@ -39,42 +69,39 @@
 
           <!--Task Name area-->
           <div id="TaskName">
-            <p class="mt-4 mb-1"><strong>Name</strong></p>
-            <p v-if="status !== 'IN_DESIGN'" class="mt-4 mb-1">{{name}}</p>
+            <h3 v-if="status === 'IN_DESIGN'" class="mt-4 mb-1 lead"><strong>Name</strong></h3>
+            <h3 v-if="status !== 'IN_DESIGN'" class="mt-4 mb-1 lead"><strong>{{name}}</strong></h3>
             <b-form-input v-if="status === 'IN_DESIGN'" v-model="name"></b-form-input>
           </div>
           <!-->
         </div> <!--end of header-->
 
-        <hr/>
+      <hr/>
 
         <!--Description area-->
         <div id="taskDescription">
-          <h5 class="mb-2 lead"><strong>Description</strong></h5>
-          <p v-if="status !== 'IN_DESIGN'" class="mt-4 mb-1">{{description}}</p>
+          <h5 class="mb-2 mt-1 lead"><strong>Task description</strong></h5>
+          <p v-if="status !== 'IN_DESIGN'" class="mt-2 mb-1 text-justify">{{description}}</p>
           <b-form-textarea v-if="status === 'IN_DESIGN'" id="textarea" rows="3" max-rows="6" v-model="description" ></b-form-textarea>
         </div>
         <!-->
 
-          <hr/>
 
           <!--Skills component -->
           <SkillForm :skills="loaded_skills" :status="status" ></SkillForm>
           <!-->
-          <hr/>
 
         <!--TaskDateRange area-->
         <div id="taskDateRange">
-          <h5 class="lead"><strong>Task date range</strong></h5>
-            <p class="mb-1">Created date</p>
-            <b-form-input disabled="true" v-model=created_time type="date"></b-form-input>
-            <p class="mb-1">Deadline</p>
-            <b-form-input v-if="status === 'IN_DESIGN'" v-model=deadline type="date"></b-form-input>
-            <b-form-input v-if="status !== 'IN_DESIGN'" disabled="true" v-model=deadline type="date"></b-form-input>
+         <!-- <p class="mb-1 mt-1">Created date</p>
+            <b-form-input disabled="true" v-model=created_time type="date" style="width:20%"></b-form-input>-->
+
+            <h5 class="mb-1 mt-4 lead"><strong>Deadline</strong></h5>
+            <b-form-input v-if="status === 'IN_DESIGN'" v-model=deadline type="date" style="width:20%"></b-form-input>
+            <b-form-input v-if="status !== 'IN_DESIGN'" disabled="true" v-model=deadline type="date" style="width:20%"></b-form-input>
 
         </div>
         <!-->
-
         <!--Comments component-->
         <CommentForm v-if="status !== 'IN_DESIGN'" :comments="comments" :status="status"></CommentForm>
         <!-->
@@ -94,6 +121,7 @@
 
 
 
+
   export default {
     beforeMount() {
       this.loadTask(),
@@ -102,6 +130,8 @@
     components: {Menu, Navbar, CommentForm, SkillForm, Comment, Skill},
     data() {
       return {
+        userReview:'',
+        settedRate:null,
         userId:'',
         comments: [],
         newComment: '',
@@ -114,11 +144,59 @@
         description: '',
         created_time: '',
         deadline: '',
-        assignedUser:Object
+        assignedUser:[],
+        assignedName:''
+
         //-------task---------
       }
     },
     methods: {
+      taskDone(){
+        let self =this
+        fetch('/api/v1/person/'+ self.assignedUser.id + '/' + self.settedRate, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
+          },
+        })
+          .then(
+            function (response) {
+              if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' +
+                  response.status);
+                return;
+              }
+              fetch('/api/v1/review', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + localStorage.getItem('JWT')
+                },
+                body: JSON.stringify({
+                  description: self.userReview,
+                  done: true,
+                  taskId: {
+                    taskId: self.$route.params.id,
+                  }
+                })
+              })
+                .then(
+                  function (response) {
+                    if (response.status !== 200) {
+                      console.log('Looks like there was a problem. Status Code: ' +
+                        response.status);
+                      return;
+                    }
+
+                  }
+                )
+              self.$refs['task_done'].hide();
+              self.updateStatus()
+            }
+          )
+
+      },
       goToUserPage(id){
         router.replace('/user/' + id)
       },
@@ -193,11 +271,12 @@
             'Authorization': 'Bearer ' + localStorage.getItem('JWT')
           },
           body: JSON.stringify({
-            taskId: self.$route.params.id,
+            id: self.$route.params.id,
             name: self.name,
             status: self.status,
             description: self.description,
-            deadline: self.deadline
+            deadline: self.deadline,
+
           })
         })
           .then(
@@ -210,7 +289,7 @@
               alert("Success!");
               response.json().then(function (data) {
                 console.log(data),
-                  window.location.reload()
+                window.location.reload()
               })
             }
           )
@@ -243,9 +322,7 @@
                 self.loaded_skills = data.skills;
                 self.comments = data.reviews;
                 self.assignedUser = data.assignedUser
-                console.log(data.assignedUser.id)
-                console.log(data.assignedUser.name)
-
+                self.assignedName = data.assignedUser.name;
 
 
               })
@@ -282,6 +359,9 @@
   }
 </script>
 <style>
+  .bg{
+    background-image: url("https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80")
+  }
 </style>
 
 

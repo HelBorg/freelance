@@ -75,6 +75,7 @@ public class TaskServiceImpl implements TaskService {
         updating.setStatus(task.getStatus());
         updating.setDescription(task.getDescription());
         updating.setDeadline(task.getDeadline());
+        updating.setAuthor(updating.getAuthor());
     }
 
     @Override

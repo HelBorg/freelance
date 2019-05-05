@@ -1,33 +1,23 @@
 <template>
   <div>
-    <b-modal ref="add_comment" id="add_comment" hide-footer>
-      <template slot="modal-title">
-        Add comment
+    <h5 class="mt-2 mb-4 lead">
+      <strong>Comments</strong>
+    </h5>
+    <div>
+      <div class="d-inline" v-if="status !== 'CURRENT' || status !== 'IN_DESIGN'">
         <b-form-textarea
           id="textarea"
-          size="lg"
-          rows="3"
+          size="sm"
+          rows="1"
           max-rows="8"
           v-model="newComment"
+          placeholder="New comment"
         ></b-form-textarea>
-      </template>
-
-      <div style="float:right">
-        <b-button @click="$refs['add_comment'].hide()" class="mt-3">Cansel</b-button>
-        <b-button v-on:click="saveComment" class="mt-3" variant="danger">Add</b-button>
-      </div>
-    </b-modal>
-
-    <hr>
-
-    <div>
-      <div class="d-inline-block">
-        <b-button @click="$refs['add_comment'].show();">Add new comment</b-button>
-        <h5 class="lead">Comments</h5>
+        <b-button class="mt-2" variant="success" @click="saveComment">Add new comment</b-button>
       </div>
 
       <div class="column">
-        <Comment v-for="comment in comments" :load="load" :comment="comment" :status="status"></Comment>
+        <Comment v-for="comment in comments" :comment="comment" :status="status"></Comment>
       </div>
     </div>
   </div>
@@ -58,6 +48,7 @@
           },
           body: JSON.stringify({
             description: self.newComment,
+            done:false,
             taskId: {
               taskId: self.$route.params.id
             }

@@ -30,4 +30,9 @@ public class ReviewController {
     public List<ReviewDTO> getAllByTask(@PathVariable int id){
         return reviewService.getAllByTask(id);
     }
+
+    @GetMapping("/user/{id}")
+    public List<ReviewDTO> getAllAboutUser(@PathVariable int id){
+        return reviewService.getAllForUser(id);
+    }
 }

@@ -46,7 +46,4 @@
     font-size: 1.5rem;
   }
 
-  .bg{
-    background-image: url("https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80")
-  }
 </style>

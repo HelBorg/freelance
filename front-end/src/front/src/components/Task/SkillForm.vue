@@ -1,33 +1,30 @@
 <template>
-  <div>
+  <div class="mt-4">
   <h5 class="lead">
-    <strong>Nessesary skills</strong>
+   <strong>Skills:</strong>
+      <Skill v-for="each in skills" :skill="each" :status="status"></Skill>
   </h5>
-  <div v-if="status === 'IN_DESIGN'" >
-    <b-form-select v-model="skill_name" class="mb-3">
-      <option :value="null">Please select skill name</option>
+
+  <div v-if="status === 'IN_DESIGN' || status === 'CURRENT'" >
+    <b-form-select v-model="skill_name" style="width:20%">
+      <option :value="null">Select skill name</option>
       <option value="java">Java</option>
       <option value="sql">SQL</option>
       <option value="spring">Spring</option>
       <option value="javascript">Javascript</option>
     </b-form-select>
 
-    <b-form-select v-model="skill_level" class="mb-3">
-      <option :value="null">Please select skill level</option>
-      <option value="1">Bad</option>
-      <option value="25">semi-good</option>
-      <option value="50">good</option>
-      <option value="75">semi-profi</option>
-      <option value="99">profi</option>
+    <b-form-select v-model="skill_level" style="width:20%">
+      <option :value="null">Select skill level</option>
+      <option value="bad">Bad</option>
+      <option value="semi-good">semi-good</option>
+      <option value="good">good</option>
+      <option value="semi-profi">semi-profi</option>
+      <option value="profi">profi</option>
     </b-form-select>
 
-    <b-button @click="addTaskSkill" variant="success"> Add skill</b-button>
-
+    <b-button @click="addTaskSkill" variant="success" class="p-1"> Add skill</b-button>
   </div>
-
-    <div class="column">
-      <Skill v-for="each in skills" :skill="each" :status="status"></Skill>
-    </div>
   </div>
 </template>
 
@@ -40,8 +37,9 @@
         skill_level:null
       }
     },
-
       props: {
+        route: Object,
+        cusr: Object,
         skills: Object,
         status: Object
       },
@@ -51,6 +49,12 @@
       methods: {
         addTaskSkill() {
           let self = this;
+          self.skills.push({
+            skillName: {
+              name: self.skill_name
+            },
+            level: self.skill_level
+          })
           if(!self.checkForArray(self.skill_name, self.skills)){
           fetch('/api/v1/task-skill/' + self.$route.params.id, {
             method: 'POST',
@@ -62,7 +66,7 @@
               skillName: {
                 name: self.skill_name
               },
-              level: self.skill_level,
+              level: self.skill_level
             })
 
           })
@@ -74,7 +78,6 @@
                     response.status);
                   return;
                 }
-                window.location.reload()
               }
             )
           }else alert("Skill already exists")
