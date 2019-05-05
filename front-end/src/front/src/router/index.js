@@ -60,6 +60,7 @@ const router = new Router({
     {
       path: '/users',
       name: 'Users',
+      component: Users
     },
     {
       path: '/singup',
