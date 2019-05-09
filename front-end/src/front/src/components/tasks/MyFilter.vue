@@ -96,7 +96,7 @@
           <b-form-input v-model="findUser" placeholder="Enter user name"></b-form-input>
           <b-form-select :select-size="4">
             <option v-for="user in filterUsers(getUsers.users)"
-                  @click="selectedUser=user">
+                    @click="selectedUser=user">
               {{user.name}}
             </option>
           </b-form-select>
@@ -139,26 +139,31 @@
     },
     methods: {
       retrieveSkills() {
-        axios.get('http://localhost:80/api/v1/skill')
-          .then(response => {
-            if (response) {
-              this.getSkills.skills = response.data;
-            }
-          })
+        axios.get('http://localhost:80/api/v1/skill', {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('JWT')
+          }
+        }).then(response => {
+          if (response) {
+            this.getSkills.skills = response.data;
+          }
+        })
           .catch(e => {
             this.errors.push(e)
           });
       },
       retrieveUsers() {
-        axios.get('http://localhost:80/api/v1/person')
-          .then(response => {
-            if (response) {
-              this.getUsers.users = response.data.items;
-            }
-          })
-          .catch(e => {
-            this.errors.push(e)
-          });
+        axios.get('http://localhost:80/api/v1/person', {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('JWT')
+          }
+        }).then(response => {
+          if (response) {
+            this.getUsers.users = response.data.items;
+          }
+        }).catch(e => {
+          this.errors.push(e)
+        });
       },
 
       // Filter
@@ -178,25 +183,18 @@
       },
 
       filterUsers: function (users) {
-        console.log("0");
         this.filteredUsers = [];
         if (this.findUser.length < 1) {
           return users;
         }
-        console.log("1");
         for (let user in users) {
           if (users[user].name.includes(this.findUser)) {
             this.filteredUsers.push(users[user]);
-            console.log("2");
           }
-          console.log("3");
         }
-        console.log("4");
         if (this.filteredUsers.length < 1) {
-          console.log("5");
           return users;
         } else {
-          console.log("6");
           return this.filteredUsers;
         }
       },
@@ -215,6 +213,9 @@
       onReset(evt) {
         evt.preventDefault();
         // Reset our form values
+        this.refreshFilter();
+      },
+      refreshFilter() {
         this.find_name = '';
         this.date_from = '';
         this.date_to = '';
@@ -230,6 +231,7 @@
       }
     },
     mounted() {
+      this.refreshFilter();
       this.retrieveSkills();
       this.retrieveUsers();
     }

@@ -21,8 +21,8 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer> {
 
-    @Query("Select t from Task t")
-    Page<Task> find(Pageable pageRequest);
+    @Query("Select t from Task t where t.status != :status")
+    Page<Task> find(@Param("status")String status, Pageable pageRequest);
 
     List<Task> findAll();
 
@@ -32,7 +32,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("SELECT DISTINCT t FROM Task t join t.candidateTasks tc where tc.personId = :id")
     Page<Task> findAllByCandidate(@Param("id")int candidate_id, Pageable pageRequest);
 
-    @Query("SELECT t from Task t join t.candidateTasks tc where tc.personId = :id and t.status = :status")
+    @Query("SELECT distinct t from Task t join t.candidateTasks tc where tc.personId = :id and t.status = :status")
     Page<Task> findAllInWork(@Param("id")int candidate_id, @Param("status")String status, Pageable pageRequest);
 
     @Query("Select t from Task t where t.name = :name")

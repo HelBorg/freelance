@@ -36,7 +36,7 @@ public class AuthController {
     @Autowired
     PersonService personService;
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/singin")
     public ResponseEntity signin(@RequestBody AuthenticationRequest credentials) {
@@ -61,7 +61,6 @@ public class AuthController {
         logger.info("Request to get current user: {}", userDetails);
         Person currentPerson = personService.findByEmail(userDetails.getUsername());
         Map<Object, Object> model = new HashMap<>();
-        model.put("id", currentPerson.getPersonId());
         model.put("name", currentPerson.getName());
         model.put("id", currentPerson.getPersonId());
         return ok(model);

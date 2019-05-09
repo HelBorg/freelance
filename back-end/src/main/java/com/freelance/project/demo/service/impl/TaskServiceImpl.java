@@ -1,11 +1,14 @@
 package com.freelance.project.demo.service.impl;
 
+import com.freelance.project.demo.controller.TaskController;
 import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.*;
 import com.freelance.project.demo.repository.PersonRepository;
 import com.freelance.project.demo.repository.TaskRepository;
 import com.freelance.project.demo.service.TaskService;
 import org.dozer.DozerBeanMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +31,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private DozerBeanMapper mapper;
+    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
+
 
 
     public void deleteTask(int id) {
@@ -96,8 +101,8 @@ public class TaskServiceImpl implements TaskService {
         int pageId = pageNumber.orElse(0);
         int size = pageSize.orElse(5);
         int idN = id.orElse(0);
-        Date from = date_from.orElse(new Date(2019, Calendar.MARCH, 5));
-        Date to = date_to.orElse(new Date());
+//        Date from = date_from.orElse(new Date());
+//        Date to = date_to.orElse(new Date());
         String name = findName.orElse("");
         String pageN = pageName.orElse("tasks");
         String sort = pageSort.orElse("taskId");
@@ -107,9 +112,9 @@ public class TaskServiceImpl implements TaskService {
             System.out.println("name.equals('')");
         }
         System.out.println(name.length());
-//        if(!(findName.equals(Optional.of("")))) {
-//            page = taskRepository.findByName(findName.orElse(""), PageRequest.of(pageId, size, Sort.by(sort)));
-//        } else {
+        if(name.length() != 0) {
+            page = taskRepository.findByName(findName.orElse(""), PageRequest.of(pageId, size, Sort.by(sort)));
+        } else {
             switch (pageN) {
                 case "candidate":
                     page = taskRepository.findAllByCandidate(idN, PageRequest.of(pageId, size, Sort.by(sort)));
@@ -118,13 +123,15 @@ public class TaskServiceImpl implements TaskService {
                     page = taskRepository.findAllByAuthor(idN, PageRequest.of(pageId, size, Sort.by(sort)));
                     break;
                 case "in_work":
+                    logger.info("In_work\n\n\n");
                     page = taskRepository.findAllInWork(idN, "IN_WORK", PageRequest.of(pageId, size, Sort.by(sort)));
+                    logger.info("Page {}",page);
                     break;
                 default:
-                    page = taskRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
+                    page = taskRepository.find("IN_WORK",PageRequest.of(pageId, size, Sort.by(sort)));
                     break;
             }
-//        }
+        }
 
         boolean hasPreviousPage = pageId != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageId;
@@ -136,7 +143,7 @@ public class TaskServiceImpl implements TaskService {
         return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
-    private String selectNextTaskStatus(String status){
+    private String selectNextTaskStatus (String status){
         LinkedList<String> statuses = new LinkedList<>();
         statuses.add("IN_DESIGN");
         statuses.add("PUBLISH");

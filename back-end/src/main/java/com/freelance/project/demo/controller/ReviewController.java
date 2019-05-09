@@ -20,7 +20,7 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReviewController.class);
 
     @PostMapping
     public void create(@RequestBody Review review, @AuthenticationPrincipal UserDetails userDetails){

@@ -29,7 +29,7 @@ public class SkillController {
     @Autowired
     private SkillService service;
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SkillController.class);
 
     @GetMapping
     public Collection<SkillDTO> getAll() {

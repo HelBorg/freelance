@@ -22,7 +22,7 @@ import java.util.Optional;
     @Autowired
     private PersonService personService;
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PersonController.class);
     @Autowired
     private DozerBeanMapper mapper;
 

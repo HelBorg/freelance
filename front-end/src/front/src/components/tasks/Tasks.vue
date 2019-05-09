@@ -42,34 +42,38 @@
               </template>
             </b-table>
 
-            <!--          Pagination-->
-            <div v-if="getTasks.pagesCount>1">
-              <b-button variant="light"
-                        @click="changePage(0)"
-                        :disabled="page.currentPage===0">
-                First
-              </b-button>
-              <b-button variant="light"
-                        @click="changePage(page.currentPage - 1)"
-                        :disabled="page.currentPage===0">
-                Prev
-              </b-button>
-              <b-button variant="light"
-                        v-for="index in getTasks.pagesCount"
-                        @click="changePage(index - 1)"
-              >
-                {{index}}
-              </b-button>
-              <b-button variant="light"
-                        @click="changePage(page.currentPage + 1)"
-                        :disabled="page.currentPage===(getTasks.pagesCount-1)">
-                Next
-              </b-button>
-              <b-button variant="light"
-                        @click="changePage(getTasks.pagesCount - 1)"
-                        :disabled="page.currentPage===(getTasks.pagesCount-1)">
-                Last
-              </b-button>
+
+            <Pagination @changePage="changePage"/>
+            <div>
+              <!--            &lt;!&ndash;          Pagination&ndash;&gt;-->
+              <!--            <div v-if="getTasks.pagesCount>1">-->
+              <!--              <b-button variant="light"-->
+              <!--                        @click="changePage(0)"-->
+              <!--                        :disabled="page.currentPage===0">-->
+              <!--                First-->
+              <!--              </b-button>-->
+              <!--              <b-button variant="light"-->
+              <!--                        @click="changePage(page.currentPage - 1)"-->
+              <!--                        :disabled="page.currentPage===0">-->
+              <!--                Prev-->
+              <!--              </b-button>-->
+              <!--              <b-button variant="light"-->
+              <!--                        v-for="index in getTasks.pagesCount"-->
+              <!--                        @click="changePage(index - 1)"-->
+              <!--              >-->
+              <!--                {{index}}-->
+              <!--              </b-button>-->
+              <!--              <b-button variant="light"-->
+              <!--                        @click="changePage(page.currentPage + 1)"-->
+              <!--                        :disabled="page.currentPage===(getTasks.pagesCount-1)">-->
+              <!--                Next-->
+              <!--              </b-button>-->
+              <!--              <b-button variant="light"-->
+              <!--                        @click="changePage(getTasks.pagesCount - 1)"-->
+              <!--                        :disabled="page.currentPage===(getTasks.pagesCount-1)">-->
+              <!--                Last-->
+              <!--              </b-button>-->
+              <!--            </div>-->
             </div>
           </b-col>
           <b-col>
@@ -88,10 +92,11 @@
   import Navbar from "../Navbar";
   import axios from 'axios';
   import MyFilter from "./MyFilter";
+  import Pagination from "./Pagination";
 
   export default {
     name: "Tasks",
-    components: {Menu, Navbar, MyFilter},
+    components: {Pagination, Menu, Navbar, MyFilter},
     data() {
       return {
         sort: '',
@@ -101,8 +106,8 @@
           showFilter: true,
           user_id: 1,
           find: null,
-          // date_from: null,
-          // date_to: null,
+          date_from: null,
+          date_to: null,
           currentPage: 0,
           pageSize: 10
         },
@@ -168,60 +173,79 @@
             thClass: null,
             tdClass: null
           }
-        },
+        }
       }
     },
     methods: {
       retrieveTasks() {
         axios.get('http://localhost:80/api/v1/task', {
-            params:
-              {
-                size: this.page.pageSize,
-                page: this.page.currentPage,
-                pageName: this.page.get,
-                id: this.page.user_id,
-                find_name: this.getTasks.find_name,
-                sort: this.getTasks.sort,
-                date_from: this.getTasks.find_date_from,
-                date_to: this.getTasks.find_date_to
-              }
+            params: {
+              size: this.page.pageSize,
+              page: this.page.currentPage,
+              pageName: this.page.get,
+              id: this.page.user_id,
+              find_name: this.getTasks.find_name,
+              sort: this.getTasks.sort,
+              date_from: this.getTasks.find_date_from,
+              date_to: this.getTasks.find_date_to
+            },
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('JWT')
+            }
           }
-        )
-          .then(response => {
-            console.log(response.data);
-            if (response) {
-              this.getTasks.hasNextPage = response.data.hasNextPage;
-              this.getTasks.hasPreviousPage = response.data.hasPreviousPage;
-              this.getTasks.pagesCount = response.data.pagesCount;
-              this.getTasks.sort = response.data.sort;
-              this.getTasks.find = response.data.find;
-              this.getTasks.tasks = []; //remove default msg from tasks
-              for (let t = 0; t < this.page.pageSize; t++) {
-                this.getTasks.tasks.push({
-                  id: response.data.items[t].id,
-                  name: response.data.items[t].name,
-                  status: response.data.items[t].status,
-                  date_from: null,
-                  deadline: response.data.items[t].deadline,
-                  rate: response.data.items[t].rate,
-                  author: response.data.items[t].author.name,
-                  skills: [],
-                  assigned: response.data.items[t].assignedUser
-                });
-                for (let sk in response.data.items[t].skills) {
-                  this.getTasks.tasks[t].skills.push(response.data.items[t].skills[sk].skillName.name);
-                }
-                for (let as in response.data.items[t].assignedUser) {
-                  this.getTasks.tasks[t].assigned.push(response.data.items[t].assignedUser[as].name);
-                }
+        ).then(response => {
+          console.log(response.data);
+          if (response) {
+            this.getTasks.hasNextPage = response.data.hasNextPage;
+            this.getTasks.hasPreviousPage = response.data.hasPreviousPage;
+            this.getTasks.pagesCount = response.data.pagesCount;
+            this.getTasks.sort = response.data.sort;
+            this.getTasks.find = response.data.find;
+            this.getTasks.tasks = []; //remove default msg from tasks
+            for (let t = 0; t < this.page.pageSize; t++) {
+              let date = response.data.items[t].deadline;
+              if(date) {
+                console.log(not);
+              }
+              if(date == null) {
+                console.log(null);
+              }
+              // let due_date = date.getUTCFullYear() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCDate();
+              // date = response.data.items[t].createdTime;
+              // let date_from = date.getUTCFullYear() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCDate();
+              this.getTasks.tasks.push({
+                id: response.data.items[t].id,
+                name: response.data.items[t].name,
+                status: response.data.items[t].status,
+                // date_from: date_from,
+                // deadline: due_date,
+                rate: response.data.items[t].rate,
+                author: response.data.items[t].author.name,
+                skills: [],
+                assigned: null
+              });
+              //Skills
+              for (let sk in response.data.items[t].skills) {
+                this.getTasks.tasks[t].skills.push(response.data.items[t].skills[sk].skillName.name);
+              }
+              //Assigned user
+              let assign = response.data.items[t].assignedUser.name;
+              console.log(assign == null);
+              console.log(assign.equals(null));
+              if (assign) {
+                // this.getTasks.tasks[t].assign = assign;
               }
             }
-          })
+            console.log(this.getTasks.tasks);
+          }
+        })
           .catch(e => {
             this.errors.push(e)
           });
       },
+      // Исполльзовать, когда при обновлении таблицы хотим перейти на первую страницу
       refreshList() {
+        this.page.currentPage = 0;
         this.retrieveTasks();
         this.show = false;
         this.$nextTick(() => {
@@ -231,7 +255,7 @@
       changePage(changeTo) {
         console.log(this.page.currentPage);
         this.page.currentPage = changeTo;
-        this.refreshList();
+        this.retrieveTasks();
         this.show = false;
         this.$nextTick(() => {
           this.show = true
@@ -246,25 +270,19 @@
         this.refreshList();
       },
       getUserId() {
-        fetch('/api/v1/me', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          }
-        })
-          .then(
-            function (response) {
-              if (response.status !== 200) {
-                console.log('Looks like there was a problem. Status Code: ' +
-                  response.status);
-                return;
-              }
-              response.json().then(function (data) {
-                this.page.user_id = data.id
-              })
+        axios.get('http://localhost:80/api/v1/me', {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('JWT')
             }
-          )
+          }
+        ).then(response => {
+          console.log(response.data);
+          if (response) {
+            this.page.user_id = response.data.id
+          }
+        }).catch(e => {
+            this.errors.push(e)
+          });
       },
       extractPageParam() {
         this.page.name = this.$route.params.pageName;
@@ -295,22 +313,27 @@
           default:
             break;
         }
-      },
+      }
+      ,
       goToTask(record) {
         this.$router.push({name: 'Task', params: {id: record.id}});
-      },
+      }
+      ,
       handleSubmit(find_name, date_to, date_from) {
+        console.log(find_name + date_to + date_from);
         this.getTasks.find_name = find_name;
         this.getTasks.find_date_to = date_to;
         this.getTasks.find_date_from = date_from;
         this.refreshList();
       }
+
     },
     mounted() {
       this.extractPageParam();
       this.refreshList();
     }
-  };
+  }
+  ;
 </script>
 
 <style scoped>
