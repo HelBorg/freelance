@@ -16,4 +16,5 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
 
     @Query("Select t from Person t")
     Page<Person> find(Pageable pageRequest);
+
 }

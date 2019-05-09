@@ -6,6 +6,7 @@ import Task from '../components/Task/Task'
 import Login from '../components/Login'
 import store from '../store'
 import * as types from '../store/mutation-types'
+import User from "../components/User"
 import Tasks from "../components/tasks/Tasks"
 import Users from "../components/Users";
 
@@ -24,7 +25,7 @@ const requireAuth = (to, from, next) => {
   if (store.getters.isLoggedIn) {
     next()
   } else {
-    router.replace('/')
+    router.push('/')
   }
 }
 
@@ -58,6 +59,10 @@ const router = new Router({
 
     },
     {
+      path: '/user/:id',
+      name: 'User',
+      component: User
+    },{
       path: '/users',
       name: 'Users',
       component: Users

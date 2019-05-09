@@ -40,12 +40,15 @@ public class TaskServiceImpl implements TaskService {
         return nextStatus;
     }
 
-    @Transactional
     public void updateAssignedUser(int personId, int taskId){
         taskRepository.updateAssignedUser(personRepository.findByPersonId(personId), taskId);
-       /* System.out.println("!!!!!!!!!!!!!!!!!!!!!!!" + taskRepository.findByTaskId(taskId).getStatus());
-        updateStatus(taskId, taskRepository.findByTaskId(taskId).getStatus());*/
+        updateStatus(taskId, "PUBLISH");
     }
+
+    public void deleteAssignAndRevertStatus(int taskId){
+        taskRepository.deleteAssignAndRevertStatus(taskId);
+    }
+
 
 
     @Transactional
@@ -72,6 +75,7 @@ public class TaskServiceImpl implements TaskService {
         updating.setStatus(task.getStatus());
         updating.setDescription(task.getDescription());
         updating.setDeadline(task.getDeadline());
+        updating.setAuthor(updating.getAuthor());
     }
 
     @Override
@@ -100,8 +104,9 @@ public class TaskServiceImpl implements TaskService {
         PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
         Page<Task> page;
         if(name.equals("")){
-            System.out.println("ggggg");
+            System.out.println("name.equals('')");
         }
+        System.out.println(name.length());
 //        if(!(findName.equals(Optional.of("")))) {
 //            page = taskRepository.findByName(findName.orElse(""), PageRequest.of(pageId, size, Sort.by(sort)));
 //        } else {
@@ -111,6 +116,9 @@ public class TaskServiceImpl implements TaskService {
                     break;
                 case "author":
                     page = taskRepository.findAllByAuthor(idN, PageRequest.of(pageId, size, Sort.by(sort)));
+                    break;
+                case "in_work":
+                    page = taskRepository.findAllInWork(idN, "IN_WORK", PageRequest.of(pageId, size, Sort.by(sort)));
                     break;
                 default:
                     page = taskRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
@@ -127,6 +135,7 @@ public class TaskServiceImpl implements TaskService {
                 .collect(Collectors.toList());
         return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
+
     private String selectNextTaskStatus(String status){
         LinkedList<String> statuses = new LinkedList<>();
         statuses.add("IN_DESIGN");

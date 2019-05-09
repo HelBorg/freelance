@@ -15,8 +15,10 @@ public class DozerConfig {
             @Override
             protected void configure() {
                 mapping(Person.class, PersonDTO.class)
-                        .fields(field("personId").accessible(), field("id").accessible());
-
+                        .fields(field("personId").accessible(), field("id").accessible())
+                        .fields(field("name").accessible(), field("name").accessible())
+                        .fields(field("rating").accessible(), field("rating").accessible())
+                        .fields(field("email").accessible(), field("email").accessible());
             }
         };
     }
@@ -37,11 +39,6 @@ public class DozerConfig {
                         .fields(field("taskReviews").accessible(), field("reviews").accessible())
                         .fields(field("author").accessible(), field("author").accessible())
                         .fields(field("assignedUser").accessible(), field("assignedUser").accessible());
-               /* mapping(TaskSkillDTO.class, TaskDTO.class)
-                        .fields(field("id").accessible(), field("taskSkillsId").accessible());
-                mapping(ReviewDTO.class, TaskDTO.class)
-                        .fields(field("id").accessible(), field("taskSkillsId").accessible());*/
-
             }
         };
     }
@@ -54,6 +51,7 @@ public class DozerConfig {
                         .fields(field("reviewId").accessible(), field("id").accessible())
                         .fields(field("description").accessible(), field("description").accessible())
                         .fields(field("dateTime").accessible(), field("createdTime").accessible())
+                        .fields(field("done").accessible(), field("done").accessible())
                         .fields(field("userId").accessible(), field("user").accessible());
 
 

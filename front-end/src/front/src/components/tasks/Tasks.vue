@@ -46,12 +46,12 @@
             <div v-if="getTasks.pagesCount>1">
               <b-button variant="light"
                         @click="changePage(0)"
-                        :disabled="getTasks.currentPage==0">
+                        :disabled="page.currentPage===0">
                 First
               </b-button>
               <b-button variant="light"
-                        @click="changePage(getTasks.currentPage - 1)"
-                        :disabled="getTasks.currentPage==0">
+                        @click="changePage(page.currentPage - 1)"
+                        :disabled="page.currentPage===0">
                 Prev
               </b-button>
               <b-button variant="light"
@@ -61,13 +61,13 @@
                 {{index}}
               </b-button>
               <b-button variant="light"
-                        @click="changePage(getTasks.currentPage + 1)"
-                        :disabled="getTasks.currentPage==(getTasks.pagesCount-1)">
+                        @click="changePage(page.currentPage + 1)"
+                        :disabled="page.currentPage===(getTasks.pagesCount-1)">
                 Next
               </b-button>
               <b-button variant="light"
                         @click="changePage(getTasks.pagesCount - 1)"
-                        :disabled="getTasks.currentPage==(getTasks.pagesCount-1)">
+                        :disabled="page.currentPage===(getTasks.pagesCount-1)">
                 Last
               </b-button>
             </div>
@@ -101,8 +101,10 @@
           showFilter: true,
           user_id: 1,
           find: null,
-          date_from: null,
-          date_to: null
+          // date_from: null,
+          // date_to: null,
+          currentPage: 0,
+          pageSize: 10
         },
         errors: [],
         show: true,
@@ -112,8 +114,6 @@
           hasNextPage: null,
           pagesCount: null,
           sort: null,
-          currentPage: 0,
-          pageSize: 10,
           find_name: null,
           find_date_from: null,
           find_date_to: null,
@@ -176,8 +176,8 @@
         axios.get('http://localhost:80/api/v1/task', {
             params:
               {
-                size: this.getTasks.pageSize,
-                page: this.getTasks.currentPage,
+                size: this.page.pageSize,
+                page: this.page.currentPage,
                 pageName: this.page.get,
                 id: this.page.user_id,
                 find_name: this.getTasks.find_name,
@@ -196,7 +196,7 @@
               this.getTasks.sort = response.data.sort;
               this.getTasks.find = response.data.find;
               this.getTasks.tasks = []; //remove default msg from tasks
-              for (let t = 0; t < this.getTasks.pageSize; t++) {
+              for (let t = 0; t < this.page.pageSize; t++) {
                 this.getTasks.tasks.push({
                   id: response.data.items[t].id,
                   name: response.data.items[t].name,
@@ -210,6 +210,9 @@
                 });
                 for (let sk in response.data.items[t].skills) {
                   this.getTasks.tasks[t].skills.push(response.data.items[t].skills[sk].skillName.name);
+                }
+                for (let as in response.data.items[t].assignedUser) {
+                  this.getTasks.tasks[t].assigned.push(response.data.items[t].assignedUser[as].name);
                 }
               }
             }
@@ -226,8 +229,8 @@
         });
       },
       changePage(changeTo) {
-        console.log(this.getTasks.currentPage);
-        this.getTasks.currentPage = changeTo;
+        console.log(this.page.currentPage);
+        this.page.currentPage = changeTo;
         this.refreshList();
         this.show = false;
         this.$nextTick(() => {
@@ -235,7 +238,7 @@
         })
       },
       changePerPage(perPage) {
-        this.getTasks.pageSize = perPage;
+        this.page.pageSize = perPage;
         this.refreshList();
       },
       changeSort(sortBy) {
@@ -283,7 +286,11 @@
             break;
           case 'in_work':
             this.getUserId();
-            this.page.get = 'assigned';
+            this.fields.author.thClass = 'd-none';
+            this.fields.author.tdClass = 'd-none';
+            this.fields.status.thClass = 'd-none';
+            this.fields.status.tdClass = 'd-none';
+            this.page.get = 'in_work';
             break;
           default:
             break;

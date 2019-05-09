@@ -2,3 +2,16 @@
 В конце концов тогда TaskSkill и TaskSkillDTO будут совпдать.
 
 2.AuthenticationRequest это модель
+
+user -  добавить колонку сортировка по репозиторию
+
+Таблица - замапить assigned users
+таблица in work
+таблица users
+вынести pagination
+Dropdown для страниц
+Filter: -name
+-skills
+-author(проверить сколько столбцов)
+
+в базу маппинг скиллов

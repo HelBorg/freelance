@@ -2,8 +2,10 @@ package com.freelance.project.demo.models;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class PageAndSort {
+public class PageAndSort implements Serializable {
     private String sort;
     private int currentPage;
     private int pageSize;

@@ -2,7 +2,6 @@ package com.freelance.project.demo.repository;
 
 
 import com.freelance.project.demo.models.Review;
-import com.freelance.project.demo.models.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,4 +14,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     @Query("select r from Review r join r.taskId tr where tr.taskId = :taskId")
     List<Review> findAllForTask(@Param("taskId") int taskId);
+
+    @Query("select r from Review r join r.userId ur where ur.personId = :userId and r.done='t' ")
+    List<Review> findAllAboutUser(@Param("userId") int userId);
 }

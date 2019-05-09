@@ -1,27 +1,21 @@
 <template>
-  <div id="container">
+  <div id="container" class="bg">
     <div>
       <Navbar/>
     </div>
     <div>
-      <b-row>
-        <b-col>
           <Menu/>
-        </b-col>
-        <b-col>
+    </div>
             <div class="hero">
-              <h1 class="display-3">Hello World</h1>
-              <p class="lead">This is the homepage of our website</p>
+              <h2 class="display-3" style="color:dimgrey">Freelance system of your company</h2>
             </div>
-        </b-col>
-      </b-row>
-  </div>
   </div>
 </template>
 
 <script>
   import Navbar from "../Navbar";
   import Menu from "../Menu";
+  import Tasks from "../tasks/Tasks";
 
   export default {
     name: 'home',
@@ -29,7 +23,7 @@
     data() {
       return {}
     },
-    components: {Menu, Navbar},
+    components: {Tasks, Menu, Navbar},
     methods: {
       getPage() {
         this.pageName = this.$router.params.pageName
@@ -40,10 +34,10 @@
 
 <style scoped>
   .hero {
-    height: 90vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    float:right;
+    width: 80%;
+    margin-right: 5%;
+    margin-top:15%;
     text-align: center;
   }
 
@@ -51,4 +45,5 @@
     font-weight: 200;
     font-size: 1.5rem;
   }
+
 </style>

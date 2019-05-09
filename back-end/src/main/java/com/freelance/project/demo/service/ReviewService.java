@@ -14,5 +14,7 @@ public interface ReviewService {
 
     List<ReviewDTO> getAllByTask(int taskId);
 
+    List<ReviewDTO> getAllForUser(int userId);
+
 
 }

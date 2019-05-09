@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class TaskDTO {
@@ -15,8 +16,8 @@ public class TaskDTO {
     String status;
     Date createdTime;
     Date deadline;
-    Collection<TaskSkillDTO> skills;
-    Collection<ReviewDTO> reviews;
+    List<TaskSkillDTO> skills;
+    List<ReviewDTO> reviews;
     PersonDTO author;
     PersonDTO assignedUser;
 }

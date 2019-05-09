@@ -17,4 +17,8 @@ public interface PersonService {
 
     void create(Person person);
 
+    Person getById(int id);
+
+    void updateRating(int id, int rate);
+
 }

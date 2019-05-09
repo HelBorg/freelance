@@ -21,6 +21,9 @@ public class Review implements Serializable {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "done")
+    private boolean done;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "datetime", nullable = false)
     private Date dateTime;

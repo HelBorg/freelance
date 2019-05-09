@@ -6,7 +6,6 @@ import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.service.PersonService;
 import com.freelance.project.demo.service.TaskService;
 import javafx.util.Pair;
-import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,7 @@ public class TaskController {
 
     @Autowired
     PersonService personService;
+
 
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
@@ -61,6 +61,11 @@ public class TaskController {
         taskService.updateAssignedUser(userId,taskId);
     }
 
+    @PostMapping("/delete/assigned/{taskId}")
+    public void deleteAssignAndRevertStatus(@PathVariable int taskId){
+        taskService.deleteAssignAndRevertStatus(taskId);
+    }
+
     @GetMapping("/{id}")
     public TaskDTO getTaskById(@PathVariable int id) {
         logger.info("Request to get task by id: id - {}", id);
@@ -76,8 +81,8 @@ public class TaskController {
                                                  @RequestParam("pageName") Optional<String> pageName,
                                                  @RequestParam("find_name") Optional<String> findName,
                                                  @RequestParam("date_from")Optional<Date> date_from,
-                                                 @RequestParam("date_to") Optional<Date> date_to,
-                                                 @RequestParam("skills") Optional<List<Pair<String, Integer>>> skillsList) {
+                                                 @RequestParam("date_to") Optional<Date> date_to
+                                                /* @RequestParam("skills") Optional<List<Pair<String, Integer>>> skillsList*/) {
         Pager<TaskDTO> pager = taskService.findAll(id, pageSize, pageNumber, sort, pageName, findName, date_from, date_to);
         logger.info("Request to get tasks: {}", pager);
         return ResponseEntity.ok().body(pager);

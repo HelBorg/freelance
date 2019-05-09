@@ -2,10 +2,11 @@ package com.freelance.project.demo.models;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class Pager<T> {
+public class Pager<T> implements Serializable {
     private boolean hasPreviousPage;
     private boolean hasNextPage;
     private int pagesCount;

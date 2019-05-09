@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,10 +21,16 @@ import java.util.stream.Collectors;
 @Service
 public class PersonServiceImpl implements PersonService {
     @Autowired
-    private PersonRepository repository;
+    private PersonRepository personRepository;
 
     @Autowired
     private DozerBeanMapper mapper;
+
+    public void updateRating(int id, int rate){
+        Person updated =  personRepository.findByPersonId(id);
+           updated.setRating(updated.getRating() + rate);
+           personRepository.save(updated);
+    }
 
     @Override
     public Pager<PersonDTO> findAll(Optional<Integer> pageSize,
@@ -33,7 +40,7 @@ public class PersonServiceImpl implements PersonService {
         int size = pageSize.orElse(5);
         String sort = pageSort.orElse("personId");
         PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
-        Page<Person> page = repository.find(PageRequest.of(pageId, size, Sort.by(sort)));
+        Page<Person> page = personRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
 
 
         boolean hasPreviousPage = pageId != 0;
@@ -47,8 +54,11 @@ public class PersonServiceImpl implements PersonService {
 
     }
 
+    public Person getById(int id){
+        return personRepository.findByPersonId(id);
+    }
     public Person findByEmail(String email) {
-        return repository.findByEmail(email);
+        return personRepository.findByEmail(email);
     }
 
     public void create(Person person) {
@@ -62,6 +72,7 @@ public class PersonServiceImpl implements PersonService {
         add.setPassword(person.getPassword());
         add.setRating(0);
         add.setRole("user");
-        repository.save(add);
+        add.setUserSkills(Collections.EMPTY_LIST);
+        personRepository.save(add);
     }
 }

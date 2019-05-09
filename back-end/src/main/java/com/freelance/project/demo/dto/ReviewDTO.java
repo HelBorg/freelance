@@ -8,8 +8,10 @@ import java.util.Date;
 @Data
 public class ReviewDTO {
 
-    int id;
-    String description;
-    Date createdTime;
-    PersonDTO user;
+     int id;
+     boolean done;
+     String description;
+     Date createdTime;
+     PersonDTO user;
+
 }
