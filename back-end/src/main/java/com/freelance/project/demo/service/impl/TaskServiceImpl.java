@@ -101,11 +101,10 @@ public class TaskServiceImpl implements TaskService {
         int pageId = pageNumber.orElse(0);
         int size = pageSize.orElse(5);
         int idN = id.orElse(0);
-//        Date from = date_from.orElse(new Date());
-//        Date to = date_to.orElse(new Date());
         String name = findName.orElse("");
         String pageN = pageName.orElse("tasks");
         String sort = pageSort.orElse("taskId");
+        System.out.println("\n\n " + sort + "\n\n");
         PageAndSort pageAndSort = new PageAndSort(idN, sort, pageId, size, name);
         Page<Task> page;
         if(name.length() != 0) {

@@ -41,12 +41,10 @@ public class PersonServiceImpl implements PersonService {
         int size = pageSize.orElse((int)personRepository.count());
         String sort = pageSort.orElse("personId");
         PageAndSort pageAndSort = new PageAndSort(0, sort, pageId, size, new String(""));
-        PageRequest request = PageRequest.of(pageId, size, Sort.by(sort));
         Page<Person> page;
         if (findName.isPresent()) {
-            System.out.println("is Presence" + findName);
+            System.out.println("is Presence" + findName.get());
         }
-        System.out.println(findName.get());
         page = personRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
 
         boolean hasPreviousPage = pageId != 0;

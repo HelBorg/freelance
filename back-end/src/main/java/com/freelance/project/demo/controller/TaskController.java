@@ -34,14 +34,14 @@ public class TaskController {
 
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id){
+    public void delete(@PathVariable int id) {
         logger.info("Request to delete task: id - {}", id);
         taskService.deleteTask(id);
     }
 
 
     @PostMapping("/new")
-    public ResponseEntity create(@AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity create(@AuthenticationPrincipal UserDetails userDetails) {
         logger.info("Request to create task from user: {}", userDetails);
         Task createdTask = taskService.createNew(personService.findByEmail(userDetails.getUsername()));
         Map<Object, Object> model = new HashMap<>();
@@ -50,29 +50,36 @@ public class TaskController {
     }
 
     @PostMapping("/update/status/{id}/{status}")
-    public String updateStatus(@PathVariable int id, @PathVariable String status){
+    public String updateStatus(@PathVariable int id, @PathVariable String status) {
         logger.info("Request to update task status: task id - {}, new status - {}", id, status);
-        return taskService.updateStatus(id,status);
+        return taskService.updateStatus(id, status);
     }
 
 
     @PostMapping("/update/assigned/{taskId}/{userId}")
-    public void updateAssignedUser(@PathVariable int taskId, @PathVariable int userId){
+    public void updateAssignedUser(@PathVariable int taskId, @PathVariable int userId) {
         logger.info("Request to update task's assigned user: user id - {}", userId);
-        taskService.updateAssignedUser(userId,taskId);
+        taskService.updateAssignedUser(userId, taskId);
     }
 
     @PostMapping("/delete/assigned/{taskId}")
-    public void deleteAssignAndRevertStatus(@PathVariable int taskId){
+    public void deleteAssignAndRevertStatus(@PathVariable int taskId) {
         taskService.deleteAssignAndRevertStatus(taskId);
     }
 
     @GetMapping("/{id}")
     public TaskDTO getTaskById(@PathVariable int id) {
         logger.info("Request to get task by id: id - {}", id);
-       return taskService.loadTask(id);
+        return taskService.loadTask(id);
     }
 
+    private Date dateConstructor(String date) throws ParseException {
+        Date d = date.length() > 0 ?
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+                        .parse(date.replace("T", " ").replace("Z", ""))
+                : null;
+        return d;
+    }
 
     @GetMapping
     public ResponseEntity<Pager<TaskDTO>> getAll(@RequestParam("id") Optional<Integer> id,
@@ -81,24 +88,18 @@ public class TaskController {
                                                  @RequestParam("sort") Optional<String> sort,
                                                  @RequestParam("pageName") Optional<String> pageName,
                                                  @RequestParam("find_name") Optional<String> findName,
-                                                 @RequestParam("date_from")Optional<String> date_from,
+                                                 @RequestParam("date_from") Optional<String> date_from,
                                                  @RequestParam("date_to") Optional<String> date_to
-                                                /* @RequestParam("skills") Optional<List<Pair<String, Integer>>> skillsList*/) throws ParseException {
-        SimpleDateFormat formatter6=new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-        Date from = null;
-        if (date_from.orElse("").length() > 0) {
-            System.out.println("date" + date_from.get().replace("T", " ").replace("Z", ""));
-//            from = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").parse(date_from.orElse(null).replace("T", " "));
-        }
-        Date to = new Date();
-
+            /* @RequestParam("skills") Optional<List<Pair<String, Integer>>> skillsList*/) throws ParseException {
+        Date from = dateConstructor(date_from.orElse(""));
+        Date to = dateConstructor(date_to.orElse(""));
         Pager<TaskDTO> pager = taskService.findAll(id, pageSize, pageNumber, sort, pageName, findName, from, to);
         logger.info("Request to get tasks: {}", pager);
         return ResponseEntity.ok().body(pager);
     }
 
     @PostMapping
-    public void updateTask(@RequestBody TaskDTO task){
+    public void updateTask(@RequestBody TaskDTO task) {
         logger.info("Request to update task: {}", task);
         taskService.updateTask(task);
     }

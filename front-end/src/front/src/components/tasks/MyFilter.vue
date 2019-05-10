@@ -79,8 +79,7 @@
         </b-form-group>
         <b-button type="addSkill"
                   variant="success"
-                  @click="addSkill"
-                  style="float: right">
+                  @click="addSkill">
           Add Skill
         </b-button>
       </p>

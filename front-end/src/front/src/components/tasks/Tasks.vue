@@ -9,7 +9,7 @@
       </div>
       <div style="float:right; width: 75%">
         <b-row>
-          <b-col>
+          <b-col v-if="this.show">
             <div>
               <b-dropdown id="dropdown-1"
                           class="m-md-2"
@@ -22,26 +22,26 @@
               <b-dropdown id="dropdown-2"
                           class="m-md-2"
                           text="Sort by:">
-                <b-dropdown-item @click="changeSort(date_from)">Date of creation</b-dropdown-item>
-                <b-dropdown-item @click="changeSort(date_to)">Deadline</b-dropdown-item>
+                <b-dropdown-item @click="changeSort(createdTime)">Date of creation</b-dropdown-item>
+                <b-dropdown-item @click="changeSort(deadline)">Deadline</b-dropdown-item>
                 <b-dropdown-item>None</b-dropdown-item>
               </b-dropdown>
             </div>
-            <div v-if="this.show">
-            <b-table id="tasks"
-                     title="Tasks"
-                     :items="getTasks.tasks"
-                     :fields="fields"
-                     small
-                     hover
-                     striped
-                     @row-clicked="goToTask">
-              <template slot="skills" slot-scope="row">
-                <div v-for="skill in row.item.skills">
-                  {{skill}}
-                </div>
-              </template>
-            </b-table>
+            <div>
+              <b-table id="tasks"
+                       title="Tasks"
+                       :items="getTasks.tasks"
+                       :fields="fields"
+                       small
+                       hover
+                       striped
+                       @row-clicked="goToTask">
+                <template slot="skills" slot-scope="row">
+                  <div v-for="skill in row.item.skills">
+                    {{skill}}
+                  </div>
+                </template>
+              </b-table>
             </div>
             <div>
               <MyPagination :currentPage="page.currentPage"
@@ -50,12 +50,12 @@
             </div>
           </b-col>
 
-            <b-col style="width: 40px;">
-              <div>
-                <MyFilter :show="this.page.showFilter"
-                          @submit="handleSubmit"/>
-              </div>
-            </b-col>
+          <b-col cols="4">
+            <div>
+              <MyFilter :show="this.page.showFilter"
+                        @submit="handleSubmit"/>
+            </div>
+          </b-col>
         </b-row>
       </div>
     </div>
@@ -177,10 +177,6 @@
             this.getTasks.find = response.data.find;
             this.getTasks.tasks = []; //remove default msg from tasks
             for (let t = 0; t < this.page.pageSize; t++) {
-              // let date = response.data.items[t].deadline;
-              // let date_from = date.getUTCFullYear() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCDate();
-              // date = response.data.items[t].createdTime;
-
               this.getTasks.tasks.push({
                 id: response.data.items[t].id,
                 name: response.data.items[t].name,
@@ -197,16 +193,14 @@
                 this.getTasks.tasks[t].skills.push(response.data.items[t].skills[sk].skillName.name);
               }
               //Assigned user
-              // let assign = response.data.items[t].assignedUser.name;
-              // if (assign != null) {
-              //   this.getTasks.tasks[t].assign = assign;
-              // } else {
-              //   this.getTasks.tasks[t].assign = null;
-              // }
+              let assign = response.data.items[t].assignedUser;
+              this.getTasks.tasks[t].assign = assign ? assign.name : null;
+              //Date
+              this.getTasks.tasks[t].deadline = this.dateConstructor(response.date.items[t].deadline);
+              this.getTasks.tasks[t].date_from = this.dateConstructor(response.date.items[t].createdTime);
             }
           }
-        })
-          .catch(e => {
+        }).catch(e => {
             this.errors.push(e);
           });
       },
@@ -228,11 +222,7 @@
       },
       changePage(changeTo) {
         this.page.currentPage = changeTo;
-        this.retrieveTasks();
-        this.show = false;
-        this.$nextTick(() => {
-          this.show = true
-        })
+        this.refreshList();
       },
       changePerPage(perPage) {
         this.page.pageSize = perPage;
@@ -307,7 +297,3 @@
     }
   };
 </script>
-
-<style scoped>
-
-</style>

@@ -37,13 +37,6 @@ import java.util.Optional;
         return ResponseEntity.ok().body(pager);
     }
 
-//    @GetMapping("/getByName/{find_by}")
-//    public ResponseEntity<List<PersonDTO>> getByName(@PathVariable String find_by) {
-//
-////        logger.info("Request to get users by name: {}", );
-//        return ResponseEntity.ok().body();
-//    }
-
     @PostMapping
     public void saveNewPerson(@RequestBody Person person) {
         logger.info("Request to save new user: {}", person.getName());

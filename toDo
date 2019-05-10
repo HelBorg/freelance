@@ -19,3 +19,5 @@ request param into request body
 search between published
 
 candidates in publish
+
+вынести таблицу в отдельну компоненту
