@@ -3,11 +3,9 @@ package com.freelance.project.demo.service;
 import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.Person;
 import com.freelance.project.demo.models.Task;
-import com.freelance.project.demo.models.PageAndSort;
 import com.freelance.project.demo.models.Pager;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 public interface TaskService {
@@ -32,7 +30,7 @@ public interface TaskService {
                            Optional<String> pageSort,
                            Optional<String> pageName,
                            Optional<String> find_name,
-                           Optional<Date> date_from,
-                           Optional<Date> date_to);
+                           Date date_from,
+                           Date date_to);
 
 }

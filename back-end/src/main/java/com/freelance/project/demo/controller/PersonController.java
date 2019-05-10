@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -28,12 +29,20 @@ import java.util.Optional;
 
     @GetMapping
     public ResponseEntity<Pager<PersonDTO>> getAll(@RequestParam("size") Optional<Integer> pageSize,
-                                        @RequestParam("page") Optional<Integer> pageNumber,
-                                        @RequestParam("sort") Optional<String> sort) {
-        Pager<PersonDTO> pager = personService.findAll(pageSize, pageNumber, sort);
+                                                   @RequestParam("page") Optional<Integer> pageNumber,
+                                                   @RequestParam("sort") Optional<String> sort,
+                                                   @RequestParam("findName") Optional<String> findName) {
+        Pager<PersonDTO> pager = personService.findAll(pageSize, pageNumber, sort, findName);
         logger.info("Request to get users: {}", pager);
         return ResponseEntity.ok().body(pager);
     }
+
+//    @GetMapping("/getByName/{find_by}")
+//    public ResponseEntity<List<PersonDTO>> getByName(@PathVariable String find_by) {
+//
+////        logger.info("Request to get users by name: {}", );
+//        return ResponseEntity.ok().body();
+//    }
 
     @PostMapping
     public void saveNewPerson(@RequestBody Person person) {

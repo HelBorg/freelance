@@ -9,7 +9,6 @@ import java.util.List;
 
 @Data
 public class TaskDTO {
-
     int id;
     String name;
     String description;

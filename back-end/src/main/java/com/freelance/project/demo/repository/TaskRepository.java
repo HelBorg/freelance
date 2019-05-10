@@ -35,7 +35,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("SELECT distinct t from Task t join t.candidateTasks tc where tc.personId = :id and t.status = :status")
     Page<Task> findAllInWork(@Param("id")int candidate_id, @Param("status")String status, Pageable pageRequest);
 
-    @Query("Select t from Task t where t.name = :name")
+    @Query("Select t from Task t where t.name like %:name%")
     Page<Task> findByName(@Param("name") String name, Pageable pageRequest);
 
     Task findByTaskId(int id);

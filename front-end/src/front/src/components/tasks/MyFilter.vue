@@ -3,7 +3,6 @@
     <b-form-group @submit="onSubmit"
                   @reset="onReset"
                   class="mb-0">
-
       <b-form-group id="input-group-1"
                     label="Name"
                     label-class="font-weight-bold pt-0"
@@ -93,7 +92,13 @@
                       label-for="input-4"
                       label-class="font-weight-bold pt-0"
                       margin-top="50px">
-          <b-form-input v-model="findUser" placeholder="Enter user name"></b-form-input>
+          <b-input-group>
+            <b-form-input v-model="findUser" placeholder="Type user name"></b-form-input>
+            <b-input-group-append>
+              <b-button :disabled="!findUser" @click="findUserByName">Find</b-button>
+            </b-input-group-append>
+          </b-input-group>
+
           <b-form-select :select-size="4">
             <option v-for="user in filterUsers(getUsers.users)"
                     @click="selectedUser=user">
@@ -149,11 +154,15 @@
           }
         })
           .catch(e => {
-            this.errors.push(e)
+            this.errors.push(e);
+            console.log(e);
           });
       },
       retrieveUsers() {
         axios.get('http://localhost:80/api/v1/person', {
+          params: {
+            findName: this.findUser
+          },
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('JWT')
           }
@@ -162,7 +171,8 @@
             this.getUsers.users = response.data.items;
           }
         }).catch(e => {
-          this.errors.push(e)
+          this.errors.push(e);
+          console.log(e);
         });
       },
 

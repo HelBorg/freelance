@@ -5,15 +5,17 @@
 
 user -  добавить колонку сортировка по репозиторию
 
-Таблица - замапить assigned users
-таблица in work
 таблица users
-вынести pagination
-Dropdown для страниц
-Filter: -name
+Dropdown для сортировки
 -skills
 -author(проверить сколько столбцов)
 
-в базу маппинг скиллов
+маппинг скиллов
 
 логгер дописать
+
+request param into request body
+
+search between published
+
+candidates in publish

@@ -1,5 +1,5 @@
 <template>
-  <div id="tasksList" v-if="this.show">
+  <div id="tasksList">
     <div>
       <Navbar/>
     </div>
@@ -27,6 +27,7 @@
                 <b-dropdown-item>None</b-dropdown-item>
               </b-dropdown>
             </div>
+            <div v-if="this.show">
             <b-table id="tasks"
                      title="Tasks"
                      :items="getTasks.tasks"
@@ -41,47 +42,20 @@
                 </div>
               </template>
             </b-table>
-
-
-            <Pagination @changePage="changePage"/>
+            </div>
             <div>
-              <!--            &lt;!&ndash;          Pagination&ndash;&gt;-->
-              <!--            <div v-if="getTasks.pagesCount>1">-->
-              <!--              <b-button variant="light"-->
-              <!--                        @click="changePage(0)"-->
-              <!--                        :disabled="page.currentPage===0">-->
-              <!--                First-->
-              <!--              </b-button>-->
-              <!--              <b-button variant="light"-->
-              <!--                        @click="changePage(page.currentPage - 1)"-->
-              <!--                        :disabled="page.currentPage===0">-->
-              <!--                Prev-->
-              <!--              </b-button>-->
-              <!--              <b-button variant="light"-->
-              <!--                        v-for="index in getTasks.pagesCount"-->
-              <!--                        @click="changePage(index - 1)"-->
-              <!--              >-->
-              <!--                {{index}}-->
-              <!--              </b-button>-->
-              <!--              <b-button variant="light"-->
-              <!--                        @click="changePage(page.currentPage + 1)"-->
-              <!--                        :disabled="page.currentPage===(getTasks.pagesCount-1)">-->
-              <!--                Next-->
-              <!--              </b-button>-->
-              <!--              <b-button variant="light"-->
-              <!--                        @click="changePage(getTasks.pagesCount - 1)"-->
-              <!--                        :disabled="page.currentPage===(getTasks.pagesCount-1)">-->
-              <!--                Last-->
-              <!--              </b-button>-->
-              <!--            </div>-->
+              <MyPagination :currentPage="page.currentPage"
+                            :pagesCount="getTasks.pagesCount"
+                            @changePage="changePage"/>
             </div>
           </b-col>
-          <b-col>
-            <div>
-              <MyFilter :show="this.page.showFilter"
-                        @submit="handleSubmit"/>
-            </div>
-          </b-col>
+
+            <b-col style="width: 40px;">
+              <div>
+                <MyFilter :show="this.page.showFilter"
+                          @submit="handleSubmit"/>
+              </div>
+            </b-col>
         </b-row>
       </div>
     </div>
@@ -92,18 +66,18 @@
   import Navbar from "../Navbar";
   import axios from 'axios';
   import MyFilter from "./MyFilter";
-  import Pagination from "./Pagination";
+  import MyPagination from "./MyPagination";
 
   export default {
     name: "Tasks",
-    components: {Pagination, Menu, Navbar, MyFilter},
+    components: {MyPagination, Menu, Navbar, MyFilter},
     data() {
       return {
         sort: '',
         page: {
           name: null,
           get: null,   //get all tasks, get by author, by candidates
-          showFilter: true,
+          showFilter: false,
           user_id: 1,
           find: null,
           date_from: null,
@@ -114,10 +88,10 @@
         errors: [],
         show: true,
         getTasks: {
-          tasks: [{name: 'Sorry, there is no tasks in here yet'}],
+          tasks: [{name: 'Sorry, there is no tasks in here yet', id: -1}],
           hasPreviousPage: null,
           hasNextPage: null,
-          pagesCount: null,
+          pagesCount: 0,
           sort: null,
           find_name: null,
           find_date_from: null,
@@ -195,7 +169,7 @@
           }
         ).then(response => {
           console.log(response.data);
-          if (response) {
+          if (response.data.items) {
             this.getTasks.hasNextPage = response.data.hasNextPage;
             this.getTasks.hasPreviousPage = response.data.hasPreviousPage;
             this.getTasks.pagesCount = response.data.pagesCount;
@@ -203,22 +177,16 @@
             this.getTasks.find = response.data.find;
             this.getTasks.tasks = []; //remove default msg from tasks
             for (let t = 0; t < this.page.pageSize; t++) {
-              let date = response.data.items[t].deadline;
-              if(date) {
-                console.log(not);
-              }
-              if(date == null) {
-                console.log(null);
-              }
-              // let due_date = date.getUTCFullYear() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCDate();
-              // date = response.data.items[t].createdTime;
+              // let date = response.data.items[t].deadline;
               // let date_from = date.getUTCFullYear() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCDate();
+              // date = response.data.items[t].createdTime;
+
               this.getTasks.tasks.push({
                 id: response.data.items[t].id,
                 name: response.data.items[t].name,
                 status: response.data.items[t].status,
-                // date_from: date_from,
-                // deadline: due_date,
+                date_from: null,
+                deadline: null,
                 rate: response.data.items[t].rate,
                 author: response.data.items[t].author.name,
                 skills: [],
@@ -229,19 +197,25 @@
                 this.getTasks.tasks[t].skills.push(response.data.items[t].skills[sk].skillName.name);
               }
               //Assigned user
-              let assign = response.data.items[t].assignedUser.name;
-              console.log(assign == null);
-              console.log(assign.equals(null));
-              if (assign) {
-                // this.getTasks.tasks[t].assign = assign;
-              }
+              // let assign = response.data.items[t].assignedUser.name;
+              // if (assign != null) {
+              //   this.getTasks.tasks[t].assign = assign;
+              // } else {
+              //   this.getTasks.tasks[t].assign = null;
+              // }
             }
-            console.log(this.getTasks.tasks);
           }
         })
           .catch(e => {
-            this.errors.push(e)
+            this.errors.push(e);
           });
+      },
+      dateConstructor: function (date) {
+        if (date == null) {
+          return null;
+        } else {
+          return date.getUTCDate() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCFullYear();
+        }
       },
       // Исполльзовать, когда при обновлении таблицы хотим перейти на первую страницу
       refreshList() {
@@ -253,7 +227,6 @@
         });
       },
       changePage(changeTo) {
-        console.log(this.page.currentPage);
         this.page.currentPage = changeTo;
         this.retrieveTasks();
         this.show = false;
@@ -281,8 +254,9 @@
             this.page.user_id = response.data.id
           }
         }).catch(e => {
-            this.errors.push(e)
-          });
+          this.errors.push(e);
+          console.log(e);
+        });
       },
       extractPageParam() {
         this.page.name = this.$route.params.pageName;
@@ -290,22 +264,21 @@
           case 'search':
             this.fields.status.thClass = 'd-none';
             this.fields.status.tdClass = 'd-none';
+            this.fields.assigned.thClass = 'd-none';
+            this.fields.assigned.tdClass = 'd-none';
             this.page.get = 'tasks';
             break;
           case 'candidates':
-            this.getUserId();
             this.page.get = 'candidate';
             break;
           case 'mine':
-            this.getUserId();
             this.fields.author.thClass = 'd-none';
             this.fields.author.tdClass = 'd-none';
             this.page.get = 'author';
             break;
           case 'in_work':
-            this.getUserId();
-            this.fields.author.thClass = 'd-none';
-            this.fields.author.tdClass = 'd-none';
+            this.fields.assigned.thClass = 'd-none';
+            this.fields.assigned.tdClass = 'd-none';
             this.fields.status.thClass = 'd-none';
             this.fields.status.tdClass = 'd-none';
             this.page.get = 'in_work';
@@ -313,12 +286,12 @@
           default:
             break;
         }
-      }
-      ,
+      },
       goToTask(record) {
-        this.$router.push({name: 'Task', params: {id: record.id}});
-      }
-      ,
+        if (this.getTasks.tasks[0].id > -1) {
+          this.$router.push({name: 'Task', params: {id: record.id}});
+        }
+      },
       handleSubmit(find_name, date_to, date_from) {
         console.log(find_name + date_to + date_from);
         this.getTasks.find_name = find_name;
@@ -326,14 +299,13 @@
         this.getTasks.find_date_from = date_from;
         this.refreshList();
       }
-
     },
     mounted() {
+      this.getUserId();
       this.extractPageParam();
       this.refreshList();
     }
-  }
-  ;
+  };
 </script>
 
 <style scoped>

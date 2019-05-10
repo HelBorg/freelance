@@ -5,7 +5,6 @@ import com.freelance.project.demo.models.Pager;
 import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.service.PersonService;
 import com.freelance.project.demo.service.TaskService;
-import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.*;
+import java.text.SimpleDateFormat;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -80,10 +81,18 @@ public class TaskController {
                                                  @RequestParam("sort") Optional<String> sort,
                                                  @RequestParam("pageName") Optional<String> pageName,
                                                  @RequestParam("find_name") Optional<String> findName,
-                                                 @RequestParam("date_from")Optional<Date> date_from,
-                                                 @RequestParam("date_to") Optional<Date> date_to
-                                                /* @RequestParam("skills") Optional<List<Pair<String, Integer>>> skillsList*/) {
-        Pager<TaskDTO> pager = taskService.findAll(id, pageSize, pageNumber, sort, pageName, findName, date_from, date_to);
+                                                 @RequestParam("date_from")Optional<String> date_from,
+                                                 @RequestParam("date_to") Optional<String> date_to
+                                                /* @RequestParam("skills") Optional<List<Pair<String, Integer>>> skillsList*/) throws ParseException {
+        SimpleDateFormat formatter6=new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+        Date from = null;
+        if (date_from.orElse("").length() > 0) {
+            System.out.println("date" + date_from.get().replace("T", " ").replace("Z", ""));
+//            from = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").parse(date_from.orElse(null).replace("T", " "));
+        }
+        Date to = new Date();
+
+        Pager<TaskDTO> pager = taskService.findAll(id, pageSize, pageNumber, sort, pageName, findName, from, to);
         logger.info("Request to get tasks: {}", pager);
         return ResponseEntity.ok().body(pager);
     }
@@ -93,5 +102,4 @@ public class TaskController {
         logger.info("Request to update task: {}", task);
         taskService.updateTask(task);
     }
-
 }

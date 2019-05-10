@@ -10,8 +10,9 @@ public interface PersonService {
 
 
     Pager<PersonDTO> findAll(Optional<Integer> pageSize,
-                           Optional<Integer> pageNumber,
-                           Optional<String> pageSort);
+                             Optional<Integer> pageNumber,
+                             Optional<String> pageSort,
+                             Optional<String> findName);
 
     Person findByEmail(String email);
 

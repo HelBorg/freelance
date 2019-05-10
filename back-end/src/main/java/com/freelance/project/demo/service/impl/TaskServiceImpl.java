@@ -96,8 +96,8 @@ public class TaskServiceImpl implements TaskService {
                                   Optional<String> pageSort,
                                   Optional<String> pageName,
                                   Optional<String> findName,
-                                  Optional<Date> date_from,
-                                  Optional<Date> date_to) {
+                                  Date date_from,
+                                  Date date_to) {
         int pageId = pageNumber.orElse(0);
         int size = pageSize.orElse(5);
         int idN = id.orElse(0);
@@ -106,14 +106,10 @@ public class TaskServiceImpl implements TaskService {
         String name = findName.orElse("");
         String pageN = pageName.orElse("tasks");
         String sort = pageSort.orElse("taskId");
-        PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
+        PageAndSort pageAndSort = new PageAndSort(idN, sort, pageId, size, name);
         Page<Task> page;
-        if(name.equals("")){
-            System.out.println("name.equals('')");
-        }
-        System.out.println(name.length());
         if(name.length() != 0) {
-            page = taskRepository.findByName(findName.orElse(""), PageRequest.of(pageId, size, Sort.by(sort)));
+            page = taskRepository.findByName(findName.get(), PageRequest.of(pageId, size, Sort.by(sort)));
         } else {
             switch (pageN) {
                 case "candidate":
@@ -123,9 +119,7 @@ public class TaskServiceImpl implements TaskService {
                     page = taskRepository.findAllByAuthor(idN, PageRequest.of(pageId, size, Sort.by(sort)));
                     break;
                 case "in_work":
-                    logger.info("In_work\n\n\n");
                     page = taskRepository.findAllInWork(idN, "IN_WORK", PageRequest.of(pageId, size, Sort.by(sort)));
-                    logger.info("Page {}",page);
                     break;
                 default:
                     page = taskRepository.find("IN_WORK",PageRequest.of(pageId, size, Sort.by(sort)));

@@ -35,23 +35,26 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Pager<PersonDTO> findAll(Optional<Integer> pageSize,
                                    Optional<Integer> pageNumber,
-                                   Optional<String> pageSort) {
+                                   Optional<String> pageSort,
+                                    Optional<String> findName) {
         int pageId = pageNumber.orElse(0);
-        int size = pageSize.orElse(5);
+        int size = pageSize.orElse((int)personRepository.count());
         String sort = pageSort.orElse("personId");
-        PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
-        Page<Person> page = personRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
-
+        PageAndSort pageAndSort = new PageAndSort(0, sort, pageId, size, new String(""));
+        PageRequest request = PageRequest.of(pageId, size, Sort.by(sort));
+        Page<Person> page;
+        if (findName.isPresent()) {
+            System.out.println("is Presence" + findName);
+        }
+        System.out.println(findName.get());
+        page = personRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
 
         boolean hasPreviousPage = pageId != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageId;
-
-        List<Person> list = page.getContent();
-        List<PersonDTO> listDTO = list.stream()
+        List<PersonDTO> listDTO = page.getContent().stream()
                 .map(entity -> mapper.map(entity, PersonDTO.class))
                 .collect(Collectors.toList());
         return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
-
     }
 
     public Person getById(int id){
