@@ -43,6 +43,8 @@ public class PersonServiceImpl implements PersonService {
         String name = findName.orElse("");
         PageAndSort pageAndSort = new PageAndSort(0, sort, pageId, size, new String(""));
         Page<Person> page;
+        System.out.println("\n\n ok \n\n");
+
         page = personRepository.findByName(name, PageRequest.of(pageId, size, Sort.by(sort)));
 
         boolean hasPreviousPage = pageId != 0;

@@ -6,6 +6,8 @@ import com.freelance.project.demo.models.SkillF;
 import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.service.PersonService;
 import com.freelance.project.demo.service.TaskService;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.util.*;
 import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -93,8 +95,9 @@ public class TaskController {
                                                  @RequestParam("date_to") Optional<String> date_to,
                                                  @RequestParam("due_from") Optional<String> due_from,
                                                  @RequestParam("due_to") Optional<String> due_to,
-                                                 @RequestParam("skillsF") Optional<List<String>> skillF,
-                                                 @RequestParam("author") Optional<String> authorName
+                                                 @RequestParam("skillsF") Optional<String> skillF,
+                                                 @RequestParam("author") Optional<String> authorName,
+                                                 @RequestParam("filter") Optional<String> filter
             /* @RequestParam("skills") Optional<List<Pair<String, Integer>>> skillsList*/) throws ParseException {
         int idN = id.orElse(0);
         int size = pageSize.orElse(5);
@@ -103,11 +106,27 @@ public class TaskController {
         String pageN = pageName.orElse("tasks");
         //Filter
         String name = findName.orElse("");
-        Date from = dateConstructor(date_from.orElse("2019-01-01 00:00:00.000"));
+        Date from = dateConstructor(date_from.orElse("").length() < 1 ?
+                "2019-01-01 00:00:00.000" : date_from.get());
         Date to = dateConstructor(date_to.orElse(""));
         Date dueFrom = dateConstructor(due_from.orElse(""));
-        Date dueTo = dateConstructor(due_to.orElse("3000-01-01 00:00:00.000"));
+        Date dueTo = dateConstructor(due_to.orElse("").length() < 1 ?
+                "3000-01-01 00:00:00.000" : due_to.get());
         logger.info("from {}", skillF);
+
+//        logger.info("{}",new JSONArray("[" + skillF.get() + "]"));
+        JSONArray json = new JSONArray("[" + skillF.get() + "]");
+        logger.info("{}\n\n", json.get(0));
+
+        logger.info("{}\n", filter);
+        JSONObject jsonFilter = new JSONObject(filter.orElse(""));
+        Iterator<String> iterator = jsonFilter.keys();
+        logger.info("{}", jsonFilter.getString("find_name"));
+        logger.info("{}\n", jsonFilter.keys());
+        while(iterator.hasNext()) {
+            logger.info(iterator.next());
+        }
+
 
         Pager<TaskDTO> pager = taskService.findAll(idN, size, pageId, pageSort, pageN, name, from, to, dueFrom, dueTo);
         logger.info("Request to get tasks: {}", pager);

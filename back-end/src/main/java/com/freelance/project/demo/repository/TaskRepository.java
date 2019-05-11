@@ -38,14 +38,25 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     List<Task> findAll();
 
-    @Query("SELECT t FROM Task t where t.author.personId = :id")
-    Page<Task> findAllByAuthor(@Param("id") int author_id, Pageable pageRequest);
+    @Query("SELECT t FROM Task t where t.author.personId = :id and " +
+            "t.name like %:nameLike%")
+    Page<Task> findAllByAuthor(@Param("id") int author_id,
+                               @Param("nameLike") String nameLike,
+                               Pageable pageRequest);
 
-    @Query("SELECT DISTINCT t FROM Task t join t.candidateTasks tc where tc.personId = :id")
-    Page<Task> findAllByCandidate(@Param("id") int candidate_id, Pageable pageRequest);
+    @Query("SELECT DISTINCT t FROM Task t join t.candidateTasks tc where tc.personId = :id and " +
+            "t.name like %:nameLike%")
+    Page<Task> findAllByCandidate(@Param("id") int candidate_id,
+                                  @Param("nameLike") String nameLike,
+                                  Pageable pageRequest);
 
-    @Query("SELECT distinct t from Task t join t.candidateTasks tc where tc.personId = :id and t.status = :status")
-    Page<Task> findAllInWork(@Param("id") int candidate_id, @Param("status") String status, Pageable pageRequest);
+    @Query("SELECT distinct t from Task t join t.candidateTasks tc where tc.personId = :id and " +
+            "t.status = :status and " +
+            "t.name like %:nameLike%")
+    Page<Task> findAllInWork(@Param("id") int candidate_id,
+                             @Param("status") String status,
+                             @Param("nameLike") String nameLike,
+                             Pageable pageRequest);
 
     @Query("Select t from Task t where t.name like %:name%")
     Page<Task> findByName(@Param("name") String name, Pageable pageRequest);

@@ -102,14 +102,15 @@ public class TaskServiceImpl implements TaskService {
         Page<Task> page;
         switch (pageName) {
             case "candidate":
-                page = taskRepository.findAllByCandidate(id,
+                page = taskRepository.findAllByCandidate(id, findName,
                         PageRequest.of(pageNumber, pageSize, Sort.by(pageSort)));
                 break;
             case "author":
-                page = taskRepository.findAllByAuthor(id, PageRequest.of(pageNumber, pageSize, Sort.by(pageSort)));
+                page = taskRepository.findAllByAuthor(id, findName,
+                        PageRequest.of(pageNumber, pageSize, Sort.by(pageSort)));
                 break;
             case "in_work":
-                page = taskRepository.findAllInWork(id, "IN_WORK",
+                page = taskRepository.findAllInWork(id, "IN_WORK", findName,
                         PageRequest.of(pageNumber, pageSize, Sort.by(pageSort)));
                 break;
             default:

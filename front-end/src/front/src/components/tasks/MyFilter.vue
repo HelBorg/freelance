@@ -8,7 +8,7 @@
                     label-class="font-weight-bold pt-0"
                     class="input-group">
         <b-input-group>
-          <b-form-input v-model="filter.ind_name" placeholder="Type to Search"></b-form-input>
+          <b-form-input v-model="filter.find_name" placeholder="Type to Search"></b-form-input>
           <b-input-group-append>
             <b-button :disabled="!filter.find_name" @click="filter.find_name = ''">Clear</b-button>
           </b-input-group-append>
@@ -155,7 +155,7 @@
         getUsers: {users: [{name: 'There is nobody here yet'}]},
         errors: [],
         filter: {
-          find_name: 'ddd',
+          find_name: '',
           date_from: '',
           date_to: '',
           due_from: '',

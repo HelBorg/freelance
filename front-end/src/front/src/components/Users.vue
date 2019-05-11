@@ -1,5 +1,5 @@
 <template>
-  <div id="tasksList" v-if="show">
+  <div id="tasksList">
     <div>
       <Navbar/>
     </div>
@@ -7,7 +7,7 @@
 
       <Menu></Menu>
 
-      <div style="width: 80%; float: right">
+      <div style="width: 80%; float: right" v-if="show">
         <p>
           <b-table id="user"
                    :items="user"
@@ -74,7 +74,9 @@
         errors: [],
         getUsers: {
         },
-        user: {},
+        user: [{
+          id: null
+        }],
         filter: {
           sort: null,
           currentPage: 0,
@@ -147,8 +149,6 @@
         this.$router.push({name: 'User', params: {id: record.id}});
       },
       getUserId() {
-        console.log(this.getUsers);
-        this.getUsers.user = [];
         axios.get('http://localhost:80/api/v1/me', {
             headers: {
               Authorization: 'Bearer ' + localStorage.getItem('JWT')
@@ -157,24 +157,27 @@
         ).then(response => {
           console.log(response.data);
           if (response) {
-            this.user.id = response.data.id
+            this.user[0].id = response.data.id;
           }
+          this.getUserInfo();
         }).catch(e => {
           this.errors.push(e);
           console.log(e);
         });
-        this.getUserInfo();
       },
       getUserInfo() {
-        axios.get('http:/localhost:80/api/v1/person/' + this.user.id, {
+        console.log(this.user);
+        axios.get('http://localhost:80/api/v1/person/' + this.user[0].id, {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('JWT')
           }
         }).then(response => {
           console.log(response.data);
+          this.user = [];
           if (response) {
-            this.user = response.data;
+            this.user.push(response.data);
           }
+          this.refreshList();
         }).catch(e => {
           this.errors.push(e);
           console.error(e);
@@ -183,7 +186,6 @@
     },
     mounted() {
       this.getUserId();
-      this.refreshList();
     }
   }
 </script>

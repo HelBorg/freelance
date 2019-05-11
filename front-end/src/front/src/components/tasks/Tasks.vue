@@ -19,7 +19,7 @@
               </b-dropdown>
               <b-dropdown id="dropdown-2"
                           class="m-md-2"
-                          text="Sort by:">
+                          text="Sort by">
                 <b-dropdown-item @click="changeSort(createdTime)">Date of creation</b-dropdown-item>
                 <b-dropdown-item @click="changeSort(deadline)">Deadline</b-dropdown-item>
                 <b-dropdown-item @click="changeSort(taskId)">None</b-dropdown-item>
@@ -40,7 +40,7 @@
                        hover
                        striped
                        @row-clicked="goToTask">
-                <template slot="date_from" slot-scope="row">
+                <template slot="createdTime" slot-scope="row">
                   <div>
                     {{dateConstructor(row.item.createdTime)}}
                   </div>
@@ -60,9 +60,9 @@
                     {{skill.name}}
                   </div>
                 </template>
-                <template slot="assigned" slot-scope="row">
-                  <div v-if="row.item.assigned.name">
-                    {{row.item.assigned.name}}
+                <template slot="assignedUser" slot-scope="row">
+                  <div v-if="row.item.assignedUser">
+                    {{row.item.assignedUser.name}}
                   </div>
                 </template>
               </b-table>
@@ -112,7 +112,7 @@
         sort: null,
         sortDir: null,
         filter: {
-          find_name: 'ddd',
+          find_name: '',
           date_from: '',
           date_to: '',
           due_from: '',
@@ -135,8 +135,8 @@
             thClass: null,
             tdClass: null
           },
-          date_from: {
-            key: 'date_from',
+          createdTime: {
+            key: 'createdTime',
             label: 'Date of creating',
             thClass: null,
             tdClass: null
@@ -159,8 +159,8 @@
             thClass: null,
             tdClass: null
           },
-          assigned: {
-            key: 'assigned',
+          assignedUser: {
+            key: 'assignedUser',
             label: 'Assigned',
             thClass: null,
             tdClass: null
@@ -182,8 +182,13 @@
               date_to: this.filter.date_to,
               due_from: this.filter.due_from,
               due_to: this.filter.due_to,
-              skills: JSON.stringify(this.filter.skillsF),
-              author: this.filter.selectedUser
+              skillsF: JSON.stringify(this.filter.skillsF)
+                .replace("[", "")
+                .replace("]", ""),
+              author: this.filter.selectedUser.name,
+              filter: JSON.stringify(this.filter)
+                .replace("[", "")
+                .replace("]", "")
             },
             headers: {
               Authorization: 'Bearer ' + localStorage.getItem('JWT')
@@ -191,12 +196,13 @@
           }
         ).then(response => {
           console.log(response.data);
-          if (response.data.items) {
+          if (response) {
             this.getTasks = response.data;
           }
         }).catch(e => {
           this.errors.push(e);
         });
+        console.log(this.getTasks);
       },
       dateConstructor: function (date) {
         return moment(date.replace("T", " ").substring(0, 22)).format('Do / MM / YYYY');
@@ -252,8 +258,8 @@
           case 'search':
             // this.fields.status.thClass = 'd-none';
             // this.fields.status.tdClass = 'd-none';
-            // this.fields.assigned.thClass = 'd-none';
-            // this.fields.assigned.tdClass = 'd-none';
+            // this.fields.assignedUser.thClass = 'd-none';
+            // this.fields.assignedUser.tdClass = 'd-none';
             this.page.get = 'tasks';
             break;
           case 'candidates':
@@ -265,8 +271,8 @@
             this.page.get = 'author';
             break;
           case 'in_work':
-            this.fields.assigned.thClass = 'd-none';
-            this.fields.assigned.tdClass = 'd-none';
+            this.fields.assignedUser.thClass = 'd-none';
+            this.fields.assignedUser.tdClass = 'd-none';
             this.fields.status.thClass = 'd-none';
             this.fields.status.tdClass = 'd-none';
             this.page.get = 'in_work';
