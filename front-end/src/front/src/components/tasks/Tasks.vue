@@ -111,6 +111,8 @@
         getTasks: {},
         sort: null,
         sortDir: null,
+
+        //Filter
         filter: {
           find_name: '',
           date_from: '',
@@ -122,6 +124,8 @@
             {name: '', value: 0}
           ]
         },
+        skillsF: [],
+        //Table
         fields: {
           name: {
             key: 'name',
@@ -182,7 +186,7 @@
               date_to: this.filter.date_to,
               due_from: this.filter.due_from,
               due_to: this.filter.due_to,
-              skillsF: JSON.stringify(this.filter.skillsF)
+              skillsFilter: JSON.stringify(this.skillsF)
                 .replace("[", "")
                 .replace("]", ""),
               author: this.filter.selectedUser.name,
@@ -286,8 +290,9 @@
           this.$router.push({name: 'Task', params: {id: record.id}});
         }
       },
-      handleFilter(filter) {
+      handleFilter(filter, skillsF) {
         this.filter = filter;
+        this.skillsF = skillsF;
         this.refreshList();
       }
     },

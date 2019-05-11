@@ -97,7 +97,8 @@ public class TaskServiceImpl implements TaskService {
                                   Date date_to,
                                   Date due_from,
                                   Date due_to) {
-        System.out.println("\n\n " + pageSort + "\n\n");
+        System.out.println("\n\n " + date_from + "\n\n");
+        System.out.println("\n\n " + date_to + "\n\n");
         PageAndSort pageAndSort = new PageAndSort(id, pageSort, pageNumber, pageSize, findName);
         Page<Task> page;
         switch (pageName) {

@@ -6,6 +6,7 @@ import com.freelance.project.demo.models.SkillF;
 import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.service.PersonService;
 import com.freelance.project.demo.service.TaskService;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -76,11 +78,12 @@ public class TaskController {
         return taskService.loadTask(id);
     }
 
-    private Date dateConstructor(String date) throws ParseException {
+    private Date dateConstructor(String date, String other) throws ParseException {
         Date d = date.length() > 0 ?
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
                         .parse(date.replace("T", " ").replace("Z", ""))
-                : new Date();
+                : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+                        .parse(other.replace("T", " ").replace("Z", ""));
         return d;
     }
 
@@ -90,35 +93,29 @@ public class TaskController {
                                                  @RequestParam("page") Optional<Integer> pageNumber,
                                                  @RequestParam("sort") Optional<String> sort,
                                                  @RequestParam("pageName") Optional<String> pageName,
+
                                                  @RequestParam("find_name") Optional<String> findName,
                                                  @RequestParam("date_from") Optional<String> date_from,
                                                  @RequestParam("date_to") Optional<String> date_to,
                                                  @RequestParam("due_from") Optional<String> due_from,
                                                  @RequestParam("due_to") Optional<String> due_to,
-                                                 @RequestParam("skillsF") Optional<String> skillF,
+                                                 @RequestParam("skillsFilter") Optional<String> skillF,
                                                  @RequestParam("author") Optional<String> authorName,
                                                  @RequestParam("filter") Optional<String> filter
             /* @RequestParam("skills") Optional<List<Pair<String, Integer>>> skillsList*/) throws ParseException {
-        int idN = id.orElse(0);
-        int size = pageSize.orElse(5);
-        int pageId = pageNumber.orElse(0);
-        String pageSort = sort.orElse("taskId");
-        String pageN = pageName.orElse("tasks");
         //Filter
         String name = findName.orElse("");
-        Date from = dateConstructor(date_from.orElse("").length() < 1 ?
-                "2019-01-01 00:00:00.000" : date_from.get());
-        Date to = dateConstructor(date_to.orElse(""));
-        Date dueFrom = dateConstructor(due_from.orElse(""));
+//        Date from = dateConstructor(date_from.orElse("").length() < 1 ?
+//                "2019-01-01 00:00:00.000" : date_from.get());
+//        Date to = dateConstructor(date_to.orElse(""));
+        Date dueFrom = dateConstructor(due_from.orElse(""), "");
         Date dueTo = dateConstructor(due_to.orElse("").length() < 1 ?
-                "3000-01-01 00:00:00.000" : due_to.get());
+                "3000-01-01 00:00:00.000" : due_to.get(), "");
         logger.info("from {}", skillF);
 
 //        logger.info("{}",new JSONArray("[" + skillF.get() + "]"));
         JSONArray json = new JSONArray("[" + skillF.get() + "]");
-        logger.info("{}\n\n", json.get(0));
 
-        logger.info("{}\n", filter);
         JSONObject jsonFilter = new JSONObject(filter.orElse(""));
         Iterator<String> iterator = jsonFilter.keys();
         logger.info("{}", jsonFilter.getString("find_name"));
@@ -127,8 +124,17 @@ public class TaskController {
             logger.info(iterator.next());
         }
 
+        Pager<TaskDTO> pager = taskService.findAll(id.orElse(0),
+                pageSize.orElse(5),
+                pageNumber.orElse(0),
+                sort.orElse("taskId"),
+                pageName.orElse("tasks"),
+                jsonFilter.getString("find_name"),
+                dateConstructor(jsonFilter.getString("date_from"), "2019-01-01 00:00:00.000"),
+                dateConstructor(jsonFilter.getString("date_to"), ""),
+                dueFrom,
+                dueTo);
 
-        Pager<TaskDTO> pager = taskService.findAll(idN, size, pageId, pageSort, pageN, name, from, to, dueFrom, dueTo);
         logger.info("Request to get tasks: {}", pager);
         return ResponseEntity.ok().body(pager);
     }

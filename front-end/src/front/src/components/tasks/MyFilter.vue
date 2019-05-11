@@ -71,12 +71,12 @@
                       style="margin-bottom: 20px"
                       label-class="font-weight-bold pt-0"
                       class="input-group">
-          <b-container fluid v-for="(skillF,index) in filter.skillsF">
+          <b-container fluid v-for="(skillF,index) in skillsF">
             <b-row>
               <b-col>
                 <b-form-select
                   id="input-{{index}}"
-                  v-model="filter.skillsF[index].name">
+                  v-model="skillsF[index].name">
                   <option v-for="skill in getSkills.skills">
                     {{skill.name}}
                   </option>
@@ -160,11 +160,11 @@
           date_to: '',
           due_from: '',
           due_to: '',
-          selectedUser: {},
-          skillsF: [
-            {name: '', value: 0}
-          ],
+          selectedUser: {}
         },
+        skillsF: [
+          {name: '', value: 0}
+        ],
         findUser: '',
       }
     },
@@ -204,7 +204,7 @@
       },
       // Filter
       addSkill() {
-        this.filter.skillsF.push({
+        this.skillsF.push({
           name: '',
           value: 0
         });
@@ -214,7 +214,7 @@
         })
       },
       deleteSkill(index) {
-        this.filter.skillsF.splice(index, 1);
+        this.skillsF.splice(index, 1);
       },
       onSubmit(evt) {
         // evt.preventDefault();
@@ -224,7 +224,7 @@
         evt.preventDefault();
         // Reset our form values
         this.refreshFilter();
-        this.$emit('filter', this.filter);
+        this.$emit('filter', this.filter, this.skillsF);
       },
       refreshFilter() {
         this.filter.find_name = '';
