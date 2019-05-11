@@ -24,13 +24,15 @@ public interface TaskService {
 
     void deleteAssignAndRevertStatus(int taskId);
 
-    Pager<TaskDTO> findAll(Optional<Integer> id,
-                           Optional<Integer> pageSize,
-                           Optional<Integer> pageNumber,
-                           Optional<String> pageSort,
-                           Optional<String> pageName,
-                           Optional<String> find_name,
+    Pager<TaskDTO> findAll(int id,
+                           int pageSize,
+                           int pageNumber,
+                           String pageSort,
+                           String pageName,
+                           String find_name,
                            Date date_from,
-                           Date date_to);
+                           Date date_to,
+                           Date due_from,
+                           Date due_to);
 
 }

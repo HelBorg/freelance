@@ -4,12 +4,10 @@
       <Navbar/>
     </div>
     <div>
-      <div>
-        <Menu/>
-      </div>
-      <div style="float:right; width: 75%">
+      <Menu/>
+      <div style="float:right; width: 80%">
         <b-row>
-          <b-col v-if="this.show">
+          <b-col>
             <div>
               <b-dropdown id="dropdown-1"
                           class="m-md-2"
@@ -24,21 +22,47 @@
                           text="Sort by:">
                 <b-dropdown-item @click="changeSort(createdTime)">Date of creation</b-dropdown-item>
                 <b-dropdown-item @click="changeSort(deadline)">Deadline</b-dropdown-item>
-                <b-dropdown-item>None</b-dropdown-item>
+                <b-dropdown-item @click="changeSort(taskId)">None</b-dropdown-item>
+              </b-dropdown>
+              <b-dropdown id="dropdown-3"
+                          class="m-md-2"
+                          text="Direction">
+                <b-dropdown-item @click="changeSortDir()">From old to new</b-dropdown-item>
+                <b-dropdown-item @click="changeSortDir()">From new to old</b-dropdown-item>
               </b-dropdown>
             </div>
-            <div>
+            <div v-if="this.show">
               <b-table id="tasks"
                        title="Tasks"
-                       :items="getTasks.tasks"
+                       :items="getTasks.items"
                        :fields="fields"
                        small
                        hover
                        striped
                        @row-clicked="goToTask">
+                <template slot="date_from" slot-scope="row">
+                  <div>
+                    {{dateConstructor(row.item.createdTime)}}
+                  </div>
+                </template>
+                <template slot="deadline" slot-scope="row">
+                  <div>
+                    {{dateConstructor(row.item.deadline)}}
+                  </div>
+                </template>
+                <template slot="author" slot-scope="row">
+                  <div>
+                    {{row.item.author.name}}
+                  </div>
+                </template>
                 <template slot="skills" slot-scope="row">
                   <div v-for="skill in row.item.skills">
-                    {{skill}}
+                    {{skill.name}}
+                  </div>
+                </template>
+                <template slot="assigned" slot-scope="row">
+                  <div v-if="row.item.assigned.name">
+                    {{row.item.assigned.name}}
                   </div>
                 </template>
               </b-table>
@@ -53,7 +77,7 @@
           <b-col cols="4">
             <div>
               <MyFilter :show="this.page.showFilter"
-                        @submit="handleSubmit"/>
+                        @filter="handleFilter"/>
             </div>
           </b-col>
         </b-row>
@@ -62,9 +86,10 @@
   </div>
 </template>
 <script>
+  import moment from 'moment';
+  import axios from 'axios';
   import Menu from "../Menu";
   import Navbar from "../Navbar";
-  import axios from 'axios';
   import MyFilter from "./MyFilter";
   import MyPagination from "./MyPagination";
 
@@ -73,30 +98,29 @@
     components: {MyPagination, Menu, Navbar, MyFilter},
     data() {
       return {
-        sort: '',
         page: {
           name: null,
           get: null,   //get all tasks, get by author, by candidates
-          showFilter: false,
+          showFilter: true,
           user_id: 1,
-          find: null,
-          date_from: null,
-          date_to: null,
           currentPage: 0,
           pageSize: 10
         },
         errors: [],
         show: true,
-        getTasks: {
-          tasks: [{name: 'Sorry, there is no tasks in here yet', id: -1}],
-          hasPreviousPage: null,
-          hasNextPage: null,
-          pagesCount: 0,
-          sort: null,
-          find_name: null,
-          find_date_from: null,
-          find_date_to: null,
-          filter: null
+        getTasks: {},
+        sort: null,
+        sortDir: null,
+        filter: {
+          find_name: 'ddd',
+          date_from: '',
+          date_to: '',
+          due_from: '',
+          due_to: '',
+          selectedUser: {},
+          skillsF: [
+            {name: '', value: 0}
+          ]
         },
         fields: {
           name: {
@@ -120,12 +144,6 @@
           deadline: {
             key: 'deadline',
             label: 'To',
-            thClass: null,
-            tdClass: null
-          },
-          rate: {
-            key: 'rate',
-            label: 'Rate',
             thClass: null,
             tdClass: null
           },
@@ -158,10 +176,14 @@
               page: this.page.currentPage,
               pageName: this.page.get,
               id: this.page.user_id,
-              find_name: this.getTasks.find_name,
-              sort: this.getTasks.sort,
-              date_from: this.getTasks.find_date_from,
-              date_to: this.getTasks.find_date_to
+              find_name: this.filter.find_name,
+              sort: this.sort,
+              date_from: this.filter.date_from,
+              date_to: this.filter.date_to,
+              due_from: this.filter.due_from,
+              due_to: this.filter.due_to,
+              skills: JSON.stringify(this.filter.skillsF),
+              author: this.filter.selectedUser
             },
             headers: {
               Authorization: 'Bearer ' + localStorage.getItem('JWT')
@@ -170,46 +192,14 @@
         ).then(response => {
           console.log(response.data);
           if (response.data.items) {
-            this.getTasks.hasNextPage = response.data.hasNextPage;
-            this.getTasks.hasPreviousPage = response.data.hasPreviousPage;
-            this.getTasks.pagesCount = response.data.pagesCount;
-            this.getTasks.sort = response.data.sort;
-            this.getTasks.find = response.data.find;
-            this.getTasks.tasks = []; //remove default msg from tasks
-            for (let t = 0; t < this.page.pageSize; t++) {
-              this.getTasks.tasks.push({
-                id: response.data.items[t].id,
-                name: response.data.items[t].name,
-                status: response.data.items[t].status,
-                date_from: null,
-                deadline: null,
-                rate: response.data.items[t].rate,
-                author: response.data.items[t].author.name,
-                skills: [],
-                assigned: null
-              });
-              //Skills
-              for (let sk in response.data.items[t].skills) {
-                this.getTasks.tasks[t].skills.push(response.data.items[t].skills[sk].skillName.name);
-              }
-              //Assigned user
-              let assign = response.data.items[t].assignedUser;
-              this.getTasks.tasks[t].assign = assign ? assign.name : null;
-              //Date
-              this.getTasks.tasks[t].deadline = this.dateConstructor(response.date.items[t].deadline);
-              this.getTasks.tasks[t].date_from = this.dateConstructor(response.date.items[t].createdTime);
-            }
+            this.getTasks = response.data;
           }
         }).catch(e => {
-            this.errors.push(e);
-          });
+          this.errors.push(e);
+        });
       },
       dateConstructor: function (date) {
-        if (date == null) {
-          return null;
-        } else {
-          return date.getUTCDate() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCFullYear();
-        }
+        return moment(date.replace("T", " ").substring(0, 22)).format('Do / MM / YYYY');
       },
       // Исполльзовать, когда при обновлении таблицы хотим перейти на первую страницу
       refreshList() {
@@ -222,14 +212,22 @@
       },
       changePage(changeTo) {
         this.page.currentPage = changeTo;
-        this.refreshList();
+        this.retrieveTasks();
+        this.show = false;
+        this.$nextTick(() => {
+          this.show = true
+        })
       },
       changePerPage(perPage) {
         this.page.pageSize = perPage;
         this.refreshList();
       },
       changeSort(sortBy) {
-        this.getTasks.sort = sortBy;
+        this.sort = sortBy;
+        this.refreshList();
+      },
+      changeSortDir(Dir) {
+        this.sortDir = Dir;
         this.refreshList();
       },
       getUserId() {
@@ -252,10 +250,10 @@
         this.page.name = this.$route.params.pageName;
         switch (this.page.name) {
           case 'search':
-            this.fields.status.thClass = 'd-none';
-            this.fields.status.tdClass = 'd-none';
-            this.fields.assigned.thClass = 'd-none';
-            this.fields.assigned.tdClass = 'd-none';
+            // this.fields.status.thClass = 'd-none';
+            // this.fields.status.tdClass = 'd-none';
+            // this.fields.assigned.thClass = 'd-none';
+            // this.fields.assigned.tdClass = 'd-none';
             this.page.get = 'tasks';
             break;
           case 'candidates':
@@ -278,15 +276,12 @@
         }
       },
       goToTask(record) {
-        if (this.getTasks.tasks[0].id > -1) {
+        if (this.getTasks.items[0].id > -1) {
           this.$router.push({name: 'Task', params: {id: record.id}});
         }
       },
-      handleSubmit(find_name, date_to, date_from) {
-        console.log(find_name + date_to + date_from);
-        this.getTasks.find_name = find_name;
-        this.getTasks.find_date_to = date_to;
-        this.getTasks.find_date_from = date_from;
+      handleFilter(filter) {
+        this.filter = filter;
         this.refreshList();
       }
     },

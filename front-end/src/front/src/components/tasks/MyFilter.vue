@@ -8,23 +8,23 @@
                     label-class="font-weight-bold pt-0"
                     class="input-group">
         <b-input-group>
-          <b-form-input v-model="find_name" placeholder="Type to Search"></b-form-input>
+          <b-form-input v-model="filter.ind_name" placeholder="Type to Search"></b-form-input>
           <b-input-group-append>
-            <b-button :disabled="!find_name" @click="find_name = ''">Clear</b-button>
+            <b-button :disabled="!filter.find_name" @click="filter.find_name = ''">Clear</b-button>
           </b-input-group-append>
         </b-input-group>
       </b-form-group>
 
 
       <b-form-group id="input-group-2"
-                    label="Date of creation:"
+                    label="Date of creation:   "
                     label-for="input-2"
                     label-class="font-weight-bold pt-0"
                     class="input-group">
         <p>
           <b-form aria-label="From:">
             From:
-            <datepicker v-model="date_from"
+            <datepicker v-model="filter.date_from"
                         monday-first=true>
             </datepicker>
           </b-form>
@@ -32,7 +32,31 @@
         <p>
           <b-form aria-label="To:">
             To:
-            <datepicker v-model="date_to"
+            <datepicker v-model="filter.date_to"
+                        style="margin-bottom: 10px"
+                        monday-first=true>
+            </datepicker>
+          </b-form>
+        </p>
+      </b-form-group>
+
+      <b-form-group id="input-group-5"
+                    label="Due date:          "
+                    label-for="input-5"
+                    label-class="font-weight-bold pt-0"
+                    class="input-group">
+        <p>
+          <b-form aria-label="From:">
+            From:
+            <datepicker v-model="filter.due_from"
+                        monday-first=true>
+            </datepicker>
+          </b-form>
+        </p>
+        <p>
+          <b-form aria-label="To:">
+            To:
+            <datepicker v-model="filter.due_to"
                         style="margin-bottom: 10px"
                         monday-first=true>
             </datepicker>
@@ -47,12 +71,12 @@
                       style="margin-bottom: 20px"
                       label-class="font-weight-bold pt-0"
                       class="input-group">
-          <b-container fluid v-for="(skillF,index) in skillsF">
+          <b-container fluid v-for="(skillF,index) in filter.skillsF">
             <b-row>
               <b-col>
                 <b-form-select
                   id="input-{{index}}"
-                  v-model="skillsF[index].name">
+                  v-model="filter.skillsF[index].name">
                   <option v-for="skill in getSkills.skills">
                     {{skill.name}}
                   </option>
@@ -94,17 +118,17 @@
           <b-input-group>
             <b-form-input v-model="findUser" placeholder="Type user name"></b-form-input>
             <b-input-group-append>
-              <b-button :disabled="!findUser" @click="findUserByName">Find</b-button>
+              <b-button :disabled="!findUser" @click="retrieveUsers">Find</b-button>
             </b-input-group-append>
           </b-input-group>
 
           <b-form-select :select-size="4">
-            <option v-for="user in filterUsers(getUsers.users)"
-                    @click="selectedUser=user">
+            <option v-for="user in getUsers.users"
+                    @click="filter.selectedUser=user">
               {{user.name}}
             </option>
           </b-form-select>
-          <a>Selected: {{selectedUser.name}}</a>
+          <a>Selected: {{filter.selectedUser.name}}</a>
         </b-form-group>
       </p>
     </b-form-group>
@@ -130,15 +154,18 @@
         getSkills: {skills: [{name: 'Nothing in here yet'}]},
         getUsers: {users: [{name: 'There is nobody here yet'}]},
         errors: [],
-        find_name: '',
-        date_from: '',
-        date_to: '',
-        skillsF: [
-          {name: '', value: 0}
-        ],
+        filter: {
+          find_name: 'ddd',
+          date_from: '',
+          date_to: '',
+          due_from: '',
+          due_to: '',
+          selectedUser: {},
+          skillsF: [
+            {name: '', value: 0}
+          ],
+        },
         findUser: '',
-        filteredUsers: [],
-        selectedUser: {name: '', id: null}
       }
     },
     methods: {
@@ -166,6 +193,7 @@
             Authorization: 'Bearer ' + localStorage.getItem('JWT')
           }
         }).then(response => {
+          console.log(response.data);
           if (response) {
             this.getUsers.users = response.data.items;
           }
@@ -174,10 +202,9 @@
           console.log(e);
         });
       },
-
       // Filter
       addSkill() {
-        this.skillsF.push({
+        this.filter.skillsF.push({
           name: '',
           value: 0
         });
@@ -186,52 +213,29 @@
           this.show = Object(true);
         })
       },
-
       deleteSkill(index) {
-        this.skillsF.splice(index, 1);
+        this.filter.skillsF.splice(index, 1);
       },
-
-      filterUsers: function (users) {
-        this.filteredUsers = [];
-        if (this.findUser.length < 1) {
-          return users;
-        }
-        for (let user in users) {
-          if (users[user].name.includes(this.findUser)) {
-            this.filteredUsers.push(users[user]);
-          }
-        }
-        if (this.filteredUsers.length < 1) {
-          return users;
-        } else {
-          return this.filteredUsers;
-        }
-      },
-
-      select(user) {
-        this.selectedUser.name = user.name;
-        this.selectedUser.id = user.id;
-      },
-
       onSubmit(evt) {
-        evt.preventDefault();
-        alert(JSON.stringify(this.form));
-        this.$emit('submit', this.find_name, this.date_to, this.date_from);
+        // evt.preventDefault();
+        this.$emit('filter', this.filter);
       },
-
       onReset(evt) {
         evt.preventDefault();
         // Reset our form values
         this.refreshFilter();
+        this.$emit('filter', this.filter);
       },
       refreshFilter() {
-        this.find_name = '';
-        this.date_from = '';
-        this.date_to = '';
+        this.filter.find_name = '';
+        this.filter.date_from = '';
+        this.filter.date_to = '';
+        this.filter.due_from = '';
+        this.filter.due_to = '';
         this.skillsF = [
           {name: '', value: 0}
         ];
-        this.selectedUser = {};
+        this.filter.selectedUser = {};
         // Trick to reset/clear native browser form validation state
         this.show = Object(false);
         this.$nextTick(() => {

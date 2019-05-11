@@ -2,6 +2,7 @@ package com.freelance.project.demo.controller;
 
 import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.Pager;
+import com.freelance.project.demo.models.SkillF;
 import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.service.PersonService;
 import com.freelance.project.demo.service.TaskService;
@@ -77,7 +78,7 @@ public class TaskController {
         Date d = date.length() > 0 ?
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
                         .parse(date.replace("T", " ").replace("Z", ""))
-                : null;
+                : new Date();
         return d;
     }
 
@@ -89,11 +90,26 @@ public class TaskController {
                                                  @RequestParam("pageName") Optional<String> pageName,
                                                  @RequestParam("find_name") Optional<String> findName,
                                                  @RequestParam("date_from") Optional<String> date_from,
-                                                 @RequestParam("date_to") Optional<String> date_to
+                                                 @RequestParam("date_to") Optional<String> date_to,
+                                                 @RequestParam("due_from") Optional<String> due_from,
+                                                 @RequestParam("due_to") Optional<String> due_to,
+                                                 @RequestParam("skillsF") Optional<List<String>> skillF,
+                                                 @RequestParam("author") Optional<String> authorName
             /* @RequestParam("skills") Optional<List<Pair<String, Integer>>> skillsList*/) throws ParseException {
-        Date from = dateConstructor(date_from.orElse(""));
+        int idN = id.orElse(0);
+        int size = pageSize.orElse(5);
+        int pageId = pageNumber.orElse(0);
+        String pageSort = sort.orElse("taskId");
+        String pageN = pageName.orElse("tasks");
+        //Filter
+        String name = findName.orElse("");
+        Date from = dateConstructor(date_from.orElse("2019-01-01 00:00:00.000"));
         Date to = dateConstructor(date_to.orElse(""));
-        Pager<TaskDTO> pager = taskService.findAll(id, pageSize, pageNumber, sort, pageName, findName, from, to);
+        Date dueFrom = dateConstructor(due_from.orElse(""));
+        Date dueTo = dateConstructor(due_to.orElse("3000-01-01 00:00:00.000"));
+        logger.info("from {}", skillF);
+
+        Pager<TaskDTO> pager = taskService.findAll(idN, size, pageId, pageSort, pageN, name, from, to, dueFrom, dueTo);
         logger.info("Request to get tasks: {}", pager);
         return ResponseEntity.ok().body(pager);
     }
