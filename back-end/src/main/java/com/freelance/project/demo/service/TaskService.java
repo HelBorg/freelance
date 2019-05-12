@@ -1,9 +1,11 @@
 package com.freelance.project.demo.service;
 
 import com.freelance.project.demo.dto.TaskDTO;
+import com.freelance.project.demo.models.Filter;
 import com.freelance.project.demo.models.Person;
 import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.models.Pager;
+import org.springframework.data.domain.Sort;
 
 import java.util.Date;
 import java.util.Optional;
@@ -29,10 +31,7 @@ public interface TaskService {
                            int pageNumber,
                            String pageSort,
                            String pageName,
-                           String find_name,
-                           Date date_from,
-                           Date date_to,
-                           Date due_from,
-                           Date due_to);
+                           Filter filter,
+                           Sort sort);
 
 }

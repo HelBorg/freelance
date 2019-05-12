@@ -1,23 +1,23 @@
 package com.freelance.project.demo.controller;
 
 import com.freelance.project.demo.dto.TaskDTO;
+import com.freelance.project.demo.models.Filter;
 import com.freelance.project.demo.models.Pager;
-import com.freelance.project.demo.models.SkillF;
+import com.freelance.project.demo.models.SkillFilter;
 import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.service.PersonService;
 import com.freelance.project.demo.service.TaskService;
-import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -78,62 +78,59 @@ public class TaskController {
         return taskService.loadTask(id);
     }
 
-    private Date dateConstructor(String date, String other) throws ParseException {
+    private Date dateConstructor(String date) throws ParseException {
         Date d = date.length() > 0 ?
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
                         .parse(date.replace("T", " ").replace("Z", ""))
-                : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
-                        .parse(other.replace("T", " ").replace("Z", ""));
+                :  new Date();
         return d;
     }
 
     @GetMapping
-    public ResponseEntity<Pager<TaskDTO>> getAll(@RequestParam("id") Optional<Integer> id,
+    public ResponseEntity<Pager<TaskDTO>> getAll(@RequestParam("id") Optional<Integer> id,            //user_id if needed
                                                  @RequestParam("size") Optional<Integer> pageSize,
                                                  @RequestParam("page") Optional<Integer> pageNumber,
                                                  @RequestParam("sort") Optional<String> sort,
                                                  @RequestParam("pageName") Optional<String> pageName,
-
+                                                 //Filter
                                                  @RequestParam("find_name") Optional<String> findName,
                                                  @RequestParam("date_from") Optional<String> date_from,
                                                  @RequestParam("date_to") Optional<String> date_to,
                                                  @RequestParam("due_from") Optional<String> due_from,
                                                  @RequestParam("due_to") Optional<String> due_to,
-                                                 @RequestParam("skillsFilter") Optional<String> skillF,
-                                                 @RequestParam("author") Optional<String> authorName,
-                                                 @RequestParam("filter") Optional<String> filter
-            /* @RequestParam("skills") Optional<List<Pair<String, Integer>>> skillsList*/) throws ParseException {
-        //Filter
-        String name = findName.orElse("");
-//        Date from = dateConstructor(date_from.orElse("").length() < 1 ?
-//                "2019-01-01 00:00:00.000" : date_from.get());
-//        Date to = dateConstructor(date_to.orElse(""));
-        Date dueFrom = dateConstructor(due_from.orElse(""), "");
-        Date dueTo = dateConstructor(due_to.orElse("").length() < 1 ?
-                "3000-01-01 00:00:00.000" : due_to.get(), "");
-        logger.info("from {}", skillF);
+                                                 @RequestParam("skillsFilter") Optional<String> skillsF,
+                                                 @RequestParam("author") Optional<String> authorName
+                                                 ) throws ParseException {
+        //Retrieve data from request parameters and put it into Filter
+//        JSONArray json = new JSONArray("[" + skillsF.orElse("") + "]");
+//        List<SkillFilter> skills = new ArrayList<>();
+//        logger.info("{}", json.length());
+//        for (int i=0; i < json.length(); i++) {
+//            logger.info("omg {}", json.length());
+//            logger.info("omg {}", i);
+//            if (((JSONObject) json.get(i)).getString("name").isEmpty()) {
+//                logger.info("iss empty:" );
+//            } else {
+//                skills.add(new SkillFilter(((JSONObject) json.get(i)).getString("name"),
+//                        ((JSONObject) json.get(i)).getInt("value")));
+//            }
+//        }
 
-//        logger.info("{}",new JSONArray("[" + skillF.get() + "]"));
-        JSONArray json = new JSONArray("[" + skillF.get() + "]");
+        Date from = dateConstructor(date_from.orElse("2019-01-01 00:00:00.000"));
+        Date to = dateConstructor(date_to.orElse(""));
+        Date dueFrom = dateConstructor(due_from.orElse(""));
+        Date dueTo = dateConstructor(due_to.orElse("3000-01-01 00:00:00.000"));
 
-        JSONObject jsonFilter = new JSONObject(filter.orElse(""));
-        Iterator<String> iterator = jsonFilter.keys();
-        logger.info("{}", jsonFilter.getString("find_name"));
-        logger.info("{}\n", jsonFilter.keys());
-        while(iterator.hasNext()) {
-            logger.info(iterator.next());
-        }
+        Filter filter = new Filter(findName.orElse(""), from, to,
+                dueFrom, dueTo, authorName.orElse(""), new ArrayList<>());
+        Sort sortS = Sort.by(sort.orElse(""));
 
         Pager<TaskDTO> pager = taskService.findAll(id.orElse(0),
                 pageSize.orElse(5),
                 pageNumber.orElse(0),
                 sort.orElse("taskId"),
                 pageName.orElse("tasks"),
-                jsonFilter.getString("find_name"),
-                dateConstructor(jsonFilter.getString("date_from"), "2019-01-01 00:00:00.000"),
-                dateConstructor(jsonFilter.getString("date_to"), ""),
-                dueFrom,
-                dueTo);
+                filter, sortS);
 
         logger.info("Request to get tasks: {}", pager);
         return ResponseEntity.ok().body(pager);

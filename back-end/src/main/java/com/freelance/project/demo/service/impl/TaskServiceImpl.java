@@ -92,31 +92,25 @@ public class TaskServiceImpl implements TaskService {
                                   int pageNumber,
                                   String pageSort,
                                   String pageName,
-                                  String findName,
-                                  Date date_from,
-                                  Date date_to,
-                                  Date due_from,
-                                  Date due_to) {
-        System.out.println("\n\n " + date_from + "\n\n");
-        System.out.println("\n\n " + date_to + "\n\n");
-        PageAndSort pageAndSort = new PageAndSort(id, pageSort, pageNumber, pageSize, findName);
+                                  Filter filter,
+                                  Sort sort) {
+        PageAndSort pageAndSort = new PageAndSort(id, pageName, pageSort, pageNumber, pageSize, filter);
         Page<Task> page;
+        PageRequest request = PageRequest.of(pageNumber, pageSize, Sort.by(pageSort));
         switch (pageName) {
             case "candidate":
-                page = taskRepository.findAllByCandidate(id, findName,
-                        PageRequest.of(pageNumber, pageSize, Sort.by(pageSort)));
+                page = taskRepository.findAllByCandidate(id, filter.getFindName(), request);
                 break;
             case "author":
-                page = taskRepository.findAllByAuthor(id, findName,
-                        PageRequest.of(pageNumber, pageSize, Sort.by(pageSort)));
+                page = taskRepository.findAllByAuthor(id, filter.getFindName(),request);
                 break;
             case "in_work":
-                page = taskRepository.findAllInWork(id, "IN_WORK", findName,
-                        PageRequest.of(pageNumber, pageSize, Sort.by(pageSort)));
+                page = taskRepository.findAllInWork(id, "IN_WORK", filter.getFindName(), request);
                 break;
             default:
-                page = taskRepository.find("IN_WORK", findName, date_from, date_to, due_from, due_to,
-                        PageRequest.of(pageNumber, pageSize, Sort.by(pageSort)));
+                page = taskRepository.find("IN_WORK",
+                        filter.getFindName(), filter.getDateFrom(), filter.getDateTo(),
+                        filter.getDueFrom(), filter.getDueTo(), request);
                 break;
         }
 

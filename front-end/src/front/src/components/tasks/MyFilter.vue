@@ -218,7 +218,7 @@
       },
       onSubmit(evt) {
         // evt.preventDefault();
-        this.$emit('filter', this.filter);
+        this.$emit('filter', this.filter, this.skillsF);
       },
       onReset(evt) {
         evt.preventDefault();

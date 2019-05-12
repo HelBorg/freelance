@@ -4,9 +4,8 @@
 2.AuthenticationRequest это модель
 втоматический дедлайн через год
 
-user -  добавить колонку сортировка по репозиторию
+user -  добавить колонку сортировка по rating
 
-таблица users
 Dropdown для сортировки
 -skills
 -author(проверить сколько столбцов)
@@ -15,10 +14,10 @@ Dropdown для сортировки
 
 логгер дописать
 
-request param into request body
-
 search between published
 
 candidates in publish
 
 вынести таблицу в отдельну компоненту
+
+вынести dropdown в отдельную компоненту

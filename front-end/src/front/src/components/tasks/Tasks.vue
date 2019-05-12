@@ -98,6 +98,8 @@
     components: {MyPagination, Menu, Navbar, MyFilter},
     data() {
       return {
+        show: true,
+        errors: [],
         page: {
           name: null,
           get: null,   //get all tasks, get by author, by candidates
@@ -106,24 +108,11 @@
           currentPage: 0,
           pageSize: 10
         },
-        errors: [],
-        show: true,
-        getTasks: {},
         sort: null,
         sortDir: null,
-
+        getTasks: {},
         //Filter
-        filter: {
-          find_name: '',
-          date_from: '',
-          date_to: '',
-          due_from: '',
-          due_to: '',
-          selectedUser: {},
-          skillsF: [
-            {name: '', value: 0}
-          ]
-        },
+        filter: {},
         skillsF: [],
         //Table
         fields: {
