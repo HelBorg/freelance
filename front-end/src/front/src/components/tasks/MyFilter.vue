@@ -71,18 +71,18 @@
                       style="margin-bottom: 20px"
                       label-class="font-weight-bold pt-0"
                       class="input-group">
-          <b-container fluid v-for="(skillF,index) in skillsF">
+          <b-container fluid v-for="(skillF,index) in filter.skillsF">
             <b-row>
               <b-col>
                 <b-form-select
                   id="input-{{index}}"
-                  v-model="skillsF[index].name">
+                  v-model="filter.skillsF[index].name">
                   <option v-for="skill in getSkills.skills">
                     {{skill.name}}
                   </option>
                 </b-form-select>
               </b-col>
-              <b-col cols="3"> Value: {{skillF.value}}
+              <b-col cols="3"> Value: {{filter.skillsF.value}}
               </b-col>
               <b-col cols='1'>
                 <b-button @click="deleteSkill(index)" variant="primary"> -</b-button>
@@ -90,8 +90,8 @@
             </b-row>
             <b-row>
               <b-col>
-                <b-form-input id="skill-range-{{skillF.name}}" v-model="skillF.value" type="range" min="0"
-                              max="10"></b-form-input>
+                <b-form-input id="skill-range-{{filter.skillsF.name}}" v-model="filter.skillsF.value" type="range" min="0"
+                              max="5"></b-form-input>
               </b-col>
               <b-col cols="1"></b-col>
             </b-row>
@@ -160,11 +160,11 @@
           date_to: '',
           due_from: '',
           due_to: '',
-          selectedUser: {}
+          selectedUser: {name: ''},
+          skillsF: [
+            {name: '', value: 0}
+          ]
         },
-        skillsF: [
-          {name: '', value: 0}
-        ],
         findUser: '',
       }
     },
@@ -204,7 +204,7 @@
       },
       // Filter
       addSkill() {
-        this.skillsF.push({
+        this.filter.skillsF.push({
           name: '',
           value: 0
         });
@@ -214,17 +214,17 @@
         })
       },
       deleteSkill(index) {
-        this.skillsF.splice(index, 1);
+        this.filter.skillsF.splice(index, 1);
       },
       onSubmit(evt) {
-        // evt.preventDefault();
-        this.$emit('filter', this.filter, this.skillsF);
+        evt.preventDefault();
+        this.$emit('filter', this.filter);
       },
       onReset(evt) {
         evt.preventDefault();
         // Reset our form values
         this.refreshFilter();
-        this.$emit('filter', this.filter, this.skillsF);
+        this.$emit('filter', this.filter);
       },
       refreshFilter() {
         this.filter.find_name = '';
@@ -232,10 +232,10 @@
         this.filter.date_to = '';
         this.filter.due_from = '';
         this.filter.due_to = '';
-        this.skillsF = [
+        this.filter.skillsF = [
           {name: '', value: 0}
         ];
-        this.filter.selectedUser = {};
+        this.filter.selectedUser = {name: ''};
         // Trick to reset/clear native browser form validation state
         this.show = Object(false);
         this.$nextTick(() => {

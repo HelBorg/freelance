@@ -87,35 +87,34 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public Pager<TaskDTO> findAll(int id,
-                                  int pageSize,
-                                  int pageNumber,
-                                  String pageSort,
-                                  String pageName,
-                                  Filter filter,
-                                  Sort sort) {
-        PageAndSort pageAndSort = new PageAndSort(id, pageName, pageSort, pageNumber, pageSize, filter);
+    public Pager<TaskDTO> findAll(PageAndSort pageAndSort) {
         Page<Task> page;
-        PageRequest request = PageRequest.of(pageNumber, pageSize, Sort.by(pageSort));
-        switch (pageName) {
+        PageRequest request = PageRequest.of(pageAndSort.getCurrentPage(),
+                pageAndSort.getPageSize(), pageAndSort.getSort());
+
+        switch (pageAndSort.getPageName()) {
             case "candidate":
-                page = taskRepository.findAllByCandidate(id, filter.getFindName(), request);
+                page = taskRepository.findAllByCandidate(pageAndSort.getPersonId(),
+                        pageAndSort.getFilter().getFindName(), request);
                 break;
             case "author":
-                page = taskRepository.findAllByAuthor(id, filter.getFindName(),request);
+                page = taskRepository.findAllByAuthor(pageAndSort.getPersonId(),
+                        pageAndSort.getFilter().getFindName(), request);
                 break;
             case "in_work":
-                page = taskRepository.findAllInWork(id, "IN_WORK", filter.getFindName(), request);
+                page = taskRepository.findAllInWork(pageAndSort.getPersonId(), "IN_WORK",
+                        pageAndSort.getFilter().getFindName(),request);
                 break;
             default:
-                page = taskRepository.find("IN_WORK",
-                        filter.getFindName(), filter.getDateFrom(), filter.getDateTo(),
-                        filter.getDueFrom(), filter.getDueTo(), request);
+                page = taskRepository.find("PUBLISH",
+                        pageAndSort.getFilter().getFindName(), pageAndSort.getFilter().getDateFrom(),
+                        pageAndSort.getFilter().getDateTo(), pageAndSort.getFilter().getDueFrom(),
+                        pageAndSort.getFilter().getDueTo(), pageAndSort.getFilter().getAuthor(), request);
                 break;
         }
 
-        boolean hasPreviousPage = pageNumber != 0;
-        boolean hasNextPage = page.getTotalPages() - 1 > pageNumber;
+        boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;
+        boolean hasNextPage = page.getTotalPages() - 1 > pageAndSort.getCurrentPage();
 
         List<Task> list = page.getContent();
         List<TaskDTO> listDTO = list.stream()

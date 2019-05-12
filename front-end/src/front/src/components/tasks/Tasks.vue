@@ -113,7 +113,6 @@
         getTasks: {},
         //Filter
         filter: {},
-        skillsF: [],
         //Table
         fields: {
           name: {
@@ -175,13 +174,10 @@
               date_to: this.filter.date_to,
               due_from: this.filter.due_from,
               due_to: this.filter.due_to,
-              skillsFilter: JSON.stringify(this.skillsF)
+              skillsFilter: JSON.stringify(this.filter.skillsF)
                 .replace("[", "")
                 .replace("]", ""),
-              author: this.filter.selectedUser.name,
-              filter: JSON.stringify(this.filter)
-                .replace("[", "")
-                .replace("]", "")
+              author: this.filter.selectedUser.name
             },
             headers: {
               Authorization: 'Bearer ' + localStorage.getItem('JWT')
@@ -279,9 +275,8 @@
           this.$router.push({name: 'Task', params: {id: record.id}});
         }
       },
-      handleFilter(filter, skillsF) {
+      handleFilter(filter) {
         this.filter = filter;
-        this.skillsF = skillsF;
         this.refreshList();
       }
     },

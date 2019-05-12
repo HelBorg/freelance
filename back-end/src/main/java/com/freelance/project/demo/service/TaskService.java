@@ -1,10 +1,7 @@
 package com.freelance.project.demo.service;
 
 import com.freelance.project.demo.dto.TaskDTO;
-import com.freelance.project.demo.models.Filter;
-import com.freelance.project.demo.models.Person;
-import com.freelance.project.demo.models.Task;
-import com.freelance.project.demo.models.Pager;
+import com.freelance.project.demo.models.*;
 import org.springframework.data.domain.Sort;
 
 import java.util.Date;
@@ -26,12 +23,6 @@ public interface TaskService {
 
     void deleteAssignAndRevertStatus(int taskId);
 
-    Pager<TaskDTO> findAll(int id,
-                           int pageSize,
-                           int pageNumber,
-                           String pageSort,
-                           String pageName,
-                           Filter filter,
-                           Sort sort);
+    Pager<TaskDTO> findAll(PageAndSort pageAndSort);
 
 }

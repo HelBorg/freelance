@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,21 +20,23 @@ import java.util.*;
 import java.util.List;
 
 @Repository
-public interface TaskRepository extends JpaRepository<Task, Integer> {
+public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecificationExecutor<Task> {
 
     @Query("Select t from Task t " +
-            "where t.status != :status and " +
+            "where t.status = :status and " +
             "t.name like %:nameLike% and " +
             "t.createdTime >= :from and " +
             "t.createdTime <= :to and " +
             "t.deadline >= :due_from and " +
-            "t.deadline <= :due_to")
+            "t.deadline <= :due_to and " +
+            "t.author.name = :author")
     Page<Task> find(@Param("status") String status,
                     @Param("nameLike") String nameLike,
                     @Param("from") Date from,
                     @Param("to") Date to,
                     @Param("due_from") Date due_from,
                     @Param("due_to") Date due_to,
+                    @Param("author") String author,
                     Pageable pageRequest);
 
     List<Task> findAll();

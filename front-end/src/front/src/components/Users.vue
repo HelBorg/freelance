@@ -109,7 +109,8 @@
             params: {
               size: this.filter.pageSize,
               page: this.filter.currentPage,
-              sort: this.filter.sort
+              sort: this.filter.sort,
+              findName: this.findUser
             },
             headers: {
               Authorization: 'Bearer ' + localStorage.getItem('JWT')
