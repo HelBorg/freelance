@@ -39,7 +39,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
                     @Param("author") String author,
                     Pageable pageRequest);
 
-    List<Task> findAll();
 
     @Query("SELECT t FROM Task t where t.author.personId = :id and " +
             "t.name like %:nameLike%")

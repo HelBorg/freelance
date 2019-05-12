@@ -5,7 +5,11 @@ import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.*;
 import com.freelance.project.demo.repository.PersonRepository;
 import com.freelance.project.demo.repository.TaskRepository;
+import com.freelance.project.demo.repository.specifications.SearchCriteria;
+import com.freelance.project.demo.repository.specifications.TaskSpecification;
+import com.freelance.project.demo.repository.specifications.TaskSpecificationsBuilder;
 import com.freelance.project.demo.service.TaskService;
+import javafx.util.Pair;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,9 +34,11 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private PersonRepository personRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
+
+
     @Autowired
     private DozerBeanMapper mapper;
-    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
 
     public void deleteTask(int id) {
@@ -92,6 +99,9 @@ public class TaskServiceImpl implements TaskService {
         PageRequest request = PageRequest.of(pageAndSort.getCurrentPage(),
                 pageAndSort.getPageSize(), pageAndSort.getSort());
 
+        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder();
+        Specification<Task> spec = builder.build(pageAndSort.getFilter());
+
         switch (pageAndSort.getPageName()) {
             case "candidate":
                 page = taskRepository.findAllByCandidate(pageAndSort.getPersonId(),
@@ -103,7 +113,7 @@ public class TaskServiceImpl implements TaskService {
                 break;
             case "in_work":
                 page = taskRepository.findAllInWork(pageAndSort.getPersonId(), "IN_WORK",
-                        pageAndSort.getFilter().getFindName(),request);
+                        pageAndSort.getFilter().getFindName(), request);
                 break;
             default:
                 page = taskRepository.find("PUBLISH",
@@ -112,15 +122,30 @@ public class TaskServiceImpl implements TaskService {
                         pageAndSort.getFilter().getDueTo(), pageAndSort.getFilter().getAuthor(), request);
                 break;
         }
+        Page page1 = taskRepository.findAll(spec, request);
+//        TaskSpecification spec =
+//                new TaskSpecification(new SearchCriteria("name", ":", pageAndSort.getFilter().getFindName()));
+//        List<Task> listSp = taskRepository.findAll(spec);
+//        logger.info("{}", listSp);
+//        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder();
+//
+//        for(Pair<String,String> pair: pageAndSort.getFilter().getFilterSkillsBy()) {
+//            builder.with(pair.getKey(), ":", pair.getValue(), true);
+//        }
+//        Specification<Task> spec = builder.build();
+//        Page<Task> listSp =  taskRepository.findAll(spec, request);
+
 
         boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageAndSort.getCurrentPage();
 
-        List<Task> list = page.getContent();
-        List<TaskDTO> listDTO = list.stream()
+        List<TaskDTO> list = (List<TaskDTO>) page1.getContent().stream()
                 .map(entity -> mapper.map(entity, TaskDTO.class))
                 .collect(Collectors.toList());
-        return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
+        List<TaskDTO> listDTO = page.getContent().stream()
+                .map(entity -> mapper.map(entity, TaskDTO.class))
+                .collect(Collectors.toList());
+        return new Pager<>(listDTO, list, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
     private String selectNextTaskStatus(String status) {

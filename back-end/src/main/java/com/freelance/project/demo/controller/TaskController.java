@@ -101,7 +101,7 @@ public class TaskController {
         JSONArray json = new JSONArray("[" + skillsF.orElse("") + "]");
         List<SkillFilter> skills = new ArrayList<>();
         for (int i=0; i < json.length(); i++) {
-            if (!((JSONObject) json.get(i)).getString("name").isEmpty()) {
+            if (!((JSONObject) json.get(i)).getString("name").equals("")) {
                 logger.info("is empty:" );
             } else {
                 skills.add(new SkillFilter(((JSONObject) json.get(i)).getString("name"),

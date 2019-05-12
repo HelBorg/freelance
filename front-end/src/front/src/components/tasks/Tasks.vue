@@ -57,7 +57,7 @@
                 </template>
                 <template slot="skills" slot-scope="row">
                   <div v-for="skill in row.item.skills">
-                    {{skill.name}}
+                    {{skill.name}}:{{skill.value}}
                   </div>
                 </template>
                 <template slot="assignedUser" slot-scope="row">
@@ -112,7 +112,15 @@
         sortDir: null,
         getTasks: {},
         //Filter
-        filter: {},
+        filter: {
+          find_name: '',
+          date_from: '',
+          date_to: '',
+          due_from: '',
+          due_to: '',
+          selectedUser: {name: ''},
+          skillsF: []
+        },
         //Table
         fields: {
           name: {
