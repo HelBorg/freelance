@@ -19,7 +19,6 @@
             <template slot="rating" slot-scope="row">
               <div>
                 {{ratingName(row.item.rating)}}({{row.item.rating}})
-                Осталось до следующего уровня: {{remainsToGet(row.item.rating)}}
               </div>
             </template>
             <template slot="skills" slot-scope="row">
@@ -28,6 +27,7 @@
               </div>
             </template>
           </b-table>
+          Осталось до следующего уровня: {{remainsToGet(user[0].rating)}}
         </p>
         <p>
           <b-input-group>

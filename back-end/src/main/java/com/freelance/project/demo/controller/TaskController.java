@@ -87,6 +87,7 @@ public class TaskController {
                                                  @RequestParam("size") Optional<Integer> pageSize,
                                                  @RequestParam("page") Optional<Integer> pageNumber,
                                                  @RequestParam("sort") Optional<String> sort,
+                                                 @RequestParam("sortDir") Optional<String> sortDir,
                                                  @RequestParam("pageName") Optional<String> pageName,
                                                  //Filter
                                                  @RequestParam("find_name") Optional<String> findName,
@@ -100,27 +101,32 @@ public class TaskController {
         //Retrieve data from request parameters and put it into Filter
         JSONArray json = new JSONArray("[" + skillsF.orElse("") + "]");
         List<SkillFilter> skills = new ArrayList<>();
-        for (int i=0; i < json.length(); i++) {
+        for (int i = 0; i < json.length(); i++) {
+            logger.info("");
             if (!((JSONObject) json.get(i)).getString("name").equals("")) {
-                logger.info("is empty:" );
-            } else {
+
                 skills.add(new SkillFilter(((JSONObject) json.get(i)).getString("name"),
                         ((JSONObject) json.get(i)).getInt("value")));
+            } else {
+                logger.info("is empty: {}", skillsF);
             }
         }
 
         Date from = dateConstructor(date_from.orElse("").equals("") ?
                 "2019-01-01 00:00:00.000" : date_from.orElse(""));
         Date to = dateConstructor(date_to.orElse("").equals("") ?
-                "3000-01-01 00:00:00.000" : date_to.orElse(""));
+                "" : date_to.orElse(""));
         Date dueFrom = dateConstructor(due_from.orElse("").equals("") ?
-                "2019-01-01 00:00:00.000" : due_from.orElse(""));
+                "" : due_from.orElse(""));
         Date dueTo = dateConstructor(due_to.orElse("").equals("") ?
                 "3000-01-01 00:00:00.000" : due_to.orElse(""));
 
         Filter filter = new Filter(findName.orElse(""), from, to,
                 dueFrom, dueTo, authorName.orElse(""), skills);
-        Sort sortS = Sort.by(sort.orElse("taskId"));
+        Sort sortS = Sort.by("taskId");
+        if (sortDir.equals("asc")) {
+            sortS.ascending();
+        }
         PageAndSort pageAndSort = new PageAndSort(id.orElse(0), pageName.orElse("tasks"), sortS,
                 pageNumber.orElse(0), pageSize.orElse(5));
         Pager<TaskDTO> pager = taskService.findAll(pageAndSort, filter);
