@@ -12,9 +12,12 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
-    @Query("select r from Review r join r.taskId tr where tr.taskId = :taskId")
+    @Query("select r from Review r join r.taskId tr where tr.taskId = :taskId and r.parentId is null and r.done=false order by r.dateTime desc")
     List<Review> findAllForTask(@Param("taskId") int taskId);
 
-    @Query("select r from Review r join r.userId ur where ur.personId = :userId and r.done='t' ")
+    @Query("select r from Review r join r.taskId tr where tr.assignedUser.personId = :userId and r.done=true order by r.dateTime desc  ")
     List<Review> findAllAboutUser(@Param("userId") int userId);
+
+    @Query("select r from Review r  where r.parentId = :reviewParentId order by r.dateTime asc ")
+    List<Review> findAllSubComments(@Param("reviewParentId") int reviewParentId);
 }

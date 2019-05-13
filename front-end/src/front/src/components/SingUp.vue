@@ -1,26 +1,4 @@
 <template>
-  <!--<div>
-  <h3 class="lead">
-    Create new user
-  </h3>
-  <div class="ml-auto mr-auto pt-20" style="width:40%">
-    <form>
-      <h2 class="lead">Name</h2>
-      <b-input  v-model="usr_name" id="user_name" class="mb-3" ></b-input>
-      <h2 class="lead">Email</h2>
-      <b-input  v-model="usr_email" id="user_email" class="mb-3" ></b-input>
-      <h2 class="lead">Password</h2>
-      <b-input  v-model="usr_password" type="password" id="user_password" class="mb-3"></b-input>
-      <h2 class="lead">Confirm password</h2>
-      <b-input v-model="confirm_password" type="password" id="user_password_c" class="mb-3"></b-input>
-      <div class="d-inline">
-        <b-button variant="primary" style="float:right" type="submit" @click="singup">Sign up
-        </b-button>
-      </div>
-    </form>
-  </div>
-  </div>-->
-
   <div class="container">
     <div class="col-md-6 mx-auto text-center">
       <div class="header-title">

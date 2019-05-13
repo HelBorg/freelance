@@ -45,8 +45,10 @@ datetime timestamp,
 done BOOL DEFAULT false,
 task_id integer not null,
 person_id integer not null,
+parent_id integer,
 foreign key (person_id) references public.person(person_id),
-foreign key (task_id) references public.task(task_id)
+foreign key (task_id) references public.task(task_id),
+foreign key (parent_id) references public.review(review_id)
 );
 
 

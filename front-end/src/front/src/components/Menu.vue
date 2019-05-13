@@ -1,22 +1,22 @@
 <template>
   <div id="menu" style="float:left; width:15%">
-      <b-list-group variant="secondary">
-        <b-list-group-item style="border-radius:0" variant="secondary" :to="'tasks/mine'">
+      <b-list-group variant="light">
+        <b-list-group-item style="border-radius:0" variant="outline-primary" :to="'tasks/mine'">
           Mine
         </b-list-group-item>
-        <b-list-group-item  variant="secondary" :to="'tasks/candidates'">
+        <b-list-group-item  variant="outline-primary" :to="'tasks/candidates'">
           Candidates
         </b-list-group-item>
-        <b-list-group-item  variant="secondary" :to="'tasks/in_work'">
+        <b-list-group-item  variant="outline-primary" :to="'tasks/in_work'">
           In work
         </b-list-group-item>
-        <b-list-group-item  variant="secondary" @click="createNewTask">
+        <b-list-group-item  variant="outline-primary" @click="createNewTask">
           Create New
         </b-list-group-item>
-        <b-list-group-item  variant="secondary" :to="'tasks/search'">
+        <b-list-group-item  variant="outline-primary" :to="'tasks/search'">
           Search
         </b-list-group-item>
-        <b-list-group-item  variant="secondary" :to="'user'">Users</b-list-group-item>
+        <b-list-group-item  variant="outline-primary" :to="'user'">Users</b-list-group-item>
       </b-list-group>
       <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
       </main>
@@ -61,10 +61,4 @@
 </script>
 
 <style scoped>
-  .b-list-item{
-    color:whitesmoke;
-  }
-  .bg{
-    background-image: url("https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80")
-  }
 </style>

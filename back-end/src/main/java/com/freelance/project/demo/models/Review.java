@@ -32,9 +32,14 @@ public class Review implements Serializable {
     @JoinColumn(name = "person_id")
     private Person userId;
 
-   @ManyToOne(cascade = {CascadeType.ALL})
-   @JoinColumn(name = "task_id")
-   private Task taskId;
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "task_id")
+    private Task taskId;
+
+    @Column(name = "parent_id")
+    private Integer parentId;
+
+
 
 
 

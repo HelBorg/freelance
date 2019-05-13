@@ -1,9 +1,7 @@
 package com.freelance.project.demo.service.impl;
 
-import com.freelance.project.demo.controller.AuthenticationRequest;
 import com.freelance.project.demo.dto.ReviewDTO;
 import com.freelance.project.demo.models.Review;
-import com.freelance.project.demo.models.Task;
 import com.freelance.project.demo.repository.PersonRepository;
 import com.freelance.project.demo.repository.ReviewRepository;
 import com.freelance.project.demo.repository.TaskRepository;
@@ -41,8 +39,17 @@ public class ReviewServiceImpl implements ReviewService {
         review.setDateTime(new Date());
         review.setTaskId(taskRepository.findByTaskId(review.getTaskId().getTaskId()));
         review.setUserId(personRepository.findByEmail(userDetails.getUsername()));
+
+        if (review.getParentId() == null) {
+            review.setParentId(null);
+        } else {
+            review.setParentId(review.getParentId());
+        }
+
         reviewRepository.save(review);
-        //Many to many candidate tasks
+
+
+        //Many to many candidate tasks: when user write a comment he's automatically become a candidate on task
         taskRepository.findByTaskId(review.getTaskId().getTaskId())
                 .getCandidateTasks().add(personRepository.findByEmail(userDetails.getUsername()));
         personRepository.findByEmail(userDetails.getUsername())
@@ -57,6 +64,12 @@ public class ReviewServiceImpl implements ReviewService {
 
     public List<ReviewDTO> getAllForUser(int userId){
         return reviewRepository.findAllAboutUser(userId).stream()
+                .map(entity -> mapper.map(entity, ReviewDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<ReviewDTO> findAllSubComments(int reviewParentId){
+        return reviewRepository.findAllSubComments(reviewParentId).stream()
                 .map(entity -> mapper.map(entity, ReviewDTO.class))
                 .collect(Collectors.toList());
     }

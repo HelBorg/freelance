@@ -21,9 +21,10 @@
             <p>
               Rating:<b-badge class="label" variant="success">{{userRating}}</b-badge>
             </p>
-            <SkillForm :skills="userSkills" :status="skillStatus"></SkillForm>
           </div>
-          <CommentForm :comments="userComments" :status="commentsStatus"></CommentForm>
+          <SkillForm :skills="userSkills" :status="skillStatus" :current="current" ></SkillForm>
+
+          <CommentForm :comments="userComments"></CommentForm>
 
         </div>
 
@@ -47,17 +48,17 @@
   export default {
 
     beforeMount(){
-      this.loadUser(),
-        this.getCurrentUserId()
-        this.loadComments()
+      this.getCurrentUserId()
       this.checkUser()
+      this.loadUser(),
+      this.loadComments()
     },
     components: {Menu, Navbar, SkillForm, Skill, CommentForm, Comment},
     data(){
       return{
         skillStatus:'',
         commentsStatus:'',
-        currentUserId:'',
+        current:'',
         edit:false,
         userId:'',
         userName:'',
@@ -69,12 +70,10 @@
     },
     methods: {
       checkUser(){
-        let self = this
-        if(self.currentUserId === self.userId)
+        let self = this;
+        if(self.current === self.$route.params.id)
           self.skillStatus = 'CURRENT'
-          self.skillStatus = 'CURRENT'
-
-
+          self.commentsStatus = 'CURRENT'
       },
       loadComments() {
         let self = this;
@@ -119,7 +118,13 @@
                 self.userName = data.name;
                 self.userRating = data.rating;
                 self.userEmail = data.email;
-                self.userSkills = data.skills;
+
+                if(data.skills !== null){
+                  self.userSkills = data.skills;
+                }else {
+                  self.userSkills.length = 0
+                }
+
               })
             }
             )
@@ -141,13 +146,18 @@
                 return;
               }
               response.json().then(function (data) {
-                self.currentUserId = data.id;
+                self.current = data.id;
+                console.log(data)
+                console.log(data.id)
+                console.log(self.current)
+
+
               })
             }
           )
-      },
+      }
     }
-    }
+  }
 </script>
 
 <style scoped>

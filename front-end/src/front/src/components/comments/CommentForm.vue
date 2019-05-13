@@ -4,7 +4,7 @@
       <strong>Comments</strong>
     </h5>
     <div>
-      <div class="d-inline" v-if="status !== 'CURRENT' || status !== 'IN_DESIGN'">
+      <div class="d-inline" v-if=" status !== 'IN_DESIGN'">
         <b-form-textarea
           id="textarea"
           size="sm"
@@ -13,12 +13,15 @@
           v-model="newComment"
           placeholder="New comment"
         ></b-form-textarea>
-        <b-button class="mt-2" variant="success" @click="saveComment">Add new comment</b-button>
+        <b-button size="sm" class="mt-2" variant="success" @click="saveComment">Add new comment</b-button>
       </div>
 
-      <div class="column">
-        <Comment v-for="comment in comments" :comment="comment" :status="status"></Comment>
-      </div>
+        <Comment v-for="comment in comments"
+                 :comment="comment"
+                 :status="status"
+                 :author-id="authorId"
+                 :current-user-id="currentUserId"
+        ></Comment>
     </div>
   </div>
 </template>
@@ -30,6 +33,8 @@
     props: {
       comments: Object,
       status: Object,
+      authorId: Object,
+      currentUserId: Object
     },
     components: {Comment},
     data() {
@@ -48,6 +53,7 @@
           },
           body: JSON.stringify({
             description: self.newComment,
+            parentId: null,
             done:false,
             taskId: {
               taskId: self.$route.params.id

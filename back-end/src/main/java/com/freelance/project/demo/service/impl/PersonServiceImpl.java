@@ -66,13 +66,13 @@ public class PersonServiceImpl implements PersonService {
         if (findByEmail(person.getEmail()) != null) {
             System.out.println("User already exists");
         }
-        Person add = new Person();
-        add.setName(person.getName());
-        add.setEmail(person.getEmail());
-        add.setPassword(person.getPassword());
-        add.setRating(0);
-        add.setRole("user");
-        add.setUserSkills(Collections.EMPTY_LIST);
-        personRepository.save(add);
+        person.setName(person.getName());
+        person.setEmail(person.getEmail());
+        person.setPassword(person.getPassword());
+        person.setRating(0);
+        person.setRole("user");
+        person.setUserSkills(Collections.EMPTY_LIST);
+
+        personRepository.save(person);
     }
 }

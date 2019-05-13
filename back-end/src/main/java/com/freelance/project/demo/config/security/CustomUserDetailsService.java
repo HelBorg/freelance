@@ -27,14 +27,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         Person user = users.findByEmail(email);
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(),
-                user.getPassword(),true,
-                true,true,
-                true,getGrantedAuthorities(user));
+                user.getPassword(), true,
+                true, true,
+                true, getGrantedAuthorities(user));
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities(Person person){
+    private List<GrantedAuthority> getGrantedAuthorities(Person person) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_"+person.getRole()));
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + person.getRole()));
         return authorities;
     }
 }

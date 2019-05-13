@@ -20,7 +20,7 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReviewController.class);
 
     @PostMapping
     public void create(@RequestBody Review review, @AuthenticationPrincipal UserDetails userDetails){
@@ -37,5 +37,10 @@ public class ReviewController {
     @GetMapping("/user/{id}")
     public List<ReviewDTO> getAllAboutUser(@PathVariable int id){
         return reviewService.getAllForUser(id);
+    }
+
+    @GetMapping("/parent/{id}")
+    public List<ReviewDTO> getAllSubComments(@PathVariable int id){
+        return reviewService.findAllSubComments(id);
     }
 }

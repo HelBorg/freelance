@@ -18,7 +18,7 @@ public class TaskSkillController{
     @Autowired
     private TaskSkillService taskSkillService;
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
+    private static final Logger logger = LoggerFactory.getLogger(TaskSkillController.class);
 
 
     @DeleteMapping("/{id}")

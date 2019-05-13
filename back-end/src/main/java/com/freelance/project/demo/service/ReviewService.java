@@ -16,5 +16,7 @@ public interface ReviewService {
 
     List<ReviewDTO> getAllForUser(int userId);
 
+    List<ReviewDTO> findAllSubComments(int reviewParentId);
+
 
 }

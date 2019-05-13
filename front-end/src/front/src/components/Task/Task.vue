@@ -15,7 +15,7 @@
           <div id="headerButtons" style="float:right" class="mt-2">
             <!--top buttons-->
 
-            <b-button v-if="status === 'IN_WORK' && author_id === userId" @click="$refs['task_done'].show();" variant="primary">Done</b-button>
+            <b-button v-if="status === 'IN_WORK' & author_id === userId" @click="$refs['task_done'].show();" variant="primary">Done</b-button>
 
             <b-modal ref="task_done" id="task_done" hide-footer>
               <template slot="modal-header">Please, write review about performer</template>
@@ -33,7 +33,7 @@
                 rows="1"
                 max-rows="8"
                 class="mt-2"
-                v-modal="userReview"
+                v-model="userReview"
               >
               </b-form-textarea>
 
@@ -96,14 +96,19 @@
          <!-- <p class="mb-1 mt-1">Created date</p>
             <b-form-input disabled="true" v-model=created_time type="date" style="width:20%"></b-form-input>-->
 
-            <h5 class="mb-1 mt-4 lead"><strong>Deadline</strong></h5>
+            <h5 class="mb-1 mt-4 lead"><strong>Due date</strong></h5>
             <b-form-input v-if="status === 'IN_DESIGN'" v-model=deadline type="date" style="width:20%"></b-form-input>
             <b-form-input v-if="status !== 'IN_DESIGN'" disabled="true" v-model=deadline type="date" style="width:20%"></b-form-input>
 
         </div>
         <!-->
         <!--Comments component-->
-        <CommentForm v-if="status !== 'IN_DESIGN'" :comments="comments" :status="status"></CommentForm>
+        <CommentForm v-if="status !== 'IN_DESIGN'"
+                     :comments="comments"
+                     :status="status"
+                     :author-id="author_id"
+                     :current-user-id="userId"
+        ></CommentForm>
         <!-->
       </div>
     </div>
@@ -124,12 +129,17 @@
 
   export default {
     beforeMount() {
-      this.loadTask(),
-        this.getCurrentUserId()
+      this.loadTask()
+      this.loadComments()
+      this.getCurrentUserId()
     },
     components: {Menu, Navbar, CommentForm, SkillForm, Comment, Skill},
     data() {
       return {
+        header:{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('JWT')
+        },
         userReview:'',
         settedRate:null,
         userId:'',
@@ -169,10 +179,7 @@
               }
               fetch('/api/v1/review', {
                 method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-                },
+                headers: self.header,
                 body: JSON.stringify({
                   description: self.userReview,
                   done: true,
@@ -186,7 +193,6 @@
                     if (response.status !== 200) {
                       console.log('Looks like there was a problem. Status Code: ' +
                         response.status);
-                      return;
                     }
 
                   }
@@ -204,10 +210,7 @@
         let self = this;
         fetch('/api/v1/task/delete/assigned/'+ self.$route.params.id, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          },
+          headers: self.header,
         })
           .then(
             function (response) {
@@ -224,10 +227,7 @@
           let self = this;
           fetch('/api/v1/task/update/status/'+ self.$route.params.id + '/' + self.status, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-            },
+            headers: self.header,
           })
             .then(
               function (response) {
@@ -243,10 +243,7 @@
       deleteTask() {
         fetch('/api/v1/task/' + this.$route.params.id, {
           method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          }
+          headers: this.header,
         })
           .then(
             function (response) {
@@ -257,7 +254,7 @@
               }
               alert("Success!");
               response.json().then(function (data) {
-                self.router.push('tasks/mine')
+                router.push('/');
               })
             }
           )
@@ -266,10 +263,7 @@
         let self = this;
         fetch('/api/v1/task', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          },
+          headers: self.header,
           body: JSON.stringify({
             id: self.$route.params.id,
             name: self.name,
@@ -299,10 +293,7 @@
         let self = this;
         fetch('/api/v1/task/' + self.$route.params.id, {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          }
+          headers: self.header
         })
           .then(
             function (response) {
@@ -320,11 +311,28 @@
                 self.deadline = data.deadline.substring(0, 10);
                 self.author_id = data.author.id;
                 self.loaded_skills = data.skills;
-                self.comments = data.reviews;
                 self.assignedUser = data.assignedUser
                 self.assignedName = data.assignedUser.name;
 
-
+              })
+            }
+          )
+      },
+      loadComments() {
+        let self = this;
+        fetch('/api/v1/review/' + self.$route.params.id, {
+          method: 'GET',
+          headers: self.header
+        })
+          .then(
+            function (response) {
+              if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' +
+                  response.status);
+                return;
+              }
+              response.json().then(function (data) {
+                self.comments = data;
               })
             }
           )
@@ -333,10 +341,7 @@
         let self = this;
         fetch('/api/v1/me', {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          }
+          headers: self.header
         })
           .then(
             function (response) {

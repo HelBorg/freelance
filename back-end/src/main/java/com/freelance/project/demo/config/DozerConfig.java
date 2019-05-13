@@ -52,6 +52,7 @@ public class DozerConfig {
                         .fields(field("description").accessible(), field("description").accessible())
                         .fields(field("dateTime").accessible(), field("createdTime").accessible())
                         .fields(field("done").accessible(), field("done").accessible())
+                        .fields(field("parentId").accessible(), field("parentId").accessible())
                         .fields(field("userId").accessible(), field("user").accessible());
 
 
