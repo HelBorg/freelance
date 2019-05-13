@@ -8,6 +8,7 @@ import com.freelance.project.demo.models.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,43 +22,16 @@ import java.util.*;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecificationExecutor<Task> {
 
-    @Query("Select t from Task t " +
-            "where t.status != :status and " +
-            "t.name like %:nameLike% and " +
-            "t.createdTime >= :from and " +
-            "t.createdTime <= :to and " +
-            "t.deadline >= :due_from and " +
-            "t.deadline <= :due_to and " +
-            "t.author.name = :author")
-    Page<Task> find(@Param("status") String status,
-                    @Param("nameLike") String nameLike,
-                    @Param("from") Date from,
-                    @Param("to") Date to,
-                    @Param("due_from") Date due_from,
-                    @Param("due_to") Date due_to,
-                    @Param("author") String author,
-                    Pageable pageRequest);
-
-
-
-    @Query("SELECT t FROM Task t where t.author.personId = :id and " +
-            "t.name like %:nameLike%")
-    Page<Task> findAllByAuthor(@Param("id") int author_id,
-                               @Param("nameLike") String nameLike,
+    @Query("SELECT t FROM Task t where t.author.personId = :id ")
+    Page<Task> findAllByAuthor(@Param("id") int author_id, Specification specification,
                                Pageable pageRequest);
 
-    @Query("SELECT DISTINCT t FROM Task t join t.candidateTasks tc where tc.personId = :id and " +
-            "t.name like %:nameLike%")
-    Page<Task> findAllByCandidate(@Param("id") int candidate_id,
-                                  @Param("nameLike") String nameLike,
+    @Query("SELECT DISTINCT t FROM Task t join t.candidateTasks tc where tc.personId = :id")
+    Page<Task> findAllByCandidate(@Param("id") int candidate_id, Specification specification,
                                   Pageable pageRequest);
 
-    @Query("SELECT distinct t from Task t join t.candidateTasks tc where tc.personId = :id and " +
-            "t.status = :status and " +
-            "t.name like %:nameLike%")
-    Page<Task> findAllInWork(@Param("id") int candidate_id,
-                             @Param("status") String status,
-                             @Param("nameLike") String nameLike,
+    @Query("SELECT distinct t from Task t join t.candidateTasks tc where tc.personId = :id")
+    Page<Task> findAllInWork(@Param("id") int candidate_id, Specification specification,
                              Pageable pageRequest);
 
     @Query("Select t from Task t where t.name like %:name%")

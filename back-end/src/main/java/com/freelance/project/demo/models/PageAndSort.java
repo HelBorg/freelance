@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 @Data
 public class PageAndSort implements Serializable {
-    private String sortS;
     private Sort sort;
     private int currentPage;
     private int pageSize;

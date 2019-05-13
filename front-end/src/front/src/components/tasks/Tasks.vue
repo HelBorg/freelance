@@ -20,15 +20,15 @@
               <b-dropdown id="dropdown-2"
                           class="m-md-2"
                           text="Sort by">
-                <b-dropdown-item @click="changeSort(createdTime)">Date of creation</b-dropdown-item>
-                <b-dropdown-item @click="changeSort(deadline)">Deadline</b-dropdown-item>
-                <b-dropdown-item @click="changeSort(taskId)">None</b-dropdown-item>
+                <b-dropdown-item @click="changeSort('createdTime')">Date of creation</b-dropdown-item>
+                <b-dropdown-item @click="changeSort('deadline')">Deadline</b-dropdown-item>
+                <b-dropdown-item @click="changeSort('taskId')">None</b-dropdown-item>
               </b-dropdown>
               <b-dropdown id="dropdown-3"
                           class="m-md-2"
                           text="Direction">
-                <b-dropdown-item @click="changeSortDir(des)">From old to new</b-dropdown-item>
-                <b-dropdown-item @click="changeSortDir(asc)">From new to old</b-dropdown-item>
+                <b-dropdown-item @click="changeSortDir('des')">From old to new</b-dropdown-item>
+                <b-dropdown-item @click="changeSortDir('asc')">From new to old</b-dropdown-item>
               </b-dropdown>
             </div>
             <div v-if="this.show">
@@ -68,7 +68,7 @@
               </b-table>
             </div>
             <div>
-              <Table :tasks="getTasks"/>
+              <MyTable :tasks="getTasks"/>
             </div>
             <div>
               <MyPagination :currentPage="page.currentPage"
@@ -181,8 +181,8 @@
               pageName: this.page.get,
               id: this.page.user_id,
               find_name: this.filter.find_name,
-              sort: this.sort,
               sortDir: this.sortDir,
+              sort: this.sort,
               date_from: this.filter.date_from,
               date_to: this.filter.date_to,
               due_from: this.filter.due_from,

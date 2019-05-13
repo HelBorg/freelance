@@ -94,24 +94,19 @@ public class TaskServiceImpl implements TaskService {
         PageRequest request = PageRequest.of(pageAndSort.getCurrentPage(),
                 pageAndSort.getPageSize(), pageAndSort.getSort());
 
-        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
+        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter, pageAndSort.getPageName());
         Specification<Task> spec = builder.build();
-        logger.info("ggg: {}", pageAndSort.getPageName());
         switch (pageAndSort.getPageName()) {
             case "candidate":
-                page = taskRepository.findAllByCandidate(pageAndSort.getPersonId(),
-                        filter.getFindName(), request);
+                page = taskRepository.findAllByCandidate(pageAndSort.getPersonId(), spec, request);
                 break;
             case "author":
-                page = taskRepository.findAllByAuthor(pageAndSort.getPersonId(),
-                        filter.getFindName(), request);
+                page = taskRepository.findAllByAuthor(pageAndSort.getPersonId(), spec, request);
                 break;
             case "in_work":
-                page = taskRepository.findAllInWork(pageAndSort.getPersonId(), "IN_WORK",
-                        filter.getFindName(), request);
+                page = taskRepository.findAllInWork(pageAndSort.getPersonId(), spec, request);
                 break;
             default:
-                logger.info("hhh");
                 page = taskRepository.findAll(spec, request);
                 break;
         }

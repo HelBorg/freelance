@@ -102,9 +102,8 @@ public class TaskController {
         JSONArray json = new JSONArray("[" + skillsF.orElse("") + "]");
         List<SkillFilter> skills = new ArrayList<>();
         for (int i = 0; i < json.length(); i++) {
-            logger.info("");
             if (!((JSONObject) json.get(i)).getString("name").equals("")) {
-
+                logger.info("");
                 skills.add(new SkillFilter(((JSONObject) json.get(i)).getString("name"),
                         ((JSONObject) json.get(i)).getInt("value")));
             } else {
@@ -121,18 +120,20 @@ public class TaskController {
         Date dueTo = dateConstructor(due_to.orElse("").equals("") ?
                 "3000-01-01 00:00:00.000" : due_to.orElse(""));
 
-        Filter filter = new Filter(findName.orElse(""), from, to,
-                dueFrom, dueTo, authorName.orElse(""), skills);
+        logger.info("desjijiji");
         Sort sortS = Sort.by(sort.orElse("taskId"));
-        if (sortDir.equals("des")) {
+        if (sortDir.orElse("asc").equals("des")) {
             logger.info("desjijiji");
             sortS.descending();
         }
+        Filter filter = new Filter(findName.orElse(""), from, to,
+                dueFrom, dueTo, authorName.orElse(""), skills, sortS, sortDir.orElse("asc"));
         PageAndSort pageAndSort = new PageAndSort(id.orElse(0), pageName.orElse("tasks"), sortS,
                 pageNumber.orElse(0), pageSize.orElse(5));
         Pager<TaskDTO> pager = taskService.findAll(pageAndSort, filter);
 
         logger.info("Request to get tasks: {}", pager);
+        logger.info("Request to filter tasks: {}", filter);
         return ResponseEntity.ok().body(pager);
     }
 
