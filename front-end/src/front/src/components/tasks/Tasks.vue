@@ -67,9 +67,7 @@
                 </template>
               </b-table>
             </div>
-            <div>
-              <MyTable :tasks="getTasks"/>
-            </div>
+              <MyTable :tasks="getTasks.tasks"></MyTable>
             <div>
               <MyPagination :currentPage="page.currentPage"
                             :pagesCount="getTasks.pagesCount"

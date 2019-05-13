@@ -47,6 +47,9 @@
                    hover
                    striped
                    @row-clicked="goToUser">
+            <template slot="place" slot-scope="row">
+              {{filter.currentPage*filter.pageSize + row.index + 1}}
+            </template>
             <template slot="skills" slot-scope="row">
               <div v-for="skill in row.item.skills">
                 {{skill}}
@@ -87,6 +90,10 @@
         },
         findUser: '',
         fields: {
+          place_in_rating: {
+            name: 'place',
+            label: 'Place in rating'
+          },
           name: {
             key: 'name',
             label: 'Name'

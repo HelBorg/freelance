@@ -90,26 +90,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Pager<TaskDTO> findAll(PageAndSort pageAndSort, Filter filter) {
-        Page<Task> page;
         PageRequest request = PageRequest.of(pageAndSort.getCurrentPage(),
                 pageAndSort.getPageSize(), pageAndSort.getSort());
 
         TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter, pageAndSort.getPageName());
         Specification<Task> spec = builder.build();
-        switch (pageAndSort.getPageName()) {
-            case "candidate":
-                page = taskRepository.findAllByCandidate(pageAndSort.getPersonId(), spec, request);
-                break;
-            case "author":
-                page = taskRepository.findAllByAuthor(pageAndSort.getPersonId(), spec, request);
-                break;
-            case "in_work":
-                page = taskRepository.findAllInWork(pageAndSort.getPersonId(), spec, request);
-                break;
-            default:
-                page = taskRepository.findAll(spec, request);
-                break;
-        }
+
+        Page<Task> page = taskRepository.findAll(spec, request);
 
         boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageAndSort.getCurrentPage();
@@ -117,7 +104,6 @@ public class TaskServiceImpl implements TaskService {
         List<TaskDTO> list = page.getContent().stream()
                 .map(entity -> mapper.map(entity, TaskDTO.class))
                 .collect(Collectors.toList());
-        logger.info("page1: {}", list);
 
         return new Pager<>(list, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }

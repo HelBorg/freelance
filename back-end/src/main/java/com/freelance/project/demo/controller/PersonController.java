@@ -53,7 +53,7 @@ import java.util.Optional;
 
     @GetMapping("/{id}")
     public PersonDTO getPersonById(@PathVariable int id){
-        return mapper.map(personService.getById(id), PersonDTO.class);
+        return personService.getById(id);
     }
 
 

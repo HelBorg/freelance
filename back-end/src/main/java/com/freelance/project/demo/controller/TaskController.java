@@ -103,11 +103,8 @@ public class TaskController {
         List<SkillFilter> skills = new ArrayList<>();
         for (int i = 0; i < json.length(); i++) {
             if (!((JSONObject) json.get(i)).getString("name").equals("")) {
-                logger.info("");
                 skills.add(new SkillFilter(((JSONObject) json.get(i)).getString("name"),
                         ((JSONObject) json.get(i)).getInt("value")));
-            } else {
-                logger.info("is empty: {}", skillsF);
             }
         }
 
@@ -120,13 +117,12 @@ public class TaskController {
         Date dueTo = dateConstructor(due_to.orElse("").equals("") ?
                 "3000-01-01 00:00:00.000" : due_to.orElse(""));
 
-        logger.info("desjijiji");
         Sort sortS = Sort.by(sort.orElse("taskId"));
         if (sortDir.orElse("asc").equals("des")) {
-            logger.info("desjijiji");
+            logger.info("desjiuj[w[]q]w[][]");
             sortS.descending();
         }
-        Filter filter = new Filter(findName.orElse(""), from, to,
+        Filter filter = new Filter(id.orElse(0), findName.orElse(""), from, to,
                 dueFrom, dueTo, authorName.orElse(""), skills, sortS, sortDir.orElse("asc"));
         PageAndSort pageAndSort = new PageAndSort(id.orElse(0), pageName.orElse("tasks"), sortS,
                 pageNumber.orElse(0), pageSize.orElse(5));

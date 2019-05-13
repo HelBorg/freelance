@@ -45,8 +45,10 @@ public class PersonServiceImpl implements PersonService {
         return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
-    public Person getById(int id){
-        return personRepository.findByPersonId(id);
+    public PersonDTO getById(int id){
+        PersonDTO person = mapper.map(personRepository.findByPersonId(id), PersonDTO.class);
+        person.setPlaceInRating(personRepository.countRaiting(person.getId()));
+        return person;
     }
     public Person findByEmail(String email) {
         return personRepository.findByEmail(email);

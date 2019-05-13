@@ -76,13 +76,13 @@
               <b-col>
                 <b-form-select
                   id="input-{{index}}"
-                  v-model="filter.skillsF[index].name">
+                  v-model="skillF.name">
                   <option v-for="skill in getSkills.skills">
                     {{skill.name}}
                   </option>
                 </b-form-select>
               </b-col>
-              <b-col cols="3"> Value: {{filter.skillsF.value}}
+              <b-col cols="3"> Value: {{skillF.value}}
               </b-col>
               <b-col cols='1'>
                 <b-button @click="deleteSkill(index)" variant="primary"> -</b-button>
@@ -90,7 +90,7 @@
             </b-row>
             <b-row>
               <b-col>
-                <b-form-input id="skill-range-{{filter.skillsF.name}}" v-model="filter.skillsF.value" type="range" min="0"
+                <b-form-input id="skill-range-{{skillF.name}}" v-model="skillF.value" type="range" min="1"
                               max="5"></b-form-input>
               </b-col>
               <b-col cols="1"></b-col>
