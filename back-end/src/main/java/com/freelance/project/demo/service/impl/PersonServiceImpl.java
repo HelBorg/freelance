@@ -33,22 +33,12 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Pager<PersonDTO> findAll(Optional<Integer> pageSize,
-                                   Optional<Integer> pageNumber,
-                                   Optional<String> pageSort,
-                                    Optional<String> findName) {
-        int pageId = pageNumber.orElse(0);
-        int size = pageSize.orElse((int)personRepository.count());
-        String sort = pageSort.orElse("personId");
-        String name = findName.orElse("");
-        PageAndSort pageAndSort = new PageAndSort(0, sort, pageId, size, new String(""));
-        Page<Person> page;
-        System.out.println("\n\n ok \n\n");
+    public Pager<PersonDTO> findAll(PageAndSort pageAndSort) {
+        Page<Person> page = personRepository.findByName(pageAndSort.getFindName(), PageRequest.of(pageAndSort.getCurrentPage(),
+                pageAndSort.getPageSize(), pageAndSort.getSort()));
 
-        page = personRepository.findByName(name, PageRequest.of(pageId, size, Sort.by(sort)));
-
-        boolean hasPreviousPage = pageId != 0;
-        boolean hasNextPage = page.getTotalPages() - 1 > pageId;
+        boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;
+        boolean hasNextPage = page.getTotalPages() - 1 > pageAndSort.getCurrentPage();
         List<PersonDTO> listDTO = page.getContent().stream()
                 .map(entity -> mapper.map(entity, PersonDTO.class))
                 .collect(Collectors.toList());

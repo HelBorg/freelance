@@ -94,7 +94,9 @@ public class TaskServiceImpl implements TaskService {
         PageRequest request = PageRequest.of(pageAndSort.getCurrentPage(),
                 pageAndSort.getPageSize(), pageAndSort.getSort());
 
-        logger.info("Filter {}", filter);
+        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
+        Specification<Task> spec = builder.build();
+        logger.info("ggg: {}", pageAndSort.getPageName());
         switch (pageAndSort.getPageName()) {
             case "candidate":
                 page = taskRepository.findAllByCandidate(pageAndSort.getPersonId(),
@@ -109,36 +111,20 @@ public class TaskServiceImpl implements TaskService {
                         filter.getFindName(), request);
                 break;
             default:
-                page = taskRepository.find("IN_WORK",
-                        filter.getFindName(), filter.getDateFrom(),
-                        filter.getDateTo(), filter.getDueFrom(),
-                        filter.getDueTo(), filter.getAuthor(), request);
+                logger.info("hhh");
+                page = taskRepository.findAll(spec, request);
                 break;
         }
-        List<TaskDTO> listDTO = page.getContent().stream()
-                .map(entity -> mapper.map(entity, TaskDTO.class))
-                .collect(Collectors.toList());
+
         boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageAndSort.getCurrentPage();
 
-
-        List<TaskDTO> list2 = taskRepository.findAll(request).stream()
-                .map(entity -> mapper.map(entity, TaskDTO.class))
-                .collect(Collectors.toList());
-
-
-        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
-        Specification<Task> spec = builder.build();
-
-        logger.info("page: {}", listDTO);
-
-        List<TaskDTO> list = taskRepository.findAll(spec, request).getContent().stream()
+        List<TaskDTO> list = page.getContent().stream()
                 .map(entity -> mapper.map(entity, TaskDTO.class))
                 .collect(Collectors.toList());
         logger.info("page1: {}", list);
 
-        logger.info("equal: {}", list.equals(list2));
-        return new Pager<>(list, listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
+        return new Pager<>(list, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
     private String selectNextTaskStatus(String status) {

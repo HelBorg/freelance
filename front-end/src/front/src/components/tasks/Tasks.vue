@@ -27,8 +27,8 @@
               <b-dropdown id="dropdown-3"
                           class="m-md-2"
                           text="Direction">
-                <b-dropdown-item @click="changeSortDir()">From old to new</b-dropdown-item>
-                <b-dropdown-item @click="changeSortDir()">From new to old</b-dropdown-item>
+                <b-dropdown-item @click="changeSortDir(des)">From old to new</b-dropdown-item>
+                <b-dropdown-item @click="changeSortDir(asc)">From new to old</b-dropdown-item>
               </b-dropdown>
             </div>
             <div v-if="this.show">
@@ -57,7 +57,7 @@
                 </template>
                 <template slot="skills" slot-scope="row">
                   <div v-for="skill in row.item.skills">
-                    {{skill.name}}:{{skill.value}}
+                    {{skill.skillName.name}}:{{skill.level}}
                   </div>
                 </template>
                 <template slot="assignedUser" slot-scope="row">
@@ -66,6 +66,9 @@
                   </div>
                 </template>
               </b-table>
+            </div>
+            <div>
+              <Table :tasks="getTasks"/>
             </div>
             <div>
               <MyPagination :currentPage="page.currentPage"
@@ -92,10 +95,11 @@
   import Navbar from "../Navbar";
   import MyFilter from "./MyFilter";
   import MyPagination from "./MyPagination";
+  import MyTable from "./Table_for_tasks";
 
   export default {
     name: "Tasks",
-    components: {MyPagination, Menu, Navbar, MyFilter},
+    components: {MyPagination, Menu, Navbar, MyFilter, MyTable},
     data() {
       return {
         show: true,
@@ -108,8 +112,8 @@
           currentPage: 0,
           pageSize: 10
         },
-        sort: null,
-        sortDir: null,
+        sort: 'taskId',
+        sortDir: 'asc',
         getTasks: {},
         //Filter
         filter: {
@@ -178,6 +182,7 @@
               id: this.page.user_id,
               find_name: this.filter.find_name,
               sort: this.sort,
+              sortDir: this.sortDir,
               date_from: this.filter.date_from,
               date_to: this.filter.date_to,
               due_from: this.filter.due_from,

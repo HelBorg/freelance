@@ -123,9 +123,10 @@ public class TaskController {
 
         Filter filter = new Filter(findName.orElse(""), from, to,
                 dueFrom, dueTo, authorName.orElse(""), skills);
-        Sort sortS = Sort.by("taskId");
-        if (sortDir.equals("asc")) {
-            sortS.ascending();
+        Sort sortS = Sort.by(sort.orElse("taskId"));
+        if (sortDir.equals("des")) {
+            logger.info("desjijiji");
+            sortS.descending();
         }
         PageAndSort pageAndSort = new PageAndSort(id.orElse(0), pageName.orElse("tasks"), sortS,
                 pageNumber.orElse(0), pageSize.orElse(5));

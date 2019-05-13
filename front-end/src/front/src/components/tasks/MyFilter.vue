@@ -41,7 +41,7 @@
       </b-form-group>
 
       <b-form-group id="input-group-5"
-                    label="Due date:          "
+                    label="   Due date:   "
                     label-for="input-5"
                     label-class="font-weight-bold pt-0"
                     class="input-group">

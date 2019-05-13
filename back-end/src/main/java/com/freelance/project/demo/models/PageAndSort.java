@@ -7,23 +7,13 @@ import java.io.Serializable;
 
 @Data
 public class PageAndSort implements Serializable {
-    private int personId; //extra parameter
     private String sortS;
     private Sort sort;
     private int currentPage;
     private int pageSize;
-    private String pageName;
-
-    public PageAndSort() {
-    }
-
-    public PageAndSort(int personId, String sort, int currentPage, int pageSize, String pageName) {
-        this.personId = personId;
-        this.sortS = sort;
-        this.currentPage = currentPage;
-        this.pageSize = pageSize;
-        this.pageName = pageName;
-    }
+    private String findName;
+    private String pageName; //parameter for tasks
+    private int personId; //extra parameter
 
     public PageAndSort(int personId, String pageName, Sort sort, int currentPage, int pageSize) {
         this.personId = personId;
@@ -31,5 +21,12 @@ public class PageAndSort implements Serializable {
         this.currentPage = currentPage;
         this.pageSize = pageSize;
         this.pageName = pageName;
+    }
+
+    public PageAndSort(Sort sort, int currentPage, int pageSize, String findName) {
+        this.sort = sort;
+        this.currentPage = currentPage;
+        this.pageSize = pageSize;
+        this.findName = findName;
     }
 }

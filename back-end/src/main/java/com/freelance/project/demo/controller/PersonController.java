@@ -1,6 +1,7 @@
 package com.freelance.project.demo.controller;
 
 import com.freelance.project.demo.dto.PersonDTO;
+import com.freelance.project.demo.models.PageAndSort;
 import com.freelance.project.demo.models.Pager;
 import com.freelance.project.demo.models.Person;
 import com.freelance.project.demo.service.PersonService;
@@ -8,6 +9,7 @@ import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,9 +32,10 @@ import java.util.Optional;
     @GetMapping
     public ResponseEntity<Pager<PersonDTO>> getAll(@RequestParam("size") Optional<Integer> pageSize,
                                                    @RequestParam("page") Optional<Integer> pageNumber,
-                                                   @RequestParam("sort") Optional<String> sort,
                                                    @RequestParam("findName") Optional<String> findName) {
-        Pager<PersonDTO> pager = personService.findAll(pageSize, pageNumber, sort, findName);
+        PageAndSort pageAndSort = new PageAndSort( Sort.by("personId"),pageNumber.orElse(0),
+                pageSize.orElse(10), findName.orElse(""));
+        Pager<PersonDTO> pager = personService.findAll(pageAndSort);
         logger.info("Request to get users: {}", pager);
         return ResponseEntity.ok().body(pager);
     }
