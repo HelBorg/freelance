@@ -16,6 +16,12 @@
                    hover
                    striped
                    @row-clicked="goToUser">
+            <template slot="rating" slot-scope="row">
+              <div>
+                {{ratingName(row.item.rating)}}({{row.item.rating}})
+                Осталось до следующего уровня: {{remainsToGet(row.item.rating)}}
+              </div>
+            </template>
             <template slot="skills" slot-scope="row">
               <div v-for="skill in row.item.skills">
                 {{skill}}
@@ -50,11 +56,9 @@
         </p>
 
 
-        <div>
-          <MyPagination :currentPage="filter.currentPage"
-                        :pagesCount="getUsers.pagesCount"
-                        @changePage="changePage"/>
-        </div>
+        <MyPagination :currentPage="filter.currentPage"
+                      :pagesCount="getUsers.pagesCount"
+                      @changePage="changePage"></MyPagination>
       </div>
     </div>
   </div>
@@ -72,8 +76,7 @@
       return {
         show: true,
         errors: [],
-        getUsers: {
-        },
+        getUsers: {},
         user: [{
           id: null
         }],
@@ -133,6 +136,30 @@
         this.$nextTick(() => {
           this.show = true
         });
+      },
+      ratingName: function (rate) {
+        if (rate < 50) {
+          return "Новичок"
+        }
+        if (rate < 200) {
+          return "Прошаренный"
+        }
+        if (rate < 500) {
+          return "Профи"
+        }
+        return "Гуру"
+      },
+      remainsToGet: function (rate) {
+        if (rate < 50) {
+          return 50 - rate
+        }
+        if (rate < 200) {
+          return 200 - rate
+        }
+        if (rate < 500) {
+          return 500 - rate
+        }
+        return 0
       },
       changePage(changeTo) {
         this.filter.currentPage = changeTo;

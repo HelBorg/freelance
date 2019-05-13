@@ -17,13 +17,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.List;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecificationExecutor<Task> {
 
     @Query("Select t from Task t " +
-            "where t.status = :status and " +
+            "where t.status != :status and " +
             "t.name like %:nameLike% and " +
             "t.createdTime >= :from and " +
             "t.createdTime <= :to and " +
@@ -38,6 +37,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
                     @Param("due_to") Date due_to,
                     @Param("author") String author,
                     Pageable pageRequest);
+
 
 
     @Query("SELECT t FROM Task t where t.author.personId = :id and " +

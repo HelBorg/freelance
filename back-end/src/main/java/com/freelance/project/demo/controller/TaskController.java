@@ -111,8 +111,10 @@ public class TaskController {
 
         Date from = dateConstructor(date_from.orElse("").equals("") ?
                 "2019-01-01 00:00:00.000" : date_from.orElse(""));
-        Date to = dateConstructor(date_to.orElse(""));
-        Date dueFrom = dateConstructor(due_from.orElse(""));
+        Date to = dateConstructor(date_to.orElse("").equals("") ?
+                "3000-01-01 00:00:00.000" : date_to.orElse(""));
+        Date dueFrom = dateConstructor(due_from.orElse("").equals("") ?
+                "2019-01-01 00:00:00.000" : due_from.orElse(""));
         Date dueTo = dateConstructor(due_to.orElse("").equals("") ?
                 "3000-01-01 00:00:00.000" : due_to.orElse(""));
 
@@ -120,8 +122,8 @@ public class TaskController {
                 dueFrom, dueTo, authorName.orElse(""), skills);
         Sort sortS = Sort.by(sort.orElse("taskId"));
         PageAndSort pageAndSort = new PageAndSort(id.orElse(0), pageName.orElse("tasks"), sortS,
-                pageNumber.orElse(0), pageSize.orElse(5), filter);
-        Pager<TaskDTO> pager = taskService.findAll(pageAndSort);
+                pageNumber.orElse(0), pageSize.orElse(5));
+        Pager<TaskDTO> pager = taskService.findAll(pageAndSort, filter);
 
         logger.info("Request to get tasks: {}", pager);
         return ResponseEntity.ok().body(pager);

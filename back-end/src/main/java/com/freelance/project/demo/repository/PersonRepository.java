@@ -21,6 +21,12 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
     @Query("select p from Person p where p.name like %:name%")
     Page<Person> findByName(@Param("name") String name, Pageable pageable);
 
+//    @Query("update Person p set p.placeInRating = select ROW_NUMBER() OVER (ORDER BY rating) from Person q where q.personId = p.personId")
+
+        //@Query("update User u set u.placeInRating = (select)")
+        //@Quary("select rowNumber from Person p ordered by rating")
+//    void updateRaitingPlace();
+
     long count();
 
 }

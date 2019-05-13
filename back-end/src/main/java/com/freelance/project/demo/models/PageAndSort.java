@@ -13,7 +13,6 @@ public class PageAndSort implements Serializable {
     private int currentPage;
     private int pageSize;
     private String pageName;
-    private Filter filter;
 
     public PageAndSort() {
     }
@@ -26,12 +25,11 @@ public class PageAndSort implements Serializable {
         this.pageName = pageName;
     }
 
-    public PageAndSort(int personId, String pageName, Sort sort, int currentPage, int pageSize, Filter filter) {
+    public PageAndSort(int personId, String pageName, Sort sort, int currentPage, int pageSize) {
         this.personId = personId;
         this.sort = sort;
         this.currentPage = currentPage;
         this.pageSize = pageSize;
         this.pageName = pageName;
-        this.filter = filter;
     }
 }

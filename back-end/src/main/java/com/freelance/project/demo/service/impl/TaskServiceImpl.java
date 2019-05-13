@@ -1,22 +1,17 @@
 package com.freelance.project.demo.service.impl;
 
-import com.freelance.project.demo.controller.TaskController;
 import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.*;
 import com.freelance.project.demo.repository.PersonRepository;
 import com.freelance.project.demo.repository.TaskRepository;
-import com.freelance.project.demo.repository.specifications.SearchCriteria;
-import com.freelance.project.demo.repository.specifications.TaskSpecification;
 import com.freelance.project.demo.repository.specifications.TaskSpecificationsBuilder;
 import com.freelance.project.demo.service.TaskService;
-import javafx.util.Pair;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,58 +89,56 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public Pager<TaskDTO> findAll(PageAndSort pageAndSort) {
+    public Pager<TaskDTO> findAll(PageAndSort pageAndSort, Filter filter) {
         Page<Task> page;
         PageRequest request = PageRequest.of(pageAndSort.getCurrentPage(),
                 pageAndSort.getPageSize(), pageAndSort.getSort());
 
-        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder();
-        Specification<Task> spec = builder.build(pageAndSort.getFilter());
-
+        logger.info("Filter {}", filter);
         switch (pageAndSort.getPageName()) {
             case "candidate":
                 page = taskRepository.findAllByCandidate(pageAndSort.getPersonId(),
-                        pageAndSort.getFilter().getFindName(), request);
+                        filter.getFindName(), request);
                 break;
             case "author":
                 page = taskRepository.findAllByAuthor(pageAndSort.getPersonId(),
-                        pageAndSort.getFilter().getFindName(), request);
+                        filter.getFindName(), request);
                 break;
             case "in_work":
                 page = taskRepository.findAllInWork(pageAndSort.getPersonId(), "IN_WORK",
-                        pageAndSort.getFilter().getFindName(), request);
+                        filter.getFindName(), request);
                 break;
             default:
-                page = taskRepository.find("PUBLISH",
-                        pageAndSort.getFilter().getFindName(), pageAndSort.getFilter().getDateFrom(),
-                        pageAndSort.getFilter().getDateTo(), pageAndSort.getFilter().getDueFrom(),
-                        pageAndSort.getFilter().getDueTo(), pageAndSort.getFilter().getAuthor(), request);
+                page = taskRepository.find("IN_WORK",
+                        filter.getFindName(), filter.getDateFrom(),
+                        filter.getDateTo(), filter.getDueFrom(),
+                        filter.getDueTo(), filter.getAuthor(), request);
                 break;
         }
-        Page page1 = taskRepository.findAll(spec, request);
-//        TaskSpecification spec =
-//                new TaskSpecification(new SearchCriteria("name", ":", pageAndSort.getFilter().getFindName()));
-//        List<Task> listSp = taskRepository.findAll(spec);
-//        logger.info("{}", listSp);
-//        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder();
-//
-//        for(Pair<String,String> pair: pageAndSort.getFilter().getFilterSkillsBy()) {
-//            builder.with(pair.getKey(), ":", pair.getValue(), true);
-//        }
-//        Specification<Task> spec = builder.build();
-//        Page<Task> listSp =  taskRepository.findAll(spec, request);
-
-
-        boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;
-        boolean hasNextPage = page.getTotalPages() - 1 > pageAndSort.getCurrentPage();
-
-        List<TaskDTO> list = (List<TaskDTO>) page1.getContent().stream()
-                .map(entity -> mapper.map(entity, TaskDTO.class))
-                .collect(Collectors.toList());
         List<TaskDTO> listDTO = page.getContent().stream()
                 .map(entity -> mapper.map(entity, TaskDTO.class))
                 .collect(Collectors.toList());
-        return new Pager<>(listDTO, list, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
+        boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;
+        boolean hasNextPage = page.getTotalPages() - 1 > pageAndSort.getCurrentPage();
+
+
+        List<TaskDTO> list2 = taskRepository.findAll(request).stream()
+                .map(entity -> mapper.map(entity, TaskDTO.class))
+                .collect(Collectors.toList());
+
+
+        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
+        Specification<Task> spec = builder.build();
+
+        logger.info("page: {}", listDTO);
+
+        List<TaskDTO> list = taskRepository.findAll(spec, request).getContent().stream()
+                .map(entity -> mapper.map(entity, TaskDTO.class))
+                .collect(Collectors.toList());
+        logger.info("page1: {}", list);
+
+        logger.info("equal: {}", list.equals(list2));
+        return new Pager<>(list, listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
     private String selectNextTaskStatus(String status) {

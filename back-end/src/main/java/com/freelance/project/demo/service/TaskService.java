@@ -23,6 +23,6 @@ public interface TaskService {
 
     void deleteAssignAndRevertStatus(int taskId);
 
-    Pager<TaskDTO> findAll(PageAndSort pageAndSort);
+    Pager<TaskDTO> findAll(PageAndSort pageAndSort, Filter filter);
 
 }
