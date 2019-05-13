@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="secondary">
+  <b-navbar toggleable="lg" type="dark" variant="secondary" class="margin-down-10">
     <!-- Надо найти картинку-->
 
     <b-navbar-brand href="#">Web-free</b-navbar-brand>

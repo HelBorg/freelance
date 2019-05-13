@@ -54,7 +54,10 @@
                 window.location.reload()
               })
             }
-      )
+          )
+      },
+      users() {
+        router.push('/users');
       }
     }
   }

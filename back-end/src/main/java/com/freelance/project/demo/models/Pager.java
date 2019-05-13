@@ -11,11 +11,8 @@ public class Pager<T> implements Serializable {
     private boolean hasNextPage;
     private int pagesCount;
     private List<T> items;
-
     PageAndSort pageAndSort;
 
-    public Pager() {
-    }
 
     public Pager(List<T> items, boolean hasPreviousPage, boolean hasNextPage, int pagesCount, PageAndSort pageAndSort) {
         this.items = items;
@@ -24,5 +21,4 @@ public class Pager<T> implements Serializable {
         this.pagesCount = pagesCount;
         this.pageAndSort = pageAndSort;
     }
-
 }

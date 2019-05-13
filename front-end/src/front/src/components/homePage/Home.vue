@@ -15,7 +15,7 @@
 <script>
   import Navbar from "../Navbar";
   import Menu from "../Menu";
-  import Tasks from "../Tasks.vue";
+  import Tasks from "../tasks/Tasks";
 
   export default {
     name: 'home',

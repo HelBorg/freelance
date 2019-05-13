@@ -33,29 +33,22 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Pager<PersonDTO> findAll(Optional<Integer> pageSize,
-                                   Optional<Integer> pageNumber,
-                                   Optional<String> pageSort) {
-        int pageId = pageNumber.orElse(0);
-        int size = pageSize.orElse(5);
-        String sort = pageSort.orElse("personId");
-        PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
-        Page<Person> page = personRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
+    public Pager<PersonDTO> findAll(PageAndSort pageAndSort) {
+        Page<Person> page = personRepository.findByName(pageAndSort.getFindName(), PageRequest.of(pageAndSort.getCurrentPage(),
+                pageAndSort.getPageSize(), pageAndSort.getSort()));
 
-
-        boolean hasPreviousPage = pageId != 0;
-        boolean hasNextPage = page.getTotalPages() - 1 > pageId;
-
-        List<Person> list = page.getContent();
-        List<PersonDTO> listDTO = list.stream()
+        boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;
+        boolean hasNextPage = page.getTotalPages() - 1 > pageAndSort.getCurrentPage();
+        List<PersonDTO> listDTO = page.getContent().stream()
                 .map(entity -> mapper.map(entity, PersonDTO.class))
                 .collect(Collectors.toList());
         return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
-
     }
 
-    public Person getById(int id){
-        return personRepository.findByPersonId(id);
+    public PersonDTO getById(int id){
+        PersonDTO person = mapper.map(personRepository.findByPersonId(id), PersonDTO.class);
+        person.setPlaceInRating(personRepository.countRaiting(person.getId()));
+        return person;
     }
     public Person findByEmail(String email) {
         return personRepository.findByEmail(email);

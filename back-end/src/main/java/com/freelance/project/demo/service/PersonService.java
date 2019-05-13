@@ -1,6 +1,7 @@
 package com.freelance.project.demo.service;
 
 import com.freelance.project.demo.dto.PersonDTO;
+import com.freelance.project.demo.models.PageAndSort;
 import com.freelance.project.demo.models.Pager;
 import com.freelance.project.demo.models.Person;
 
@@ -9,15 +10,13 @@ import java.util.Optional;
 public interface PersonService {
 
 
-    Pager<PersonDTO> findAll(Optional<Integer> pageSize,
-                           Optional<Integer> pageNumber,
-                           Optional<String> pageSort);
+    Pager<PersonDTO> findAll(PageAndSort pageAndSort);
 
     Person findByEmail(String email);
 
     void create(Person person);
 
-    Person getById(int id);
+    PersonDTO getById(int id);
 
     void updateRating(int id, int rate);
 

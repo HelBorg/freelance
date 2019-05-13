@@ -4,12 +4,15 @@ import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.*;
 import com.freelance.project.demo.repository.PersonRepository;
 import com.freelance.project.demo.repository.TaskRepository;
+import com.freelance.project.demo.repository.specifications.TaskSpecificationsBuilder;
 import com.freelance.project.demo.service.TaskService;
 import org.dozer.DozerBeanMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,9 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private PersonRepository personRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
+
+
     @Autowired
     private DozerBeanMapper mapper;
 
@@ -36,19 +42,18 @@ public class TaskServiceImpl implements TaskService {
 
     public String updateStatus(int id, String status) {
         String nextStatus = selectNextTaskStatus(status);
-        taskRepository.updateStatus(id,nextStatus);
+        taskRepository.updateStatus(id, nextStatus);
         return nextStatus;
     }
 
-    public void updateAssignedUser(int personId, int taskId){
+    public void updateAssignedUser(int personId, int taskId) {
         taskRepository.updateAssignedUser(personRepository.findByPersonId(personId), taskId);
         updateStatus(taskId, "PUBLISH");
     }
 
-    public void deleteAssignAndRevertStatus(int taskId){
+    public void deleteAssignAndRevertStatus(int taskId) {
         taskRepository.deleteAssignAndRevertStatus(taskId);
     }
-
 
 
     @Transactional
@@ -64,7 +69,6 @@ public class TaskServiceImpl implements TaskService {
         add.setTaskSkills(Collections.EMPTY_LIST);
         add.setTaskReviews(Collections.EMPTY_LIST);
         add.setDeadline(new Date());
-
         return taskRepository.save(add);
     }
 
@@ -85,59 +89,33 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public Pager<TaskDTO> findAll(Optional<Integer> id,
-                                  Optional<Integer> pageSize,
-                                  Optional<Integer> pageNumber,
-                                  Optional<String> pageSort,
-                                  Optional<String> pageName,
-                                  Optional<String> findName,
-                                  Optional<Date> date_from,
-                                  Optional<Date> date_to) {
-        int pageId = pageNumber.orElse(0);
-        int size = pageSize.orElse(5);
-        int idN = id.orElse(0);
-        Date from = date_from.orElse(new Date(2019, 5, 5));
-        Date to = date_to.orElse(new Date());
-        String name = findName.orElse("");
-        System.out.println(to);
-        String pageN = pageName.orElse("tasks");
-        String sort = pageSort.orElse("taskId");
-        PageAndSort pageAndSort = new PageAndSort(sort, pageId, size, "");
-        Page<Task> page;
-//        if(!(findName.equals(Optional.of("")))) {
-//            page = taskRepository.findByName(findName.orElse(""), PageRequest.of(pageId, size, Sort.by(sort)));
-//        } else {
-            switch (pageN) {
-                case "candidate":
-                    page = taskRepository.findAllByCandidate(idN, PageRequest.of(pageId, size, Sort.by(sort)));
-                    break;
-                case "author":
-                    page = taskRepository.findAllByAuthor(idN, PageRequest.of(pageId, size, Sort.by(sort)));
-                    break;
-                default:
-                    page = taskRepository.find(PageRequest.of(pageId, size, Sort.by(sort)));
-                    break;
-            }
-//        }
+    public Pager<TaskDTO> findAll(PageAndSort pageAndSort, Filter filter) {
+        PageRequest request = PageRequest.of(pageAndSort.getCurrentPage(),
+                pageAndSort.getPageSize(), pageAndSort.getSort());
 
-        boolean hasPreviousPage = pageId != 0;
-        boolean hasNextPage = page.getTotalPages() - 1 > pageId;
+        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter, pageAndSort.getPageName());
+        Specification<Task> spec = builder.build();
 
-        List<Task> list = page.getContent();
-        List<TaskDTO> listDTO = list.stream()
+        Page<Task> page = taskRepository.findAll(spec, request);
+
+        boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;
+        boolean hasNextPage = page.getTotalPages() - 1 > pageAndSort.getCurrentPage();
+
+        List<TaskDTO> list = page.getContent().stream()
                 .map(entity -> mapper.map(entity, TaskDTO.class))
                 .collect(Collectors.toList());
-        return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
+
+        return new Pager<>(list, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
-    private String selectNextTaskStatus(String status){
+    private String selectNextTaskStatus(String status) {
         LinkedList<String> statuses = new LinkedList<>();
         statuses.add("IN_DESIGN");
         statuses.add("PUBLISH");
         statuses.add("ASSIGNED");
         statuses.add("IN_WORK");
         statuses.add("DONE");
-        if(!status.equals("DONE")) return statuses.get(statuses.indexOf(status)+1);
+        if (!status.equals("DONE")) return statuses.get(statuses.indexOf(status) + 1);
         return null;
     }
 }

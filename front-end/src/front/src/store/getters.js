@@ -1,8 +1,11 @@
 export const isLoggedIn = state =>
-  state.auth.isLoggedIn
+  state.auth.isLoggedIn;
 
 export const getToken = state =>
-  state.auth.token
+  state.auth.token;
 
 export const username = state =>
-  state.auth.username
+  state.auth.username;
+
+
+

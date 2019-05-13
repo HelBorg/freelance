@@ -1,57 +1,67 @@
 <template>
-  <div id="tasksList" v-if="this.show">
+  <div id="tasksList">
     <div>
       <Navbar/>
     </div>
     <div>
-      <div>
-        <Menu/>
-      </div>
-      <div>
-        <b-table id="tasks"
-                 title="Users"
-                 :items="getUsers.users"
-                 :fields="fields"
-                 small
-                 hover
-                 striped
-                 @row-clicked="goToUser">
-          <template slot="skills" slot-scope="row">
-            <div v-for="skill in row.item.skills">
-              {{skill}}
-            </div>
-          </template>
-        </b-table>
 
-        <!--          Pagination-->
-        <div v-if="getUsers.pagesCount>1">
-          <b-button variant="light"
-                    @click="changePage(0)"
-                    :disabled="getUsers.currentPage==0">
-            First
-          </b-button>
-          <b-button variant="light"
-                    @click="changePage(getUsers.currentPage - 1)"
-                    :disabled="getUsers.currentPage==0">
-            Prev
-          </b-button>
-          <b-button variant="light"
-                    v-for="index in getUsers.pagesCount"
-                    @click="changePage(index - 1)"
-          >
-            {{index}}
-          </b-button>
-          <b-button variant="light"
-                    @click="changePage(getUsers.currentPage + 1)"
-                    :disabled="getUsers.currentPage==(getUsers.pagesCount-1)">
-            Next
-          </b-button>
-          <b-button variant="light"
-                    @click="changePage(getUsers.pagesCount - 1)"
-                    :disabled="getUsers.currentPage==(getUsers.pagesCount-1)">
-            Last
-          </b-button>
-        </div>
+      <Menu></Menu>
+
+      <div style="width: 80%; float: right" v-if="show">
+        <p>
+          <b-table id="user"
+                   :items="user"
+                   :fields="fields"
+                   small
+                   hover
+                   striped
+                   @row-clicked="goToUser">
+            <template slot="rating" slot-scope="row">
+              <div>
+                {{ratingName(row.item.rating)}}({{row.item.rating}})
+              </div>
+            </template>
+            <template slot="skills" slot-scope="row">
+              <div v-for="skill in row.item.skills">
+                {{skill}}
+              </div>
+            </template>
+          </b-table>
+          Осталось до следующего уровня: {{remainsToGet(user[0].rating)}}
+        </p>
+        <p>
+          <b-input-group>
+            <b-form-input v-model="findUser" placeholder="Type user name"></b-form-input>
+            <b-input-group-append>
+              <b-button :disabled="!findUser" @click="refreshList">Find</b-button>
+            </b-input-group-append>
+          </b-input-group>
+        </p>
+
+        <p>
+          <b-table id="users"
+                   title="Users"
+                   :items="getUsers.items"
+                   :fields="fields"
+                   small
+                   hover
+                   striped
+                   @row-clicked="goToUser">
+            <template slot="place" slot-scope="row">
+              {{filter.currentPage*filter.pageSize + row.index + 1}}
+            </template>
+            <template slot="skills" slot-scope="row">
+              <div v-for="skill in row.item.skills">
+                {{skill}}
+              </div>
+            </template>
+          </b-table>
+        </p>
+
+
+        <MyPagination :currentPage="filter.currentPage"
+                      :pagesCount="getUsers.pagesCount"
+                      @changePage="changePage"></MyPagination>
       </div>
     </div>
   </div>
@@ -59,26 +69,46 @@
 
 <script>
   import axios from 'axios';
+  import Navbar from "./Navbar";
+  import Menu from "./Menu";
 
   export default {
-    name: "Tasks",
+    name: "Users",
+    components: {Navbar, Menu},
     data() {
       return {
-        getUsers: {
-          users: [{name: 'Sorry, there is no tasks in here yet'}],
-          hasPreviousPage: null,
-          hasNextPage: null,
-          pagesCount: null,
+        show: true,
+        errors: [],
+        getUsers: {},
+        user: [{
+          id: null
+        }],
+        filter: {
           sort: null,
           currentPage: 0,
           pageSize: 10
         },
+        findUser: '',
         fields: {
+          place_in_rating: {
+            name: 'place',
+            label: 'Place in rating'
+          },
           name: {
             key: 'name',
-            label: 'Name',
-            thClass: null,
-            tdClass: null
+            label: 'Name'
+          },
+          rating: {
+            key: 'rating',
+            label: 'Rating'
+          },
+          email: {
+            key: 'email',
+            label: 'Email'
+          },
+          skills: {
+            key: 'skills',
+            label: 'Skills'
           }
         }
       }
@@ -86,35 +116,25 @@
     methods: {
       retrieveUsers() {
         axios.get('http://localhost:80/api/v1/person', {
-            params:
-              {
-                size: this.getUsers.pageSize,
-                page: this.getUsers.currentPage,
-                pageName: this.page.get,
-                id: this.page.user_id,
-                sort: this.getUsers.sort
-              }
-          }
-        )
-          .then(response => {
-            console.log(response.data);
-            if (response) {
-              this.getUsers.hasNextPage = response.data.hasNextPage;
-              this.getUsers.hasPreviousPage = response.data.hasPreviousPage;
-              this.getUsers.pagesCount = response.data.pagesCount;
-              this.getUsers.sort = response.data.sort;
-              this.getUsers.find = response.data.find;
-              this.getUsers.users = []; //remove default msg from users
-              for (let t = 0; t < this.getUsers.pageSize; t++) {
-                this.getUsers.users.push({
-                  id: response.data.items[t].id,
-                  name: response.data.items[t].name
-                });
-              }
+            params: {
+              size: this.filter.pageSize,
+              page: this.filter.currentPage,
+              sort: this.filter.sort,
+              findName: this.findUser
+            },
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('JWT')
             }
-          })
+          }
+        ).then(response => {
+          console.log(response.data);
+          if (response) {
+            this.getUsers = response.data;
+          }
+        })
           .catch(e => {
-            this.errors.push(e)
+            this.errors.push(e);
+            console.error(e);
           });
       },
       refreshList() {
@@ -124,9 +144,32 @@
           this.show = true
         });
       },
+      ratingName: function (rate) {
+        if (rate < 50) {
+          return "Новичок"
+        }
+        if (rate < 200) {
+          return "Прошаренный"
+        }
+        if (rate < 500) {
+          return "Профи"
+        }
+        return "Гуру"
+      },
+      remainsToGet: function (rate) {
+        if (rate < 50) {
+          return 50 - rate
+        }
+        if (rate < 200) {
+          return 200 - rate
+        }
+        if (rate < 500) {
+          return 500 - rate
+        }
+        return 0
+      },
       changePage(changeTo) {
-        console.log(this.getUsers.currentPage);
-        this.getUsers.currentPage = changeTo;
+        this.filter.currentPage = changeTo;
         this.refreshList();
         this.show = false;
         this.$nextTick(() => {
@@ -134,19 +177,50 @@
         })
       },
       changePerPage(perPage) {
-        this.getUsers.pageSize = perPage;
+        this.filter.pageSize = perPage;
         this.refreshList();
       },
       goToUser(record) {
         this.$router.push({name: 'User', params: {id: record.id}});
       },
+      getUserId() {
+        axios.get('http://localhost:80/api/v1/me', {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('JWT')
+            }
+          }
+        ).then(response => {
+          console.log(response.data);
+          if (response) {
+            this.user[0].id = response.data.id;
+          }
+          this.getUserInfo();
+        }).catch(e => {
+          this.errors.push(e);
+          console.log(e);
+        });
+      },
+      getUserInfo() {
+        console.log(this.user);
+        axios.get('http://localhost:80/api/v1/person/' + this.user[0].id, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('JWT')
+          }
+        }).then(response => {
+          console.log(response.data);
+          this.user = [];
+          if (response) {
+            this.user.push(response.data);
+          }
+          this.refreshList();
+        }).catch(e => {
+          this.errors.push(e);
+          console.error(e);
+        });
+      }
     },
     mounted() {
-      this.refreshList();
+      this.getUserId();
     }
   }
 </script>
-
-<style>
-
-</style>

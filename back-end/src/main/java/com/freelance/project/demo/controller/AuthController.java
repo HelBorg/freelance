@@ -61,7 +61,6 @@ public class AuthController {
         logger.info("Request to get current user: {}", userDetails);
         Person currentPerson = personService.findByEmail(userDetails.getUsername());
         Map<Object, Object> model = new HashMap<>();
-        model.put("id", currentPerson.getPersonId());
         model.put("name", currentPerson.getName());
         return ok(model);
     }
