@@ -32,42 +32,8 @@
               </b-dropdown>
             </div>
             <div v-if="this.show">
-              <b-table id="tasks"
-                       title="Tasks"
-                       :items="getTasks.items"
-                       :fields="fields"
-                       small
-                       hover
-                       striped
-                       @row-clicked="goToTask">
-                <template slot="createdTime" slot-scope="row">
-                  <div>
-                    {{dateConstructor(row.item.createdTime)}}
-                  </div>
-                </template>
-                <template slot="deadline" slot-scope="row">
-                  <div>
-                    {{dateConstructor(row.item.deadline)}}
-                  </div>
-                </template>
-                <template slot="author" slot-scope="row">
-                  <div>
-                    {{row.item.author.name}}
-                  </div>
-                </template>
-                <template slot="skills" slot-scope="row">
-                  <div v-for="skill in row.item.skills">
-                    {{skill.skillName.name}}:{{skill.level}}
-                  </div>
-                </template>
-                <template slot="assignedUser" slot-scope="row">
-                  <div v-if="row.item.assignedUser">
-                    {{row.item.assignedUser.name}}
-                  </div>
-                </template>
-              </b-table>
+              <MyTable :tasks="getTasks.items"></MyTable>
             </div>
-              <MyTable :tasks="getTasks.tasks"></MyTable>
             <div>
               <MyPagination :currentPage="page.currentPage"
                             :pagesCount="getTasks.pagesCount"
@@ -122,51 +88,6 @@
           due_to: '',
           selectedUser: {name: ''},
           skillsF: []
-        },
-        //Table
-        fields: {
-          name: {
-            key: 'name',
-            label: 'Name',
-            thClass: null,
-            tdClass: null
-          },
-          status: {
-            key: 'status',
-            label: 'Status',
-            thClass: null,
-            tdClass: null
-          },
-          createdTime: {
-            key: 'createdTime',
-            label: 'Date of creating',
-            thClass: null,
-            tdClass: null
-          },
-          deadline: {
-            key: 'deadline',
-            label: 'To',
-            thClass: null,
-            tdClass: null
-          },
-          author: {
-            key: 'author',
-            label: 'Author',
-            thClass: null,
-            tdClass: null
-          },
-          skills: {
-            key: 'skills',
-            label: 'Skills',
-            thClass: null,
-            tdClass: null
-          },
-          assignedUser: {
-            key: 'assignedUser',
-            label: 'Assigned',
-            thClass: null,
-            tdClass: null
-          }
         }
       }
     },
@@ -203,9 +124,6 @@
           this.errors.push(e);
         });
         console.log(this.getTasks);
-      },
-      dateConstructor: function (date) {
-        return moment(date.replace("T", " ").substring(0, 22)).format('Do / MM / YYYY');
       },
       // Исполльзовать, когда при обновлении таблицы хотим перейти на первую страницу
       refreshList() {

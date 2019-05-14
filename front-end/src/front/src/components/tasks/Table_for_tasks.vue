@@ -37,6 +37,8 @@
 </template>
 
 <script>
+  import moment from 'moment';
+
   export default {
     name: "Table_for_tasks",
     props:{
@@ -92,8 +94,7 @@
     },
     methods: {
       extractPageParam() {
-        this.page.name = this.$route.params.pageName;
-        switch (this.page.name) {
+        switch (this.$route.params.pageName) {
           case 'search':
             this.fields.status.thClass = 'd-none';
             this.fields.status.tdClass = 'd-none';
@@ -121,6 +122,9 @@
           this.$router.push({name: 'Task', params: {id: record.id}});
         }
       },
+      dateConstructor: function (date) {
+        return moment(date.replace("T", " ").substring(0, 22)).format('Do / MM / YYYY');
+      }
     },
     mounted() {
       this.extractPageParam();

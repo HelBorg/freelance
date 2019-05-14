@@ -117,10 +117,9 @@ public class TaskController {
         Date dueTo = dateConstructor(due_to.orElse("").equals("") ?
                 "3000-01-01 00:00:00.000" : due_to.orElse(""));
 
-        Sort sortS = Sort.by(sort.orElse("taskId"));
-        if (sortDir.orElse("asc").equals("des")) {
-            logger.info("desjiuj[w[]q]w[][]");
-            sortS.descending();
+        Sort sortS = Sort.by(sort.orElse("taskId")).descending();
+        if (sortDir.orElse("des").equals("asc")) {
+            sortS = sortS.ascending();
         }
         Filter filter = new Filter(id.orElse(0), findName.orElse(""), from, to,
                 dueFrom, dueTo, authorName.orElse(""), skills, sortS, sortDir.orElse("asc"));

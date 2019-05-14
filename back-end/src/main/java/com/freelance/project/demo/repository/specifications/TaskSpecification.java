@@ -20,21 +20,22 @@ public class TaskSpecification implements Specification<Task> {
     public Predicate toPredicate
             (Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         if (criteria.getKey().equals("skills")) {
-            System.out.println("Skills specification" + criteria.getValue() + " " + criteria.getField() + "\n");
-            Join<Task, TaskSkill> taskSkillJoin = root.join("taskId");
+            System.out.println("Skills specification " + criteria.getValue() + " " + criteria.getField() + "\n");
+            Join<TaskSkill, Task> taskSkillJoin = root.join("taskId");
             return builder.equal(taskSkillJoin.get(criteria.getField()), criteria.getValue());
 
         } else if (criteria.getKey().equals("author")) {
             Join<Task, Person> taskAuthorJoin = root.join("author");
             return builder.equal(taskAuthorJoin.get("name"), criteria.getValue());
 
-        } else if (criteria.getKey().equals("author_id")) {
-            Join<Task, Person> taskAuthorJoin = root.join("author");
-            return builder.equal(taskAuthorJoin.get("personId"), criteria.getValue());
+//        } else if (criteria.getKey().equals("author_id")) {
+//            Join<Task, Person> taskAuthorJoin = root.join("author");
+//            return builder.equal(taskAuthorJoin.get("person_id"), criteria.getValue());
+//
+//        } else if (criteria.getKey().equals("candidate_id")) {
+//            Join<Task, Person> taskAuthorJoin = root.join("candidate");
+//            return builder.equal(taskAuthorJoin.get("personId"), criteria.getValue());
 
-        } else if (criteria.getKey().equals("candidate_id")) {
-            Join<Task, Person> taskAuthorJoin = root.join("candidateTasks");
-            return builder.equal(taskAuthorJoin.get("personId"), criteria.getValue());
         } else if (criteria.getKey().equals("createdTime")||(criteria.getKey().equals("deadline"))) {
             if (criteria.getOperation().equalsIgnoreCase(">=")) {
                 return builder.greaterThanOrEqualTo(
@@ -44,7 +45,6 @@ public class TaskSpecification implements Specification<Task> {
                         root.<Date>get(criteria.getKey()), (Date) criteria.getValue());
             }
         }
-
         return builder.like(root.get(criteria.getKey()), "%" + criteria.getValue() + "%");
     }
 }

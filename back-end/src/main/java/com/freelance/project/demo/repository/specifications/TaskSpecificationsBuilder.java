@@ -40,7 +40,6 @@ public class TaskSpecificationsBuilder {
                 params.add(new SearchCriteria("author_id", ":", filter.getId()));
                 break;
             case "in_work":
-                System.out.println("in_work");
                 params.add(new SearchCriteria("status", ":", "IN_WORK"));
                 break;
             default:
@@ -48,7 +47,7 @@ public class TaskSpecificationsBuilder {
                 break;
         }
         for (SkillFilter skill : filter.getFilterSkillsBy()) {
-            paramsSkills.add(new SearchCriteria("skills", skill.getName(), ":", skill.getValueS()));
+            paramsSkills.add(new SearchCriteria("skills", skill.getName(), ":", skill.getValue()));
         }
 
     }
@@ -76,7 +75,11 @@ public class TaskSpecificationsBuilder {
     public Specification<Task> build() {
         logger.info(" build {}", params);
         logger.info(" build: {}", paramsSkills);
-        return Specification.where(this.buildPartly(false).and(this.buildPartly(true)));
+        Specification<Task> spec = this.buildPartly(true);
+        Specification<Task> spec1 = this.buildPartly(false);
+        Specification<Task> spec2 = Specification.where(spec1).and(spec);
+        logger.info("build: fff{}", spec2);
+        return Specification.where(this.buildPartly(false)).and(this.buildPartly(true));
     }
 
 }

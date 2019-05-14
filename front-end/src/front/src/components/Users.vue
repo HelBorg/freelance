@@ -47,7 +47,7 @@
                    hover
                    striped
                    @row-clicked="goToUser">
-            <template slot="place" slot-scope="row">
+            <template slot="place_in_rating" slot-scope="row">
               {{filter.currentPage*filter.pageSize + row.index + 1}}
             </template>
             <template slot="skills" slot-scope="row">

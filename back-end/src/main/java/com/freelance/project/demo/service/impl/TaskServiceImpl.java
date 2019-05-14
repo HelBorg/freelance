@@ -101,6 +101,7 @@ public class TaskServiceImpl implements TaskService {
         boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageAndSort.getCurrentPage();
 
+
         List<TaskDTO> list = page.getContent().stream()
                 .map(entity -> mapper.map(entity, TaskDTO.class))
                 .collect(Collectors.toList());
