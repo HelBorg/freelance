@@ -5,7 +5,7 @@
     </div>
     <div>
       <Menu></Menu>
-      <div style="float:right; width: 80%; font-size:small" >
+      <div style="float:right; width: 80%; font-size:small" class="mr-5">
         <b-row>
           <b-col>
             <div>
