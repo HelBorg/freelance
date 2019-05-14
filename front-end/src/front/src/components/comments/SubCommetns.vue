@@ -1,5 +1,5 @@
 <template>
-  <b-card style="border:0; width:70%; float:right"  class="mt-2">
+  <b-card style="border:0; width:70%; float:right" class="mt-2">
     <img src="https://placekitten.com/g/30/30" style=" border-radius:50%;">
     <span style="cursor:pointer" @click="goToUserPage(subComment.user.id)">{{subComment.user.name}}</span>
     <span class="text-muted small">answered {{subComment.createdTime.substring(0, 10)}}</span>
@@ -31,12 +31,9 @@
   import router from "../../router";
 
   export default {
-    beforeMount(){
-      console.log('user id prev - '+ this.subComment.user.id)
-      console.log('user id post - '+ this.userId)
-    },
+
     props: {
-      parentId:Object,
+      parentId: Object,
       subComment: Object,
       status: Object,
       authorId: Object,
@@ -45,7 +42,7 @@
     components: {Comment},
     data() {
       return {
-        replyText:'',
+        replyText: '',
         newComment: ''
       }
     },
@@ -60,7 +57,7 @@
           },
           body: JSON.stringify({
             description: self.replyText,
-            done:false,
+            done: false,
             parentId: self.parentId,
             taskId: {
               taskId: self.$route.params.id
@@ -78,10 +75,10 @@
             }
           )
       },
-      assignUser(userId){
+      assignUser(userId) {
         let self = this;
-        fetch('/api/v1/task/update/assigned/'+ self.$route.params.id + '/' + userId, {
-          method: 'POST',
+        fetch('/api/v1/task/assigned/' + self.$route.params.id + '/' + userId, {
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('JWT')
@@ -99,7 +96,7 @@
             }
           )
       },
-      goToUserPage(id){
+      goToUserPage(id) {
         router.replace('/user/' + id)
       }
     }

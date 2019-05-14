@@ -1,10 +1,8 @@
 package com.freelance.project.demo.controller;
 
 import com.freelance.project.demo.dto.SkillDTO;
-import com.freelance.project.demo.models.Skill;
 import com.freelance.project.demo.repository.SkillRepository;
 import com.freelance.project.demo.service.SkillService;
-import com.freelance.project.demo.service.impl.SkillServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +33,7 @@ public class SkillController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity getSkillByName(@PathVariable("name") String name){
+    public ResponseEntity getSkillByName(@PathVariable("name") String name) {
         logger.info("Request to get skill by name: {}", name);
         return ok(repository.findSkillByName(name).getSkillId());
     }

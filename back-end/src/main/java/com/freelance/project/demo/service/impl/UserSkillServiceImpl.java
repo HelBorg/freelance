@@ -18,11 +18,9 @@ public class UserSkillServiceImpl implements UserSkillService {
     @Autowired
     UserSkillRepository userSkillRepository;
 
-
     public void deleteTaskSkill(int id){
         userSkillRepository.delete(userSkillRepository.findByUserSkillId(id));
     }
-
 
     public void addNewUserSkill(UserSkillDTO userSkillDTO, int personId) {
 

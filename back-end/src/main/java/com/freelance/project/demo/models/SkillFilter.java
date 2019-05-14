@@ -1,12 +1,6 @@
 package com.freelance.project.demo.models;
 
-import javafx.util.Pair;
 import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Data
 public class SkillFilter {

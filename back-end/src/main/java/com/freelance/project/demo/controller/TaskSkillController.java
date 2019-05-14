@@ -9,27 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
-
-
 @RestController
 @RequestMapping("/api/v1/task-skill")
-public class TaskSkillController{
+public class TaskSkillController {
 
     @Autowired
     private TaskSkillService taskSkillService;
 
     private static final Logger logger = LoggerFactory.getLogger(TaskSkillController.class);
 
-
     @DeleteMapping("/{id}")
-    public void deleteTaskSkill(@PathVariable int id){
+    public void deleteTaskSkill(@PathVariable int id) {
         logger.info("Request to delete task skill dependency: {}", id);
         taskSkillService.deleteTaskSkill(id);
     }
 
     @PostMapping("/{taskId}")
-    public void createNewSkillsList(@RequestBody TaskSkillDTO taskSkillDTO, @PathVariable int taskId){
-        logger.info("Request to create new skills list: task id - {}, taskSkill - {}", taskId, taskSkillDTO);
+    public void createNewSkill(@RequestBody TaskSkillDTO taskSkillDTO, @PathVariable int taskId) {
+        logger.info("Request to create new skill: task id - {}, taskSkill - {}", taskId, taskSkillDTO);
         taskSkillService.addNewTaskSkill(taskSkillDTO, taskId);
     }
 }

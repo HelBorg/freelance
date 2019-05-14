@@ -21,11 +21,9 @@ public class TaskSkillServiceImpl implements TaskSkillService {
     @Autowired
     TaskSkillRepository taskSkillRepository;
 
-
     public void deleteTaskSkill(int id){
         taskSkillRepository.delete(taskSkillRepository.findByTaskSkillId(id));
     }
-
 
     public void addNewTaskSkill(TaskSkillDTO taskSkillDTO, int taskId) {
 

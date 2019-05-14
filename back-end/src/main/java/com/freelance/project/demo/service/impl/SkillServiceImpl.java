@@ -1,7 +1,6 @@
 package com.freelance.project.demo.service.impl;
 
 import com.freelance.project.demo.dto.SkillDTO;
-import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.Skill;
 import com.freelance.project.demo.repository.SkillRepository;
 import com.freelance.project.demo.service.SkillService;

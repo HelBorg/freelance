@@ -36,7 +36,7 @@
         methods: {
           getusername(){
             let self = this;
-            fetch('/api/v1/me', {
+            fetch('/api/v1', {
               method: 'GET',
               headers: {
                 'Content-Type' : 'application/json',

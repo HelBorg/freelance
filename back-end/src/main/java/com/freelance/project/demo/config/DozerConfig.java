@@ -43,6 +43,7 @@ public class DozerConfig {
             }
         };
     }
+
     @Bean
     public BeanMappingBuilder reviewMappingBuilder() {
         return new BeanMappingBuilder() {
@@ -57,11 +58,10 @@ public class DozerConfig {
                         .fields(field("userId").accessible(), field("user").accessible());
 
 
-
-
             }
         };
     }
+
     @Bean
     public BeanMappingBuilder taskSkillMappingBuilder() {
         return new BeanMappingBuilder() {
@@ -91,6 +91,7 @@ public class DozerConfig {
         };
 
     }
+
     @Bean
     public BeanMappingBuilder skillMappingBuilder() {
         return new BeanMappingBuilder() {

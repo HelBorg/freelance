@@ -145,7 +145,6 @@
         userId:'',
         comments: [],
         newComment: '',
-        //-------task---------
         loaded_skills: [],
         taskId: '',
         name: '',
@@ -156,8 +155,6 @@
         deadline: '',
         assignedUser:[],
         assignedName:''
-
-        //-------task---------
       }
     },
     methods: {
@@ -194,22 +191,20 @@
                       console.log('Looks like there was a problem. Status Code: ' +
                         response.status);
                     }
-
                   }
                 )
               self.$refs['task_done'].hide();
               self.updateStatus()
             }
           )
-
       },
       goToUserPage(id){
         router.replace('/user/' + id)
       },
       revertStatus(){
         let self = this;
-        fetch('/api/v1/task/delete/assigned/'+ self.$route.params.id, {
-          method: 'POST',
+        fetch('/api/v1/task/assigned/'+ self.$route.params.id, {
+          method: 'DELETE',
           headers: self.header,
         })
           .then(
@@ -225,8 +220,8 @@
       },
       updateStatus(){
           let self = this;
-          fetch('/api/v1/task/update/status/'+ self.$route.params.id + '/' + self.status, {
-            method: 'POST',
+          fetch('/api/v1/task/status/'+ self.$route.params.id + '/' + self.status, {
+            method: 'PUT',
             headers: self.header,
           })
             .then(
@@ -252,18 +247,14 @@
                   response.status);
                 return;
               }
-              response.json().then(function () {
-                router.replace('/home');
-                router.push('/home');
-
-              })
+              router.push('/home')
             }
           )
       },
       saveTask() {
         let self = this;
         fetch('/api/v1/task', {
-          method: 'POST',
+          method: 'PUT',
           headers: self.header,
           body: JSON.stringify({
             id: self.$route.params.id,
@@ -281,14 +272,12 @@
                   response.status);
                 return;
               }
-              alert("Success!");
               response.json().then(function (data) {
                 console.log(data),
                 window.location.reload()
               })
             }
           )
-
       },
       loadTask() {
         let self = this;
@@ -340,7 +329,7 @@
       },
       getCurrentUserId() {
         let self = this;
-        fetch('/api/v1/me', {
+        fetch('/api/v1', {
           method: 'GET',
           headers: self.header
         })

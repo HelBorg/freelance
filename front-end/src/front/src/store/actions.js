@@ -4,7 +4,7 @@ import router from '../router'
 
 const login = ({ commit }, creds) => {
   commit(types.LOGIN) // show spinner
-  return fetch('/api/v1/singin', {
+  return fetch('/api/v1', {
     method: 'POST',
     headers: {
       'Content-Type' : 'application/json'

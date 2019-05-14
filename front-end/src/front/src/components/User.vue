@@ -24,7 +24,7 @@
           </div>
           <SkillForm style="text-align: center;" :skills="userSkills" :status="skillStatus" :current="current" ></SkillForm>
 
-          <CommentForm style="text-align: center;" :comments="userComments"></CommentForm>
+          <CommentForm  :comments="userComments"></CommentForm>
 
         </div>
 
@@ -131,7 +131,7 @@
       },
       getCurrentUserId() {
         let self = this;
-        fetch('/api/v1/me', {
+        fetch('/api/v1', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

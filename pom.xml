@@ -31,9 +31,6 @@
     <dependencies>
 
         <!-- Spring -->
-
-
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -54,7 +51,6 @@
         </dependency>
 
         <!-- Javax -->
-
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>

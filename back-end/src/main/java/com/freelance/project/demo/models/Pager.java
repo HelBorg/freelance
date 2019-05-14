@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 public class Pager<T> implements Serializable {
+
     private boolean hasPreviousPage;
     private boolean hasNextPage;
     private int pagesCount;

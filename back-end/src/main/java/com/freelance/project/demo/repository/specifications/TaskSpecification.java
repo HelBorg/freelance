@@ -28,7 +28,7 @@ public class TaskSpecification implements Specification<Task> {
             Join<Task, Person> taskAuthorJoin = root.join("author");
             return builder.equal(taskAuthorJoin.get("name"), criteria.getValue());
 
-        } else if (criteria.getKey().equals("createdTime")||(criteria.getKey().equals("deadline"))) {
+        } else if (criteria.getKey().equals("createdTime") || (criteria.getKey().equals("deadline"))) {
             if (criteria.getOperation().equalsIgnoreCase(">=")) {
                 return builder.greaterThanOrEqualTo(
                         root.<Date>get(criteria.getKey()), (Date) criteria.getValue());

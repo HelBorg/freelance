@@ -2,10 +2,7 @@ package com.freelance.project.demo.service;
 
 import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.*;
-import org.springframework.data.domain.Sort;
 
-import java.util.Date;
-import java.util.Optional;
 
 public interface TaskService {
 

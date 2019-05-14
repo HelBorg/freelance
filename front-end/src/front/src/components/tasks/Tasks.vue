@@ -4,8 +4,8 @@
       <Navbar/>
     </div>
     <div>
-      <Menu/>
-      <div style="float:right; width: 80%">
+      <Menu></Menu>
+      <div style="float:right; width: 80%; font-size:small" >
         <b-row>
           <b-col>
             <div>
@@ -34,7 +34,7 @@
                 <b-dropdown-item @click="changeSortDir('asc')">From new to old</b-dropdown-item>
               </b-dropdown>
             </div>
-            <div v-if="this.show">
+            <div v-if="this.show" style="font-size:small">
               <MyTable :tasks="getTasks.items"></MyTable>
             </div>
             <div>
@@ -44,7 +44,7 @@
             </div>
           </b-col>
 
-            <b-col cols="4"
+            <b-col cols="3" style="font-size:small"
                    v-if="page.get==='search'">
               <MyFilter :show="this.page.showFilter"
                         @filter="handleFilter"/>
@@ -73,10 +73,10 @@
           name: null,
           get: null,   //get all tasks, get by author, by candidates
           showFilter: true,
-          user_id: 1,
           currentPage: 0,
           pageSize: 10
         },
+        user_id: 1,
         sort: 'taskId',
         sortDir: 'asc',
         getTasks: {},
@@ -99,7 +99,7 @@
               size: this.page.pageSize,
               page: this.page.currentPage,
               pageName: this.page.get,
-              id: this.page.user_id,
+              id: this.user_id,
               find_name: this.filter.find_name,
               sortDir: this.sortDir,
               sort: this.sort,
@@ -156,7 +156,7 @@
         this.refreshList();
       },
       getUserId() {
-        axios.get('http://localhost:80/api/v1/me', {
+        axios.get('http://localhost:80/api/v1', {
             headers: {
               Authorization: 'Bearer ' + localStorage.getItem('JWT')
             }
@@ -164,8 +164,9 @@
         ).then(response => {
           console.log(response.data);
           if (response) {
-            this.page.user_id = response.data.id
+            this.user_id = response.data.id;
           }
+          this.getUserInfo();
         }).catch(e => {
           this.errors.push(e);
           console.log(e);

@@ -29,15 +29,11 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private PersonRepository personRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
-
-
     @Autowired
     private DozerBeanMapper mapper;
 
-
     public void deleteTask(int id) {
-        taskRepository.delete(taskRepository.findByTaskId(id));
+        taskRepository.deleteById(id);
     }
 
     public String updateStatus(int id, String status) {
@@ -109,7 +105,6 @@ public class TaskServiceImpl implements TaskService {
                 break;
             default:
                 page = taskRepository.findAll(spec, request);
-                logger.info("!!!!!!!!!!!!!!!!!!!!!!!!  !!!!!!   {}", spec);
                 break;
         }
         boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;

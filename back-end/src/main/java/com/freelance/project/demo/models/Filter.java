@@ -10,6 +10,7 @@ import java.util.*;
 
 @Data
 public class Filter {
+
     private String findName;
     private Sort sort;
     private String sortDir;
@@ -49,7 +50,7 @@ public class Filter {
     }
 
     //Создаем список skill-значение, которые нам подходят
-    public void FilterSkillsBy() {
+    private void FilterSkillsBy() {
         Map<Integer, String> map = new HashMap<>();
         map.put(0, "bad");
         map.put(1, "semi-good");

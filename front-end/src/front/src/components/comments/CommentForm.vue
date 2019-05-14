@@ -16,12 +16,12 @@
         <b-button size="sm" class="mt-2" variant="success" @click="saveComment">Add new comment</b-button>
       </div>
 
-        <Comment v-for="comment in comments"
-                 :comment="comment"
-                 :status="status"
-                 :author-id="authorId"
-                 :current-user-id="currentUserId"
-        ></Comment>
+      <Comment v-for="comment in comments"
+               :comment="comment"
+               :status="status"
+               :author-id="authorId"
+               :current-user-id="currentUserId"
+      ></Comment>
     </div>
   </div>
 </template>
@@ -41,8 +41,8 @@
     data() {
       return {
         newComment: '',
-        done:'',
-        taskId:''
+        done: '',
+        taskId: ''
       }
     },
     methods: {

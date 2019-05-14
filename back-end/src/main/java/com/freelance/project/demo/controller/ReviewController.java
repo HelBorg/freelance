@@ -23,24 +23,24 @@ public class ReviewController {
     private static final Logger logger = LoggerFactory.getLogger(ReviewController.class);
 
     @PostMapping
-    public void create(@RequestBody Review review, @AuthenticationPrincipal UserDetails userDetails){
+    public void create(@RequestBody Review review, @AuthenticationPrincipal UserDetails userDetails) {
         logger.info("Request to create new review: review - {}, user details - {}", review, userDetails);
-        reviewService.createReview(review,userDetails);
+        reviewService.createReview(review, userDetails);
     }
 
     @GetMapping("/{id}")
-    public List<ReviewDTO> getAllByTask(@PathVariable int id){
+    public List<ReviewDTO> getAllByTask(@PathVariable int id) {
         logger.info("Request to get all reviews by task id: {}", id);
         return reviewService.getAllByTask(id);
     }
 
     @GetMapping("/user/{id}")
-    public List<ReviewDTO> getAllAboutUser(@PathVariable int id){
+    public List<ReviewDTO> getAllAboutUser(@PathVariable int id) {
         return reviewService.getAllForUser(id);
     }
 
-    @GetMapping("/parent/{id}")
-    public List<ReviewDTO> getAllSubComments(@PathVariable int id){
+    @GetMapping("/subcomments/{id}")
+    public List<ReviewDTO> getAllSubComments(@PathVariable int id) {
         return reviewService.findAllSubComments(id);
     }
 }

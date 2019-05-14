@@ -32,7 +32,7 @@ public class ReviewServiceImpl implements ReviewService {
     private DozerBeanMapper mapper;
 
     @Transactional
-    public void createReview(Review review, UserDetails userDetails){
+    public void createReview(Review review, UserDetails userDetails) {
 
         review.setDescription(review.getDescription());
         review.setDone(review.isDone());
@@ -56,19 +56,19 @@ public class ReviewServiceImpl implements ReviewService {
                 .getCandidateTasks().add(taskRepository.findByTaskId(review.getTaskId().getTaskId()));
     }
 
-    public List<ReviewDTO> getAllByTask(int taskId){
+    public List<ReviewDTO> getAllByTask(int taskId) {
         return reviewRepository.findAllForTask(taskId).stream()
                 .map(entity -> mapper.map(entity, ReviewDTO.class))
                 .collect(Collectors.toList());
     }
 
-    public List<ReviewDTO> getAllForUser(int userId){
+    public List<ReviewDTO> getAllForUser(int userId) {
         return reviewRepository.findAllAboutUser(userId).stream()
                 .map(entity -> mapper.map(entity, ReviewDTO.class))
                 .collect(Collectors.toList());
     }
 
-    public List<ReviewDTO> findAllSubComments(int reviewParentId){
+    public List<ReviewDTO> findAllSubComments(int reviewParentId) {
         return reviewRepository.findAllSubComments(reviewParentId).stream()
                 .map(entity -> mapper.map(entity, ReviewDTO.class))
                 .collect(Collectors.toList());

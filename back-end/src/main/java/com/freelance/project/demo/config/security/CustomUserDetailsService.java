@@ -18,9 +18,6 @@ import java.util.List;
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     private PersonRepository users;
 
     public CustomUserDetailsService(PersonRepository users) {

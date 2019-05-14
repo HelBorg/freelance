@@ -3,7 +3,6 @@ package com.freelance.project.demo.models;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
 @Data

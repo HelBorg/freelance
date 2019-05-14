@@ -10,14 +10,11 @@ import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,12 +28,10 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void updateRating(int id, int rate){
-        Person updated =  personRepository.findByPersonId(id);
-           updated.setRating(updated.getRating() + rate);
-           personRepository.save(updated);
-    }
 
+    public Person findByEmail(String email) {
+        return personRepository.findByEmail(email);
+    }
 
     @Override
     public Pager<PersonDTO> findAll(PageAndSort pageAndSort) {
@@ -51,13 +46,17 @@ public class PersonServiceImpl implements PersonService {
         return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
-    public PersonDTO getById(int id){
+    public PersonDTO getById(int id) {
         PersonDTO person = mapper.map(personRepository.findByPersonId(id), PersonDTO.class);
         person.setPlaceInRating(personRepository.countRaiting(person.getId()));
         return person;
     }
-    public Person findByEmail(String email) {
-        return personRepository.findByEmail(email);
+
+    public void updateRating(int id, int rate) {
+
+        Person updated = personRepository.findByPersonId(id);
+        updated.setRating(updated.getRating() + rate);
+        personRepository.save(updated);
     }
 
     public void create(Person person) {

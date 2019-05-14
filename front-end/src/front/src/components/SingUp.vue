@@ -60,6 +60,7 @@ export default {
             password: self.usr_password
           })
             .then(function (response) {
+              alert("User successfully created");
               router.push('/login');
             })
             .catch(function (error) {

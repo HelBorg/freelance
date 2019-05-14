@@ -29,7 +29,7 @@ public class TaskSpecificationsBuilder {
         params.add(new SearchCriteria("createdTime", "<=", filter.getDateTo()));
         params.add(new SearchCriteria("deadline", ">=", filter.getDueFrom()));
         params.add(new SearchCriteria("deadline", "<=", filter.getDueTo()));
-        if ((!filter.getAuthor().equals(""))&(pageName.equals("tasks"))) {
+        if ((!filter.getAuthor().equals("")) & (pageName.equals("tasks"))) {
             params.add(new SearchCriteria("author", ":", filter.getAuthor()));
         }
         params.add(new SearchCriteria("status", ":", "PUBLISH"));
@@ -48,7 +48,7 @@ public class TaskSpecificationsBuilder {
 
         Specification result = specs.get(0);
         for (int i = 1; i < size; i++) {
-            System.out.println("ppp " + i +"\n");
+            System.out.println("ppp " + i + "\n");
             result = isOrPredicate ? Specification.where(result).or(specs.get(i))
                     : Specification.where(result).and(specs.get(i));
         }

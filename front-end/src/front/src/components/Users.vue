@@ -17,16 +17,17 @@
                    striped
                    @row-clicked="goToUser">
             <template slot="place_in_rating" slot-scope="row">
-              {{row.item.place_in_rating}}
+              {{row.item[0].place_in_rating}}
             </template>
             <template slot="rating" slot-scope="row">
               <div>
                 {{ratingName(row.item.rating)}}({{row.item.rating}})
               </div>
             </template>
+
             <template slot="skills" slot-scope="row">
               <div v-for="skill in row.item.skills">
-                {{skill}}
+                {{skill.skillName.name}}:{{skill.level}}
               </div>
             </template>
           </b-table>
@@ -55,7 +56,7 @@
             </template>
             <template slot="skills" slot-scope="row">
               <div v-for="skill in row.item.skills">
-                {{skill}}
+                {{skill.skillName.name}}:{{skill.level}}
               </div>
             </template>
           </b-table>
@@ -187,7 +188,7 @@
         this.$router.push({name: 'User', params: {id: record.id}});
       },
       getUserId() {
-        axios.get('http://localhost:80/api/v1/me', {
+        axios.get('http://localhost:80/api/v1', {
             headers: {
               Authorization: 'Bearer ' + localStorage.getItem('JWT')
             }

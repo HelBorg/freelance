@@ -16,14 +16,15 @@ public class UserSkillController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserSkillController.class);
 
-
     @DeleteMapping("/{id}")
-    public void deleteTaskSkill(@PathVariable int id){
+    public void deleteTaskSkill(@PathVariable int id) {
+        logger.info("Request to delete user skill dependency: {}", id);
         userSkillService.deleteTaskSkill(id);
     }
 
     @PostMapping("/{personId}")
-    public void createNewSkill(@RequestBody UserSkillDTO userSkillDTO, @PathVariable int personId){
+    public void createNewSkill(@RequestBody UserSkillDTO userSkillDTO, @PathVariable int personId) {
+        logger.info("Request to create new skill for user: person id - {}, userSkill - {}", personId, userSkillDTO);
         userSkillService.addNewUserSkill(userSkillDTO, personId);
     }
 }

@@ -13,14 +13,13 @@ import org.springframework.stereotype.Repository;
 public interface PersonRepository extends JpaRepository<Person, Integer> {
 
     Person findByPersonId(int id);
-    Person findByEmail(String email);
 
+    Person findByEmail(String email);
 
     @Query("select p from Person p where p.name like %:name%")
     Page<Person> findByName(@Param("name") String name, Pageable pageable);
 
-
-    @Query("select count(p) from Person p where p.rating < :rating")
+    @Query("select count(p) from Person p where p.rating > :rating")
     int countRaiting(@Param("rating") int rating);
 
     long count();

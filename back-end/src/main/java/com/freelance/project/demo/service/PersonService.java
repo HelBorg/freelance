@@ -5,7 +5,6 @@ import com.freelance.project.demo.models.PageAndSort;
 import com.freelance.project.demo.models.Pager;
 import com.freelance.project.demo.models.Person;
 
-import java.util.Optional;
 
 public interface PersonService {
 

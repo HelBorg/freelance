@@ -2,17 +2,14 @@ package com.freelance.project.demo.models;
 
 
 import lombok.Data;
-import lombok.Getter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @Entity
 @Table(name = "person_skill")
-public class UserSkill implements Serializable{
-
+public class UserSkill implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

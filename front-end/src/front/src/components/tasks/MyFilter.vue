@@ -73,7 +73,7 @@
                       label-class="font-weight-bold pt-0"
                       margin-top="50px">
           <b-input-group>
-            <b-form-input v-model="findUser" placeholder="Type user name"></b-form-input>
+            <b-form-input class="mb-2" v-model="findUser" placeholder="Type user name"></b-form-input>
             <b-input-group-append>
               <b-button size="sm" :disabled="!findUser" @click="retrieveUsers">Find</b-button>
             </b-input-group-append>

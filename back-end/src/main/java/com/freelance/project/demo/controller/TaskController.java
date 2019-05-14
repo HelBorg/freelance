@@ -31,9 +31,7 @@ public class TaskController {
     @Autowired
     PersonService personService;
 
-
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
-
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id) {
@@ -41,32 +39,40 @@ public class TaskController {
         taskService.deleteTask(id);
     }
 
+    @DeleteMapping("/assigned/{taskId}")
+    public void deleteAssignAndRevertStatus(@PathVariable int taskId) {
+        logger.info("Request to delete assign and revert status of task: task id - {}", taskId);
+        taskService.deleteAssignAndRevertStatus(taskId);
+    }
 
-    @PostMapping("/new")
+    @PostMapping
     public ResponseEntity create(@AuthenticationPrincipal UserDetails userDetails) {
         logger.info("Request to create task from user: {}", userDetails);
+
         Task createdTask = taskService.createNew(personService.findByEmail(userDetails.getUsername()));
         Map<Object, Object> model = new HashMap<>();
         model.put("id", createdTask.getTaskId());
+
         return ok(model);
     }
 
-    @PostMapping("/update/status/{id}/{status}")
+    @PutMapping
+    public void saveTaskData(@RequestBody TaskDTO task) {
+        logger.info("Request to update task: {}", task);
+        taskService.updateTask(task);
+    }
+
+    @PutMapping("/status/{id}/{status}")
     public String updateStatus(@PathVariable int id, @PathVariable String status) {
         logger.info("Request to update task status: task id - {}, new status - {}", id, status);
         return taskService.updateStatus(id, status);
     }
 
 
-    @PostMapping("/update/assigned/{taskId}/{userId}")
+    @PutMapping("/assigned/{taskId}/{userId}")
     public void updateAssignedUser(@PathVariable int taskId, @PathVariable int userId) {
         logger.info("Request to update task's assigned user: user id - {}", userId);
         taskService.updateAssignedUser(userId, taskId);
-    }
-
-    @PostMapping("/delete/assigned/{taskId}")
-    public void deleteAssignAndRevertStatus(@PathVariable int taskId) {
-        taskService.deleteAssignAndRevertStatus(taskId);
     }
 
     @GetMapping("/{id}")
@@ -100,6 +106,7 @@ public class TaskController {
     ) throws ParseException {
         //Retrieve data from request parameters and put it into Filter
         JSONArray json = new JSONArray("[" + skillsF.orElse("") + "]");
+
         List<SkillFilter> skills = new ArrayList<>();
         for (int i = 0; i < json.length(); i++) {
             if (!((JSONObject) json.get(i)).getString("name").equals("")) {
@@ -129,12 +136,9 @@ public class TaskController {
 
         logger.info("Request to get tasks: {}", pager);
         logger.info("Request to filter tasks: {}", filter);
+
         return ResponseEntity.ok().body(pager);
     }
 
-    @PostMapping
-    public void updateTask(@RequestBody TaskDTO task) {
-        logger.info("Request to update task: {}", task);
-        taskService.updateTask(task);
-    }
+
 }

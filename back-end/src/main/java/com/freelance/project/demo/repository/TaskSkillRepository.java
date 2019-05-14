@@ -11,5 +11,4 @@ public interface TaskSkillRepository extends JpaRepository<TaskSkill, Integer> {
 
     TaskSkill findByTaskSkillId(int id);
 
-
 }
