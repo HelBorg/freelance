@@ -16,6 +16,9 @@
                    hover
                    striped
                    @row-clicked="goToUser">
+            <template slot="place_in_rating" slot-scope="row">
+              {{row.item.place_in_rating}}
+            </template>
             <template slot="rating" slot-scope="row">
               <div>
                 {{ratingName(row.item.rating)}}({{row.item.rating}})

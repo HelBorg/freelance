@@ -118,7 +118,7 @@
         }
       },
       goToTask(record) {
-        if (this.getTasks.items[0].id > -1) {
+        if (this.tasks[0].id > -1) {
           this.$router.push({name: 'Task', params: {id: record.id}});
         }
       },

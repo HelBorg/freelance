@@ -100,17 +100,12 @@ public class TaskServiceImpl implements TaskService {
         Page<Task> page;
         switch (pageAndSort.getPageName()) {
             case "candidate":
-                logger.info("candidate");
                 page = taskRepository.findAllByCandidate(filter.getId(), request);
                 break;
             case "mine":
-                logger.info("mine");
-
                 page = taskRepository.findAllByAuthor(filter.getId(), request);
                 break;
             case "in_work":
-                logger.info("in_work");
-
                 page = taskRepository.findAllInWork(filter.getId(), request);
                 break;
             default:

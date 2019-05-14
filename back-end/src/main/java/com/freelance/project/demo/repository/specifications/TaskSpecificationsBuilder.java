@@ -33,7 +33,6 @@ public class TaskSpecificationsBuilder {
             params.add(new SearchCriteria("author", ":", filter.getAuthor()));
         }
         params.add(new SearchCriteria("status", ":", "PUBLISH"));
-
     }
 
     //Building "or" and "and" separately, "or" for skills

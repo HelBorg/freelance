@@ -31,7 +31,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
                                   Pageable pageRequest);
 
     @Query("SELECT distinct t from Task t join t.assignedUser tc where tc.personId = :id")
-    Page<Task> findAllInWork(@Param("id") int candidate_id, @Param("status") String status, Pageable pageRequest);
+    Page<Task> findAllInWork(@Param("id") int candidate_id, Pageable pageRequest);
 
     @Query("Select t from Task t where t.name like %:name%")
     Page<Task> findByName(@Param("name") String name, Pageable pageRequest);
