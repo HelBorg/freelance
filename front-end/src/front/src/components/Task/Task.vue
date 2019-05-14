@@ -252,9 +252,10 @@
                   response.status);
                 return;
               }
-              alert("Success!");
-              response.json().then(function (data) {
-                router.push('/');
+              response.json().then(function () {
+                router.replace('/home');
+                router.push('/home');
+
               })
             }
           )
@@ -364,9 +365,6 @@
   }
 </script>
 <style>
-  .bg{
-    background-image: url("https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80")
-  }
 </style>
 
 

@@ -1,11 +1,11 @@
 <template>
   <div class="mt-4">
-  <h5 class="lead">
+  <h5  v-if=skills class="lead">
    <strong>Skills:</strong>
       <Skill v-for="each in skills" :skill="each" :status="status" :curs="current"></Skill>
   </h5>
 
-  <div v-if="current == $route.params.id || status === 'IN_DESIGN'" >
+  <div v-if="($router.currentRoute.name === 'User' && current == $route.params.id)|| status === 'IN_DESIGN'" >
     <b-form-select v-model="skill_name" style="width:20%">
       <option :value="null">Select skill name</option>
       <option value="java">Java</option>
@@ -53,10 +53,11 @@
       },
       methods: {
       addSkill(){
-        if(this.$router.currentRoute.name === 'Task') {
-          this.addTaskSkill()
-        }if(this.$router.currentRoute.name === 'User'){
-          this.addUserSkill()
+        let self = this
+        if(self.$router.currentRoute.name === 'Task') {
+          return self.addTaskSkill()
+        }if(self.$router.currentRoute.name === 'User'){
+          return self.addUserSkill()
         }
       },
         addTaskSkill() {

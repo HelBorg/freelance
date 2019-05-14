@@ -1,8 +1,8 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="secondary" class="margin-down-10">
+  <b-navbar toggleable="lg" type="dark" variant="secondary">
     <!-- Надо найти картинку-->
 
-    <b-navbar-brand href="#">Web-free</b-navbar-brand>
+    <b-navbar-brand :to="'/home'">Web-free</b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class UserSkillDTO {
 
-    private int id;
-    private String level;
-    private SkillDTO skillName;
+    int id;
+    String level;
+    SkillDTO skillName;
 }

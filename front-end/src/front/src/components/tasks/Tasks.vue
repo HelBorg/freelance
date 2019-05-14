@@ -10,6 +10,7 @@
           <b-col>
             <div>
               <b-dropdown id="dropdown-1"
+                          size="sm"
                           class="m-md-2"
                           text="Number of tasks">
                 <b-dropdown-item @click="changePerPage(5)">5</b-dropdown-item>
@@ -19,6 +20,7 @@
               </b-dropdown>
               <b-dropdown id="dropdown-2"
                           class="m-md-2"
+                          size="sm"
                           text="Sort by">
                 <b-dropdown-item @click="changeSort('createdTime')">Date of creation</b-dropdown-item>
                 <b-dropdown-item @click="changeSort('deadline')">Deadline</b-dropdown-item>
@@ -26,6 +28,7 @@
               </b-dropdown>
               <b-dropdown id="dropdown-3"
                           class="m-md-2"
+                          size="sm"
                           text="Direction">
                 <b-dropdown-item @click="changeSortDir('des')">From old to new</b-dropdown-item>
                 <b-dropdown-item @click="changeSortDir('asc')">From new to old</b-dropdown-item>
@@ -75,7 +78,7 @@
             </div>
           </b-col>
 
-          <b-col cols="4">
+          <b-col cols="3">
             <div>
               <MyFilter :show="this.page.showFilter"
                         @filter="handleFilter"/>

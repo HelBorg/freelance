@@ -13,7 +13,7 @@
         </div>
         <div class="modal-body">
           <div style="text-align: center;">
-            <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRbezqZpEuwGSvitKy3wrwnth5kysKdRqBW54cAszm_wiutku3R" width="140" height="140" class="circle">
+            <img style="border-radius:50%" src="https://www.ondernemers-peelland.nl/wp-content/themes/ondernemers-peelland/images/profile_image.jpg" width="160" height="160" class="circle">
             <h3>{{userName}}</h3>
             <p>
               Email: {{userEmail}}
@@ -22,9 +22,9 @@
               Rating:<b-badge class="label" variant="success">{{userRating}}</b-badge>
             </p>
           </div>
-          <SkillForm :skills="userSkills" :status="skillStatus" :current="current" ></SkillForm>
+          <SkillForm style="text-align: center;" :skills="userSkills" :status="skillStatus" :current="current" ></SkillForm>
 
-          <CommentForm :comments="userComments"></CommentForm>
+          <CommentForm style="text-align: center;" :comments="userComments"></CommentForm>
 
         </div>
 

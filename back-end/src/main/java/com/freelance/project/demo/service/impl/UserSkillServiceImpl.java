@@ -1,8 +1,6 @@
 package com.freelance.project.demo.service.impl;
 
-import com.freelance.project.demo.dto.TaskSkillDTO;
 import com.freelance.project.demo.dto.UserSkillDTO;
-import com.freelance.project.demo.models.TaskSkill;
 import com.freelance.project.demo.models.UserSkill;
 import com.freelance.project.demo.repository.*;
 import com.freelance.project.demo.service.UserSkillService;

@@ -16,6 +16,4 @@ public class PersonDTO implements Serializable {
      String email;
      List<UserSkillDTO> skills;
      int placeInRating;
-
-
 }

@@ -18,6 +18,7 @@ public class DozerConfig {
                         .fields(field("personId").accessible(), field("id").accessible())
                         .fields(field("name").accessible(), field("name").accessible())
                         .fields(field("rating").accessible(), field("rating").accessible())
+                        .fields(field("userSkills").accessible(), field("skills").accessible())
                         .fields(field("email").accessible(), field("email").accessible());
             }
         };
@@ -75,6 +76,21 @@ public class DozerConfig {
         };
 
     }
+
+    @Bean
+    public BeanMappingBuilder personSkillMappingBuilder() {
+        return new BeanMappingBuilder() {
+            @Override
+            protected void configure() {
+                mapping(UserSkill.class, UserSkillDTO.class)
+                        .fields(field("userSkillId").accessible(), field("id").accessible())
+                        .fields(field("level").accessible(), field("level").accessible())
+                        .fields(field("skillId").accessible(), field("skillName").accessible());
+
+            }
+        };
+
+    }
     @Bean
     public BeanMappingBuilder skillMappingBuilder() {
         return new BeanMappingBuilder() {
@@ -96,6 +112,7 @@ public class DozerConfig {
         dozerBeanMapper.addMapping(taskSkillMappingBuilder());
         dozerBeanMapper.addMapping(reviewMappingBuilder());
         dozerBeanMapper.addMapping(skillMappingBuilder());
+        dozerBeanMapper.addMapping(personSkillMappingBuilder());
 
         return dozerBeanMapper;
     }

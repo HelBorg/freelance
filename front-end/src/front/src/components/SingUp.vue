@@ -2,6 +2,9 @@
   <div class="container">
     <div class="col-md-6 mx-auto text-center">
       <div class="header-title">
+<!--
+        <b-alert ref="success_alert" variant="success">User successfully created! Now you will redirect to Login page</b-alert>
+-->
         <h1 class="wv-heading--title">
           Welcome to <strong>Web-free</strong>, get your free account!
         </h1>
@@ -44,6 +47,7 @@ export default {
           usr_email:'',
           usr_password:'',
           confirm_password:''
+
       }
   },
     methods: {
@@ -51,12 +55,11 @@ export default {
         let self = this
         if(self.usr_password === self.confirm_password) {
           axios.post('http://localhost:80/api/v1/person', {
-            name: this.usr_name,
-            email: this.usr_email,
-            password: this.usr_password
+            name: self.usr_name,
+            email: self.usr_email,
+            password: self.usr_password
           })
             .then(function (response) {
-              console.log(response);
               router.push('/login');
             })
             .catch(function (error) {

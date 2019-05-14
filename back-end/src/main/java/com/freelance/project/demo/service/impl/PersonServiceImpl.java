@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -26,11 +28,15 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     private DozerBeanMapper mapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public void updateRating(int id, int rate){
         Person updated =  personRepository.findByPersonId(id);
            updated.setRating(updated.getRating() + rate);
            personRepository.save(updated);
     }
+
 
     @Override
     public Pager<PersonDTO> findAll(PageAndSort pageAndSort) {
@@ -61,7 +67,7 @@ public class PersonServiceImpl implements PersonService {
         }
         person.setName(person.getName());
         person.setEmail(person.getEmail());
-        person.setPassword(person.getPassword());
+        person.setPassword(passwordEncoder.encode(person.getPassword()));
         person.setRating(0);
         person.setRole("user");
         person.setUserSkills(Collections.EMPTY_LIST);

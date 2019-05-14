@@ -15,6 +15,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -28,13 +29,15 @@ import static org.springframework.http.ResponseEntity.ok;
 public class AuthController {
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    PersonService personService;
+    private PersonService personService;
+
+
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
@@ -56,11 +59,12 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails) {
         // careful!!! in custom userDetails username is EMAIL
         logger.info("Request to get current user: {}", userDetails);
         Person currentPerson = personService.findByEmail(userDetails.getUsername());
         Map<Object, Object> model = new HashMap<>();
+        model.put("id", currentPerson.getPersonId());
         model.put("name", currentPerson.getName());
         return ok(model);
     }

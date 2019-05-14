@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h5 class="mt-2 mb-4 lead">
+    <h5 v-if=comments class="mt-2 mb-4 lead">
       <strong>Comments</strong>
     </h5>
     <div>
-      <div class="d-inline" v-if=" status !== 'IN_DESIGN'">
+      <div class="d-inline" v-if="status !== 'IN_DESIGN' && $router.currentRoute.name !== 'User'">
         <b-form-textarea
           id="textarea"
           size="sm"
@@ -30,6 +30,7 @@
   import Comment from "./Comment.vue"
 
   export default {
+
     props: {
       comments: Object,
       status: Object,
@@ -39,12 +40,15 @@
     components: {Comment},
     data() {
       return {
-        newComment: ''
+        newComment: '',
+        done:'',
+        taskId:''
       }
     },
     methods: {
       saveComment() {
         let self = this
+
         fetch('/api/v1/review', {
           method: 'POST',
           headers: {
@@ -54,7 +58,7 @@
           body: JSON.stringify({
             description: self.newComment,
             parentId: null,
-            done:false,
+            done: false,
             taskId: {
               taskId: self.$route.params.id
             }
