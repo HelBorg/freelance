@@ -15,8 +15,6 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
     Person findByPersonId(int id);
     Person findByEmail(String email);
 
-    @Query("Select p from Person p")
-    Page<Person> find(Pageable pageRequest);
 
     @Query("select p from Person p where p.name like %:name%")
     Page<Person> findByName(@Param("name") String name, Pageable pageable);

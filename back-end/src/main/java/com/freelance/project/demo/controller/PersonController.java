@@ -33,7 +33,7 @@ import java.util.Optional;
     public ResponseEntity<Pager<PersonDTO>> getAll(@RequestParam("size") Optional<Integer> pageSize,
                                                    @RequestParam("page") Optional<Integer> pageNumber,
                                                    @RequestParam("findName") Optional<String> findName) {
-        PageAndSort pageAndSort = new PageAndSort( Sort.by("personId"),pageNumber.orElse(0),
+        PageAndSort pageAndSort = new PageAndSort( Sort.by("rating").descending(),pageNumber.orElse(0),
                 pageSize.orElse(10), findName.orElse(""));
         Pager<PersonDTO> pager = personService.findAll(pageAndSort);
         logger.info("Request to get users: {}", pager);
