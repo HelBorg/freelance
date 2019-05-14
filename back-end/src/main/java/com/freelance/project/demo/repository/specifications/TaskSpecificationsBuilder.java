@@ -32,23 +32,7 @@ public class TaskSpecificationsBuilder {
         if ((!filter.getAuthor().equals(""))&(pageName.equals("tasks"))) {
             params.add(new SearchCriteria("author", ":", filter.getAuthor()));
         }
-        switch (pageName) {
-            case "candidate":
-                params.add(new SearchCriteria("candidate_id", ":", filter.getId()));
-                break;
-            case "author":
-                params.add(new SearchCriteria("author_id", ":", filter.getId()));
-                break;
-            case "in_work":
-                params.add(new SearchCriteria("status", ":", "IN_WORK"));
-                break;
-            default:
-                params.add(new SearchCriteria("status", ":", "PUBLISH"));
-                break;
-        }
-        for (SkillFilter skill : filter.getFilterSkillsBy()) {
-            paramsSkills.add(new SearchCriteria("skills", skill.getName(), ":", skill.getValue()));
-        }
+        params.add(new SearchCriteria("status", ":", "PUBLISH"));
 
     }
 

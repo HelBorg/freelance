@@ -42,7 +42,7 @@
           </b-col>
 
           <b-col cols="4">
-            <div>
+            <div v-if="page.name==='tasks'">
               <MyFilter :show="this.page.showFilter"
                         @filter="handleFilter"/>
             </div>
@@ -53,7 +53,6 @@
   </div>
 </template>
 <script>
-  import moment from 'moment';
   import axios from 'axios';
   import Menu from "../Menu";
   import Navbar from "../Navbar";
@@ -171,33 +170,7 @@
         });
       },
       extractPageParam() {
-        this.page.name = this.$route.params.pageName;
-        switch (this.page.name) {
-          case 'search':
-            // this.fields.status.thClass = 'd-none';
-            // this.fields.status.tdClass = 'd-none';
-            // this.fields.assignedUser.thClass = 'd-none';
-            // this.fields.assignedUser.tdClass = 'd-none';
-            this.page.get = 'tasks';
-            break;
-          case 'candidates':
-            this.page.get = 'candidate';
-            break;
-          case 'mine':
-            this.fields.author.thClass = 'd-none';
-            this.fields.author.tdClass = 'd-none';
-            this.page.get = 'author';
-            break;
-          case 'in_work':
-            this.fields.assignedUser.thClass = 'd-none';
-            this.fields.assignedUser.tdClass = 'd-none';
-            this.fields.status.thClass = 'd-none';
-            this.fields.status.tdClass = 'd-none';
-            this.page.get = 'in_work';
-            break;
-          default:
-            break;
-        }
+        this.page.get = this.$route.params.pageName;
       },
       goToTask(record) {
         if (this.getTasks.items[0].id > -1) {
