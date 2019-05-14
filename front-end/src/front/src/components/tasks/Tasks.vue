@@ -41,11 +41,11 @@
             </div>
           </b-col>
 
-          <div v-if="page.get==='tasks'">
-          <b-col cols="4">
+          <div v-if="page.get==='search'">
+            <b-col cols="4">
               <MyFilter :show="this.page.showFilter"
                         @filter="handleFilter"/>
-          </b-col>
+            </b-col>
           </div>
         </b-row>
       </div>
