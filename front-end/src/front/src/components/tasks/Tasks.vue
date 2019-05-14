@@ -35,42 +35,8 @@
               </b-dropdown>
             </div>
             <div v-if="this.show">
-              <b-table id="tasks"
-                       title="Tasks"
-                       :items="getTasks.items"
-                       :fields="fields"
-                       small
-                       hover
-                       striped
-                       @row-clicked="goToTask">
-                <template slot="createdTime" slot-scope="row">
-                  <div>
-                    {{dateConstructor(row.item.createdTime)}}
-                  </div>
-                </template>
-                <template slot="deadline" slot-scope="row">
-                  <div>
-                    {{dateConstructor(row.item.deadline)}}
-                  </div>
-                </template>
-                <template slot="author" slot-scope="row">
-                  <div>
-                    {{row.item.author.name}}
-                  </div>
-                </template>
-                <template slot="skills" slot-scope="row">
-                  <div v-for="skill in row.item.skills">
-                    {{skill.skillName.name}}:{{skill.level}}
-                  </div>
-                </template>
-                <template slot="assignedUser" slot-scope="row">
-                  <div v-if="row.item.assignedUser">
-                    {{row.item.assignedUser.name}}
-                  </div>
-                </template>
-              </b-table>
+              <MyTable :tasks="getTasks.items"></MyTable>
             </div>
-              <MyTable :tasks="getTasks.tasks"></MyTable>
             <div>
               <MyPagination :currentPage="page.currentPage"
                             :pagesCount="getTasks.pagesCount"
@@ -78,8 +44,8 @@
             </div>
           </b-col>
 
-          <b-col cols="3">
-            <div>
+          <b-col cols="4">
+            <div v-if="page.name==='tasks'">
               <MyFilter :show="this.page.showFilter"
                         @filter="handleFilter"/>
             </div>
@@ -90,7 +56,6 @@
   </div>
 </template>
 <script>
-  import moment from 'moment';
   import axios from 'axios';
   import Menu from "../Menu";
   import Navbar from "../Navbar";
@@ -125,51 +90,6 @@
           due_to: '',
           selectedUser: {name: ''},
           skillsF: []
-        },
-        //Table
-        fields: {
-          name: {
-            key: 'name',
-            label: 'Name',
-            thClass: null,
-            tdClass: null
-          },
-          status: {
-            key: 'status',
-            label: 'Status',
-            thClass: null,
-            tdClass: null
-          },
-          createdTime: {
-            key: 'createdTime',
-            label: 'Date of creating',
-            thClass: null,
-            tdClass: null
-          },
-          deadline: {
-            key: 'deadline',
-            label: 'To',
-            thClass: null,
-            tdClass: null
-          },
-          author: {
-            key: 'author',
-            label: 'Author',
-            thClass: null,
-            tdClass: null
-          },
-          skills: {
-            key: 'skills',
-            label: 'Skills',
-            thClass: null,
-            tdClass: null
-          },
-          assignedUser: {
-            key: 'assignedUser',
-            label: 'Assigned',
-            thClass: null,
-            tdClass: null
-          }
         }
       }
     },
@@ -206,9 +126,6 @@
           this.errors.push(e);
         });
         console.log(this.getTasks);
-      },
-      dateConstructor: function (date) {
-        return moment(date.replace("T", " ").substring(0, 22)).format('Do / MM / YYYY');
       },
       // Исполльзовать, когда при обновлении таблицы хотим перейти на первую страницу
       refreshList() {
@@ -256,33 +173,7 @@
         });
       },
       extractPageParam() {
-        this.page.name = this.$route.params.pageName;
-        switch (this.page.name) {
-          case 'search':
-            // this.fields.status.thClass = 'd-none';
-            // this.fields.status.tdClass = 'd-none';
-            // this.fields.assignedUser.thClass = 'd-none';
-            // this.fields.assignedUser.tdClass = 'd-none';
-            this.page.get = 'tasks';
-            break;
-          case 'candidates':
-            this.page.get = 'candidate';
-            break;
-          case 'mine':
-            this.fields.author.thClass = 'd-none';
-            this.fields.author.tdClass = 'd-none';
-            this.page.get = 'author';
-            break;
-          case 'in_work':
-            this.fields.assignedUser.thClass = 'd-none';
-            this.fields.assignedUser.tdClass = 'd-none';
-            this.fields.status.thClass = 'd-none';
-            this.fields.status.tdClass = 'd-none';
-            this.page.get = 'in_work';
-            break;
-          default:
-            break;
-        }
+        this.page.get = this.$route.params.pageName;
       },
       goToTask(record) {
         if (this.getTasks.items[0].id > -1) {

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,10 +97,29 @@ public class TaskServiceImpl implements TaskService {
         TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter, pageAndSort.getPageName());
         Specification<Task> spec = builder.build();
 
-        Page<Task> page = taskRepository.findAll(spec, request);
+        Page<Task> page;
+        switch (pageAndSort.getPageName()) {
+            case "candidate":
+                logger.info("candidate");
+                page = taskRepository.findAllByCandidate(filter.getId(), request);
+                break;
+            case "mine":
+                logger.info("mine");
 
+                page = taskRepository.findAllByAuthor(filter.getId(), request);
+                break;
+            case "in_work":
+                logger.info("in_work");
+
+                page = taskRepository.findAllInWork(filter.getId(), request);
+                break;
+            default:
+                page = taskRepository.findAll(spec, request);
+                break;
+        }
         boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageAndSort.getCurrentPage();
+
 
         List<TaskDTO> list = page.getContent().stream()
                 .map(entity -> mapper.map(entity, TaskDTO.class))

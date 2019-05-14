@@ -20,5 +20,6 @@ public class SearchCriteria {
         this.field = field;
         this.operation = operation;
         this.value = value;
+        System.out.println(this.value);
     }
 }

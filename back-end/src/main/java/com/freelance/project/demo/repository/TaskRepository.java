@@ -22,17 +22,16 @@ import java.util.*;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecificationExecutor<Task> {
 
-//    @Query("SELECT t FROM Task t where t.author.personId = :id ")
-//    Page<Task> findAllByAuthor(@Param("id") int author_id, Specification specification,
-//                               Pageable pageRequest);
-//
-//    @Query("SELECT DISTINCT t FROM Task t join t.candidateTasks tc where tc.personId = :id")
-//    Page<Task> findAllByCandidate(@Param("id") int candidate_id, Specification specification,
-//                                  Pageable pageRequest);
-//
-//    @Query("SELECT distinct t from Task t join t.candidateTasks tc where tc.personId = :id")
-//    Page<Task> findAllInWork(@Param("id") int candidate_id, Specification specification,
-//                             Pageable pageRequest);
+    @Query("SELECT t FROM Task t where t.author.personId = :id ")
+    Page<Task> findAllByAuthor(@Param("id") int author_id,
+                               Pageable pageRequest);
+
+    @Query("SELECT DISTINCT t FROM Task t join t.candidateTasks tc where tc.personId = :id")
+    Page<Task> findAllByCandidate(@Param("id") int candidate_id,
+                                  Pageable pageRequest);
+
+    @Query("SELECT distinct t from Task t join t.assignedUser tc where tc.personId = :id")
+    Page<Task> findAllInWork(@Param("id") int candidate_id, @Param("status") String status, Pageable pageRequest);
 
     @Query("Select t from Task t where t.name like %:name%")
     Page<Task> findByName(@Param("name") String name, Pageable pageRequest);
