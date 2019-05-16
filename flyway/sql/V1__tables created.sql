@@ -68,3 +68,8 @@ insert into skill(name) values('java');
 insert into skill(name) values('sql');
 insert into skill(name) values('spring');
 insert into skill(name) values('javascript');
+
+create index idx_task_name on task(name);
+create index idx_task_due_date on task(deadline);
+create index idx_task_deadline on task(time_created);
+create index idx_person_name on person(name);
