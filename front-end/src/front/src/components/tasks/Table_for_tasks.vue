@@ -102,7 +102,7 @@
             break;
           case 'candidates':
             break;
-          case 'mine':
+          case 'my':
             this.fields.author.thClass = 'd-none';
             this.fields.author.tdClass = 'd-none';
             break;

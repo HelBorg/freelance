@@ -25,7 +25,7 @@ services:
       - POSTGRES_DB=freelance
       - PGDATA=/tmp
     ports:
-      - 5432:5432
+      - 5432
     volumes:
       - ./db-data:/var/lib/postgresql/data
 

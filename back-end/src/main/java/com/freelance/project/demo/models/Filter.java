@@ -1,7 +1,12 @@
 package com.freelance.project.demo.models;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import javafx.util.Pair;
 import lombok.Data;
+import org.json.JSONObject;
+import java.text.SimpleDateFormat;
 import org.springframework.data.domain.Sort;
 
 import java.text.ParseException;
@@ -19,7 +24,7 @@ public class Filter {
     private Date dueFrom;
     private Date dueTo;
     private Integer id; //my id for filtering
-    private String author;
+    private Integer author;
     private List<SkillFilter> skills;
     private List<SkillFilter> filterSkillsBy;  //here presented all satisfying variants
 
@@ -34,18 +39,39 @@ public class Filter {
                 .parse("3000-01-01 00:00:00.000");
     }
 
-    public Filter(Integer id, String findName, Date dateFrom, Date dateTo, Date dueFrom, Date dueTo,
-                  String author, List<SkillFilter> skills, Sort sort, String sortDir) {
+    private Date dateConstructor(String date) throws ParseException {
+        return date.length() > 0 ?
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+                        .parse(date.replace("T", " ").replace("Z", ""))
+                : new Date();
+    }
+
+    public Filter(Integer id, String findName, String dateFrom, String dateTo, String dueFrom, String dueTo,
+                  Integer author, String skillsF, Sort sort, String sortDir) throws ParseException {
+        this.skills = new ArrayList<>();
+        //Retrieve data from request parameters and put it into Filter
+        JSONArray json = new JSONArray("[" + skillsF + "]");
+        for (int i = 0; i < json.length(); i++) {
+            if (!((JSONObject) json.get(i)).getString("name").equals("")) {
+                skills.add(new SkillFilter(((JSONObject) json.get(i)).getString("name"),
+                        ((JSONObject) json.get(i)).getInt("value")));
+            }
+        }
+
+        Date from = dateConstructor(dateFrom);
+        Date to = dateConstructor(dateTo);
+        Date due_from = dateConstructor(dueFrom);
+        Date due_to = dateConstructor(dueTo);
+
         this.id = id;
         this.sort = sort;
         this.sortDir = sortDir;
         this.findName = findName;
-        this.dateFrom = dateFrom;
-        this.dateTo = dateTo;
-        this.dueFrom = dueFrom;
-        this.dueTo = dueTo;
+        this.dateFrom = from;
+        this.dateTo = to;
+        this.dueFrom = due_from;
+        this.dueTo = due_to;
         this.author = author;
-        this.skills = skills;
         this.FilterSkillsBy();
     }
 

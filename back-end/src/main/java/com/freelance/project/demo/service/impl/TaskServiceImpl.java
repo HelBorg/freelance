@@ -7,6 +7,7 @@ import com.freelance.project.demo.repository.TaskRepository;
 import com.freelance.project.demo.repository.specifications.TaskSpecificationsBuilder;
 import com.freelance.project.demo.service.TaskService;
 import org.dozer.DozerBeanMapper;
+import org.omg.PortableInterceptor.INACTIVE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,39 +84,26 @@ public class TaskServiceImpl implements TaskService {
         return mapper.map(taskRepository.findByTaskId(id), TaskDTO.class);
     }
 
+    @Override
+    public Page<Task> getByCandidateId(PageRequest request, Integer id) {
+        return taskRepository.findAllByCandidateId(id, request);
+    }
 
     @Override
-    public Pager<TaskDTO> findAll(PageAndSort pageAndSort, Filter filter) {
-        PageRequest request = PageRequest.of(pageAndSort.getCurrentPage(),
-                pageAndSort.getPageSize(), pageAndSort.getSort());
+    public Page<Task> getByAuthorId(PageRequest request, Integer id) {
+        return taskRepository.findAllByAuthor(id, request);
+    }
 
-        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter, pageAndSort.getPageName());
+    @Override
+    public Page<Task> getByAssignedUserId(PageRequest request, Integer id) {
+        return taskRepository.findAllByAssignedUser(id, request);
+    }
+
+    @Override
+    public Page<Task> findAll(Filter filter, PageRequest request) {
+        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
         Specification<Task> spec = builder.build();
-
-        Page<Task> page;
-        switch (pageAndSort.getPageName()) {
-            case "candidate":
-                page = taskRepository.findAllByCandidate(filter.getId(), request);
-                break;
-            case "mine":
-                page = taskRepository.findAllByAuthor(filter.getId(), request);
-                break;
-            case "in_work":
-                page = taskRepository.findAllInWork(filter.getId(), request);
-                break;
-            default:
-                page = taskRepository.findAll(spec, request);
-                break;
-        }
-        boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;
-        boolean hasNextPage = page.getTotalPages() - 1 > pageAndSort.getCurrentPage();
-
-
-        List<TaskDTO> list = page.getContent().stream()
-                .map(entity -> mapper.map(entity, TaskDTO.class))
-                .collect(Collectors.toList());
-
-        return new Pager<>(list, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
+        return taskRepository.findAll(spec, request);
     }
 
     private String selectNextTaskStatus(String status) {

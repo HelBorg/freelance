@@ -44,11 +44,11 @@
             </div>
           </b-col>
 
-            <b-col cols="3" style="font-size:small"
-                   v-if="page.get==='search'">
-              <MyFilter :show="this.page.showFilter"
-                        @filter="handleFilter"/>
-            </b-col>
+          <b-col cols="3" style="font-size:small"
+                 v-if="page.get==='search'">
+            <MyFilter :show="this.page.showFilter"
+                      @filter="handleFilter"/>
+          </b-col>
         </b-row>
       </div>
     </div>
@@ -110,7 +110,7 @@
               skillsFilter: JSON.stringify(this.filter.skillsF)
                 .replace("[", "")
                 .replace("]", ""),
-              author: this.filter.selectedUser.name
+              author: this.filter.selectedUser.id
             },
             headers: {
               Authorization: 'Bearer ' + localStorage.getItem('JWT')
@@ -166,7 +166,7 @@
           if (response) {
             this.user_id = response.data.id;
           }
-          this.getUserInfo();
+          this.refreshList();
         }).catch(e => {
           this.errors.push(e);
           console.log(e);
@@ -188,7 +188,6 @@
     mounted() {
       this.getUserId();
       this.extractPageParam();
-      this.refreshList();
     }
   };
 </script>
