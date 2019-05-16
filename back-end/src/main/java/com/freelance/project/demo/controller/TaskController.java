@@ -103,7 +103,7 @@ public class TaskController {
                                                  @RequestParam("due_from") Optional<String> due_from,
                                                  @RequestParam("due_to") Optional<String> due_to,
                                                  @RequestParam("skillsFilter") Optional<String> skillsF,
-                                                 @RequestParam("author") Optional<String> authorName
+                                                 @RequestParam("author") Optional<Integer> authorName
     ) throws ParseException {
         Sort sortS = Sort.by(sort.orElse("taskId")).descending();
         if (sortDir.orElse("des").equals("asc")) {
@@ -119,7 +119,7 @@ public class TaskController {
                 page = taskService.getByCandidateId(request, id.orElse(null));
                 break;
             case "my":
-                page = taskService.getByAuthorId(request, id.orElse(null));
+                page = taskService.getByAuthorId(request, authorName.orElse(null));
                 break;
             case "in_work":
                 page = taskService.getByAssignedUserId(request, id.orElse(null));
@@ -129,7 +129,7 @@ public class TaskController {
                         date_from.orElse("2019-01-01 00:00:00.000"),
                         date_to.orElse(""), due_from.orElse(""),
                         due_to.orElse("3000-01-01 00:00:00.000"),
-                        authorName.orElse(""), skillsF.orElse(""), sortS, sortDir.orElse("asc"));
+                        authorName.orElse(null), skillsF.orElse(""), sortS, sortDir.orElse("asc"));
                 page = taskService.findAll(filter, request);
                 break;
         }

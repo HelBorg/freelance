@@ -24,7 +24,7 @@ public class Filter {
     private Date dueFrom;
     private Date dueTo;
     private Integer id; //my id for filtering
-    private String author;
+    private Integer author;
     private List<SkillFilter> skills;
     private List<SkillFilter> filterSkillsBy;  //here presented all satisfying variants
 
@@ -47,7 +47,7 @@ public class Filter {
     }
 
     public Filter(Integer id, String findName, String dateFrom, String dateTo, String dueFrom, String dueTo,
-                  String author, String skillsF, Sort sort, String sortDir) throws ParseException {
+                  Integer author, String skillsF, Sort sort, String sortDir) throws ParseException {
         this.skills = new ArrayList<>();
         //Retrieve data from request parameters and put it into Filter
         JSONArray json = new JSONArray("[" + skillsF + "]");
