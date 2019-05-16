@@ -19,14 +19,14 @@
 </template>
 
 <script>
-  import * as types from '../store/mutation-types'
   import router from "../router";
+  import * as types from '../store/mutation-types'
+
 
   export default {
-    beforeMount(){
+    created(){
       this.getusername()
     },
-        name: "Navbar",
         data(){
           return{
             username:'',
@@ -34,12 +34,13 @@
           }
         },
         methods: {
-          getusername(){
+          getusername: function ()
+          {
             let self = this;
             fetch('/api/v1', {
               method: 'GET',
-              headers: {
-                'Content-Type' : 'application/json',
+              headers:{
+                'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + localStorage.getItem('JWT')
               }
             })

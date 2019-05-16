@@ -48,7 +48,6 @@ public class ReviewServiceImpl implements ReviewService {
 
         reviewRepository.save(review);
 
-
         //Many to many candidate tasks: when user write a comment he's automatically become a candidate on task
         taskRepository.findByTaskId(review.getTaskId().getTaskId())
                 .getCandidateTasks().add(personRepository.findByEmail(userDetails.getUsername()));

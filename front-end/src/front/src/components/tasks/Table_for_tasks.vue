@@ -122,7 +122,7 @@
         }
       },
       dateConstructor: function (date) {
-        return moment(date.replace("T", " ").substring(0, 22)).format('Do / MM / YYYY');
+        return moment(date.replace("T", " ").substring(0, 22)).format('Do.MM.YYYY');
       }
     },
     mounted() {

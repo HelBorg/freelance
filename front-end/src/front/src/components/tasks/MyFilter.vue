@@ -99,6 +99,8 @@
 <script>
   import axios from 'axios';
   import Datepicker from 'vuejs-datepicker';
+  import * as types from '../../store/mutation-types'
+
 
   export default {
     name: "MyFilter",
@@ -128,9 +130,7 @@
     methods: {
       retrieveSkills() {
         axios.get('http://localhost:80/api/v1/skill', {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('JWT')
-          }
+          headers: types.HEADER
         }).then(response => {
           if (response) {
             this.getSkills.skills = response.data;
@@ -146,9 +146,7 @@
           params: {
             findName: this.findUser
           },
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('JWT')
-          }
+          headers: types.HEADER
         }).then(response => {
           console.log(response.data);
           if (response) {

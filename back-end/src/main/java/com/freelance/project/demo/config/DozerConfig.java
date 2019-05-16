@@ -19,6 +19,7 @@ public class DozerConfig {
                         .fields(field("name").accessible(), field("name").accessible())
                         .fields(field("rating").accessible(), field("rating").accessible())
                         .fields(field("userSkills").accessible(), field("skills").accessible())
+                        .fields(field("tasksDone").accessible(), field("tasksDone").accessible())
                         .fields(field("email").accessible(), field("email").accessible());
             }
         };

@@ -8,7 +8,6 @@ import com.freelance.project.demo.models.Person;
 
 public interface PersonService {
 
-
     Pager<PersonDTO> findAll(PageAndSort pageAndSort);
 
     Person findByEmail(String email);

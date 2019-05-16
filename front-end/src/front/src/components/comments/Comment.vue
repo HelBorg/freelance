@@ -1,14 +1,16 @@
 <template>
   <div>
     <b-card class="mt-2">
-      <img src="https://placekitten.com/g/30/30" style=" border-radius:50%;">
+      <img src="https://www.ondernemers-peelland.nl/wp-content/themes/ondernemers-peelland/images/profile_image.jpg"
+           width="40" height="40"
+           style=" border-radius:50%;">
       <span style="cursor:pointer" @click="goToUserPage(comment.user.id)">{{comment.user.name}}</span>
       <span class="text-muted small">commented {{comment.createdTime.substring(0, 10)}}</span>
 
       <b-button
         v-if="(comment.user.id !== authorId &&
                   currentUserId === authorId) && (
-                  status === 'PUBLISH' ||
+                  status === 'PUBLISHED' ||
                   status === 'ASSIGNED')"
         @click="assignUser(comment.user.id)" style="float:right" variant="outline-success" class="ml-3 p-1">
         Assign this user
@@ -24,7 +26,9 @@
         </b-input-group-append>
       </b-input-group>
 
-      <SubComments v-for="subComment in subComments"
+      <SubComments  v-on:add="addSubHandler"
+                    v-if="renderSubComments"
+                    v-for="subComment in subComments"
                    :sub-comment="subComment"
                    :status="status"
                    :current-user-id="currentUserId"
@@ -39,9 +43,11 @@
 <script>
   import router from "../../router";
   import SubComments from "./SubCommetns.vue"
+  import * as types from '../../store/mutation-types'
+
 
   export default {
-    beforeMount() {
+    created() {
       this.loadSubComments()
     },
     props: {
@@ -53,19 +59,24 @@
     components: {SubComments},
     data() {
       return {
+        renderSubComments:true,
         replyText: '',
         subComments: []
       }
     },
     methods: {
+      reloadSubComments() {
+        let self = this
+        self.renderSubComments= false;
+        self.$nextTick(() => {
+          self.renderSubComments = true;
+        });
+      },
       saveComment() {
         let self = this
         fetch('/api/v1/review', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          },
+          headers:types.HEADER,
           body: JSON.stringify({
             description: self.replyText,
             parentId: self.comment.id,
@@ -82,7 +93,8 @@
                   response.status);
                 return;
               }
-              window.location.reload()
+              self.loadSubComments()
+              self.reloadSubComments()
             }
           )
       },
@@ -91,12 +103,9 @@
       },
       assignUser(userId) {
         let self = this;
-        fetch('/api/v1/task/assigned/' + self.$route.params.id + '/' + userId, {
+        fetch('/api/v1/task/' + self.$route.params.id + '/assigned/' + userId, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          },
+          headers: types.HEADER
         })
           .then(
             function (response) {
@@ -105,19 +114,15 @@
                   response.status);
                 return;
               }
-              console.log(self.comment.user.id)
               window.location.reload()
             }
           )
       },
       loadSubComments() {
         let self = this;
-        fetch('/api/v1/review/subcomments/' + self.comment.id, {
+        fetch('/api/v1/review/' + self.comment.id + '/subcomments', {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          }
+          headers: types.HEADER
         })
           .then(
             function (response) {
@@ -132,6 +137,11 @@
               })
             }
           )
+      },
+      addSubHandler(){
+        let self = this;
+        self.loadSubComments()
+        self.reloadSubComments()
       }
     }
   }

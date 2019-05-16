@@ -47,7 +47,8 @@ public class Task implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
-                    CascadeType.MERGE
+                    CascadeType.MERGE,
+                    CascadeType.REMOVE
             })
     @JoinTable(name = "candidate",
             joinColumns = @JoinColumn(name = "task_id"),
@@ -58,7 +59,7 @@ public class Task implements Serializable {
     @JoinColumn(name = "author_id", referencedColumnName = "person_id")
     private Person author;
 
-    @OneToMany(mappedBy = "taskId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "taskId")
     private List<Review> taskReviews;
 
     public Task() {

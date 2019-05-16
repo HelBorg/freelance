@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @Service
 public class TaskServiceImpl implements TaskService {
 
-
     @Autowired
     private TaskRepository taskRepository;
 
@@ -44,7 +43,7 @@ public class TaskServiceImpl implements TaskService {
 
     public void updateAssignedUser(int personId, int taskId) {
         taskRepository.updateAssignedUser(personRepository.findByPersonId(personId), taskId);
-        updateStatus(taskId, "PUBLISH");
+        updateStatus(taskId, "PUBLISHED");
     }
 
     public void deleteAssignAndRevertStatus(int taskId) {
@@ -52,7 +51,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
 
-    @Transactional
     public Task createNew(Person person) {
 
         Task add = new Task();
@@ -65,12 +63,14 @@ public class TaskServiceImpl implements TaskService {
         add.setTaskSkills(Collections.EMPTY_LIST);
         add.setTaskReviews(Collections.EMPTY_LIST);
         add.setDeadline(new Date());
+
         return taskRepository.save(add);
     }
 
-    @Transactional
     public void updateTask(TaskDTO task) {
+
         Task updating = taskRepository.findByTaskId(task.getId());
+
         updating.setName(task.getName());
         updating.setStatus(task.getStatus());
         updating.setDescription(task.getDescription());
@@ -121,7 +121,7 @@ public class TaskServiceImpl implements TaskService {
     private String selectNextTaskStatus(String status) {
         LinkedList<String> statuses = new LinkedList<>();
         statuses.add("IN_DESIGN");
-        statuses.add("PUBLISH");
+        statuses.add("PUBLISHED");
         statuses.add("ASSIGNED");
         statuses.add("IN_WORK");
         statuses.add("DONE");

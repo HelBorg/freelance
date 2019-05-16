@@ -1,3 +1,4 @@
+
 flyway:
    url: jdbc:postgresql://db:5432/freelance
    schemas: freelance

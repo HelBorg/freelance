@@ -28,7 +28,6 @@ public class SkillServiceImpl implements SkillService {
                 .collect(Collectors.toList());
     }
 
-
     public Skill findByName(String name){
         return skillRepository.findSkillByName(name);
     }

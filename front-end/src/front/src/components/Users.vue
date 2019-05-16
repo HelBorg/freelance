@@ -75,6 +75,8 @@
   import axios from 'axios';
   import Navbar from "./Navbar";
   import Menu from "./Menu";
+  import * as types from '../store/mutation-types'
+
 
   export default {
     name: "Users",
@@ -126,9 +128,7 @@
               sort: this.filter.sort,
               findName: this.findUser
             },
-            headers: {
-              Authorization: 'Bearer ' + localStorage.getItem('JWT')
-            }
+            headers: types.HEADER
           }
         ).then(response => {
           console.log(response.data);
@@ -189,9 +189,7 @@
       },
       getUserId() {
         axios.get('http://localhost:80/api/v1', {
-            headers: {
-              Authorization: 'Bearer ' + localStorage.getItem('JWT')
-            }
+            headers: types.HEADER
           }
         ).then(response => {
           console.log(response.data);
@@ -207,9 +205,7 @@
       getUserInfo() {
         console.log(this.user);
         axios.get('http://localhost:80/api/v1/person/' + this.user[0].id, {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('JWT')
-          }
+          headers: types.HEADER
         }).then(response => {
           console.log(response.data);
           this.user = [];

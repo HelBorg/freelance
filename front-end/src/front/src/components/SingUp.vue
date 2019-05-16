@@ -37,6 +37,8 @@
 
 import axios from "axios";
 import router from "../router";
+import * as types from '../store/mutation-types'
+
 
 export default {
   name:"singup",

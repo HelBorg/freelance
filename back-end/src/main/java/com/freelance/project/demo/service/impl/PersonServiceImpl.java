@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class PersonServiceImpl implements PersonService {
+
     @Autowired
     private PersonRepository personRepository;
 
@@ -40,22 +41,26 @@ public class PersonServiceImpl implements PersonService {
 
         boolean hasPreviousPage = pageAndSort.getCurrentPage() != 0;
         boolean hasNextPage = page.getTotalPages() - 1 > pageAndSort.getCurrentPage();
+
         List<PersonDTO> listDTO = page.getContent().stream()
                 .map(entity -> mapper.map(entity, PersonDTO.class))
                 .collect(Collectors.toList());
+
         return new Pager<>(listDTO, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort);
     }
 
     public PersonDTO getById(int id) {
         PersonDTO person = mapper.map(personRepository.findByPersonId(id), PersonDTO.class);
         person.setPlaceInRating(personRepository.countRaiting(person.getId()));
+
         return person;
     }
 
     public void updateRating(int id, int rate) {
-
         Person updated = personRepository.findByPersonId(id);
         updated.setRating(updated.getRating() + rate);
+        updated.setTasksDone(updated.getTasksDone() + 1);
+
         personRepository.save(updated);
     }
 

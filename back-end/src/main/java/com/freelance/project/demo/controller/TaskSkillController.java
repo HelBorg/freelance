@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/task-skill")
@@ -28,5 +30,11 @@ public class TaskSkillController {
     public void createNewSkill(@RequestBody TaskSkillDTO taskSkillDTO, @PathVariable int taskId) {
         logger.info("Request to create new skill: task id - {}, taskSkill - {}", taskId, taskSkillDTO);
         taskSkillService.addNewTaskSkill(taskSkillDTO, taskId);
+    }
+
+    @GetMapping("/{id}")
+    public List<TaskSkillDTO> getAllByTaskId(@PathVariable int id){
+        logger.info("Request to get all task skills dependency: {}", id);
+        return taskSkillService.findAllForTask(id);
     }
 }

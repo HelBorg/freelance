@@ -33,13 +33,13 @@ public class TaskController {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
-        logger.info("Request to delete task: id - {}", id);
-        taskService.deleteTask(id);
+    @DeleteMapping("/{taskId}")
+    public void delete(@PathVariable int taskId) {
+        logger.info("Request to delete task: id - {}", taskId);
+        taskService.deleteTask(taskId);
     }
 
-    @DeleteMapping("/assigned/{taskId}")
+    @DeleteMapping("/{taskId}/assigned")
     public void deleteAssignAndRevertStatus(@PathVariable int taskId) {
         logger.info("Request to delete assign and revert status of task: task id - {}", taskId);
         taskService.deleteAssignAndRevertStatus(taskId);
@@ -62,30 +62,23 @@ public class TaskController {
         taskService.updateTask(task);
     }
 
-    @PutMapping("/status/{id}/{status}")
-    public String updateStatus(@PathVariable int id, @PathVariable String status) {
-        logger.info("Request to update task status: task id - {}, new status - {}", id, status);
-        return taskService.updateStatus(id, status);
+    @PutMapping("/{taskId}/status/{status}")
+    public String updateStatus(@PathVariable int taskId, @PathVariable String status) {
+        logger.info("Request to update task status: task id - {}, new status - {}", taskId, status);
+        return taskService.updateStatus(taskId, status);
     }
 
 
-    @PutMapping("/assigned/{taskId}/{userId}")
+    @PutMapping("/{taskId}/assigned/{userId}")
     public void updateAssignedUser(@PathVariable int taskId, @PathVariable int userId) {
         logger.info("Request to update task's assigned user: user id - {}", userId);
         taskService.updateAssignedUser(userId, taskId);
     }
 
-    @GetMapping("/{id}")
-    public TaskDTO getTaskById(@PathVariable int id) {
-        logger.info("Request to get task by id: id - {}", id);
-        return taskService.loadTask(id);
-    }
-
-    private Date dateConstructor(String date) throws ParseException {
-        return date.length() > 0 ?
-                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
-                        .parse(date.replace("T", " ").replace("Z", ""))
-                : new Date();
+    @GetMapping("/{taskId}")
+    public TaskDTO getTaskById(@PathVariable int taskId) {
+        logger.info("Request to get task by id: id - {}", taskId);
+        return taskService.loadTask(taskId);
     }
 
     @GetMapping
@@ -138,6 +131,13 @@ public class TaskController {
         logger.info("Request to filter tasks: {}", filter);
 
         return ResponseEntity.ok().body(pager);
+    }
+
+    private Date dateConstructor(String date) throws ParseException {
+        return date.length() > 0 ?
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+                        .parse(date.replace("T", " ").replace("Z", ""))
+                : new Date();
     }
 
 

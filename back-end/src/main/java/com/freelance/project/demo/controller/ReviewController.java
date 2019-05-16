@@ -39,7 +39,7 @@ public class ReviewController {
         return reviewService.getAllForUser(id);
     }
 
-    @GetMapping("/subcomments/{id}")
+    @GetMapping("/{id}/subcomments")
     public List<ReviewDTO> getAllSubComments(@PathVariable int id) {
         return reviewService.findAllSubComments(id);
     }

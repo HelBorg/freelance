@@ -3,14 +3,13 @@
     <Navbar></Navbar>
     <div class="bg">
       <Menu></Menu>
-      <div id="main" class="lead mr-5" style="float:right; width:80%">
+      <div v-on:update="reloadTask" v-if="renderTask" id="main" class="lead mr-5" style="float:right; width:80%">
         <!--Top buttons task name and status area-->
         <div id="header">
           <b-badge value="name" variant="danger" class="mt-4">{{status}} </b-badge>
           <b-badge variant="light" @click="goToUserPage(assignedUser.id)" v-if="status === 'ASSIGNED'
               || status === 'IN_WORK' || status === 'DONE'" style="cursor: pointer" >
             performer - {{assignedName}}</b-badge>
-
 
           <div id="headerButtons" style="float:right" class="mt-2">
             <!--top buttons-->
@@ -53,7 +52,7 @@
                       v-b-tooltip.hover title="Make task visible to other users"
             >Publish</b-button>
 
-            <b-button v-if="status === 'IN_DESIGN' || status === 'PUBLISH' && author_id === userId"
+            <b-button v-if="status === 'IN_DESIGN' && author_id === userId"
                       @click="$refs['commit_delete'].show();" variant="danger">Delete</b-button>
             <!-->
           </div>
@@ -88,7 +87,7 @@
 
 
           <!--Skills component -->
-          <SkillForm :skills="loaded_skills" :status="status" ></SkillForm>
+          <SkillForm :status="status" ></SkillForm>
           <!-->
 
         <!--TaskDateRange area-->
@@ -104,7 +103,6 @@
         <!-->
         <!--Comments component-->
         <CommentForm v-if="status !== 'IN_DESIGN'"
-                     :comments="comments"
                      :status="status"
                      :author-id="author_id"
                      :current-user-id="userId"
@@ -123,6 +121,8 @@
   import Comment from "../comments/Comment.vue"
   import Skill from "../../components/Task/Skill.vue"
   import router from "../../router";
+  import * as types from '../../store/mutation-types'
+
 
 
 
@@ -130,16 +130,13 @@
   export default {
     beforeMount() {
       this.loadTask()
-      this.loadComments()
       this.getCurrentUserId()
     },
     components: {Menu, Navbar, CommentForm, SkillForm, Comment, Skill},
     data() {
       return {
-        header:{
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-        },
+        renderHeader:true,
+        renderTask:true,
         userReview:'',
         settedRate:null,
         userId:'',
@@ -158,14 +155,26 @@
       }
     },
     methods: {
+      reloadTask() {
+        let self = this
+        self.renderTask= false;
+        self.$nextTick(() => {
+          self.renderTask = true;
+        });
+      },
+      reloadHeader() {
+        let self = this
+        self.loadTask()
+        self.renderHeader= false;
+        self.$nextTick(() => {
+          self.renderHeader = true;
+        });
+      },
       taskDone(){
         let self =this
         fetch('/api/v1/person/'+ self.assignedUser.id + '/' + self.settedRate, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          },
+          headers: types.HEADER,
         })
           .then(
             function (response) {
@@ -176,7 +185,7 @@
               }
               fetch('/api/v1/review', {
                 method: 'POST',
-                headers: self.header,
+                headers: types.HEADER,
                 body: JSON.stringify({
                   description: self.userReview,
                   done: true,
@@ -195,6 +204,7 @@
                 )
               self.$refs['task_done'].hide();
               self.updateStatus()
+              self.$emit('update');
             }
           )
       },
@@ -203,9 +213,9 @@
       },
       revertStatus(){
         let self = this;
-        fetch('/api/v1/task/assigned/'+ self.$route.params.id, {
+        fetch('/api/v1/task/' + self.$route.params.id + '/assigned' , {
           method: 'DELETE',
-          headers: self.header,
+          headers: types.HEADER,
         })
           .then(
             function (response) {
@@ -214,15 +224,15 @@
                   response.status);
                 return;
               }
-              window.location.reload()
+            window.location.reload()
             }
           )
       },
       updateStatus(){
           let self = this;
-          fetch('/api/v1/task/status/'+ self.$route.params.id + '/' + self.status, {
+          fetch('/api/v1/task/' + self.$route.params.id + '/status/'+ self.status, {
             method: 'PUT',
-            headers: self.header,
+            headers: types.HEADER,
           })
             .then(
               function (response) {
@@ -231,14 +241,14 @@
                     response.status);
                   return;
                 }
-                window.location.reload()
+                self.updateHandler()
               }
             )
       },
       deleteTask() {
         fetch('/api/v1/task/' + this.$route.params.id, {
           method: 'DELETE',
-          headers: this.header,
+          headers: types.HEADER,
         })
           .then(
             function (response) {
@@ -247,7 +257,7 @@
                   response.status);
                 return;
               }
-              router.push('/home')
+              router.push('/tasks/mine')
             }
           )
       },
@@ -255,7 +265,7 @@
         let self = this;
         fetch('/api/v1/task', {
           method: 'PUT',
-          headers: self.header,
+          headers: types.HEADER,
           body: JSON.stringify({
             id: self.$route.params.id,
             name: self.name,
@@ -272,10 +282,7 @@
                   response.status);
                 return;
               }
-              response.json().then(function (data) {
-                console.log(data),
-                window.location.reload()
-              })
+              self.updateHandler()
             }
           )
       },
@@ -283,7 +290,7 @@
         let self = this;
         fetch('/api/v1/task/' + self.$route.params.id, {
           method: 'GET',
-          headers: self.header
+          headers: types.HEADER
         })
           .then(
             function (response) {
@@ -300,29 +307,9 @@
                 self.created_time = data.createdTime.substring(0, 10);
                 self.deadline = data.deadline.substring(0, 10);
                 self.author_id = data.author.id;
-                self.loaded_skills = data.skills;
                 self.assignedUser = data.assignedUser
                 self.assignedName = data.assignedUser.name;
 
-              })
-            }
-          )
-      },
-      loadComments() {
-        let self = this;
-        fetch('/api/v1/review/' + self.$route.params.id, {
-          method: 'GET',
-          headers: self.header
-        })
-          .then(
-            function (response) {
-              if (response.status !== 200) {
-                console.log('Looks like there was a problem. Status Code: ' +
-                  response.status);
-                return;
-              }
-              response.json().then(function (data) {
-                self.comments = data;
               })
             }
           )
@@ -331,7 +318,7 @@
         let self = this;
         fetch('/api/v1', {
           method: 'GET',
-          headers: self.header
+          headers: types.HEADER
         })
           .then(
             function (response) {
@@ -349,6 +336,11 @@
       acceptDeleteHandler(){
         this.$refs['commit_delete'].hide();
         this.deleteTask();
+      },
+      updateHandler(){
+        let self = this
+        self.loadTask()
+        self.$emit('update');
       }
     }
   }

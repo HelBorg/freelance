@@ -42,36 +42,38 @@
     methods: {
       login() {
         const self = this;
-        this.$store.dispatch(types.LOGIN, {
-          email: this.email,
-          password: this.password
+        self.$store.dispatch(types.LOGIN, {
+          email: self.email,
+          password: self.password
         }).then((response) => {
           if (response.status === 200) {
             response.json().then(json => {
-              this.$store.commit(types.LOGIN_SUCCESS, {
+              self.$store.commit(types.LOGIN_SUCCESS, {
                 token: json.token,
                 email: self.email
               });
-              this.$router.replace('/home')
+              self.$nextTick(() => {
+                self.$router.replace('/home')
+              });
             })
           } else if (response.status === 401) {
-            this.log = 401;
+            self.log = 401;
             response.json().then(json => {
-              this.error = json
+              self.error = json
             });
-            this.$store.commit(types.LOGIN_WRONG_CREDENTIALS);
-            this.alert("Wrong email or password");
-            this.$router.push('/')
+            self.$store.commit(types.LOGIN_WRONG_CREDENTIALS);
+            self.alert("Wrong email or password");
+            self.$router.push('/')
           } else {
-            this.log = 'else: ' + response.status;
+            self.log = 'else: ' + response.status;
             response.json().then(json => {
               this.error = json
             });
-            this.$router.push('/');
-            this.$store.commit(types.LOGIN_ERROR)
+            self.$router.push('/');
+            self.$store.commit(types.LOGIN_ERROR)
           }
         }).catch(json => {
-          this.error = 'Unable to connect server.'
+          self.error = 'Unable to connect server.'
         })
       }
     }

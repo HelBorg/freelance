@@ -23,6 +23,8 @@
 
 <script>
   import router from "../router";
+  import * as types from '../store/mutation-types'
+
   export default {
     name: "Menu",
     data() {
@@ -34,10 +36,7 @@
       createNewTask() {
         fetch('/api/v1/task', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          }
+          headers:types.HEADER
         })
           .then(
             function (response) {

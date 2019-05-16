@@ -1,17 +1,15 @@
-##Don't forget to change credentials(user,pwd)
-
 # Spring Boot configuration
 spring:
   profiles:
     active: development
 
-  # Database
+# Database
   datasource:
-    url: jdbc:postgresql://db:5432/freelance #change to your local db name
+    url: jdbc:postgresql://db:5432/freelance
     username: postgres
     password: 568698
 
-    # JPA properties
+# JPA properties
   jpa:
     hibernate:
       ddl-auto: validate

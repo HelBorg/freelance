@@ -1,13 +1,15 @@
 <template>
   <b-card style="border:0; width:70%; float:right" class="mt-2">
-    <img src="https://placekitten.com/g/30/30" style=" border-radius:50%;">
+    <img src="https://www.ondernemers-peelland.nl/wp-content/themes/ondernemers-peelland/images/profile_image.jpg"
+         width="40" height="40"
+         style=" border-radius:50%;">
     <span style="cursor:pointer" @click="goToUserPage(subComment.user.id)">{{subComment.user.name}}</span>
     <span class="text-muted small">answered {{subComment.createdTime.substring(0, 10)}}</span>
 
     <b-button
       v-if="(subComment.user.id !== authorId &&
                   currentUserId === authorId) && (
-                  status === 'PUBLISH' ||
+                  status === 'PUBLISHED' ||
                   status === 'ASSIGNED')"
       @click="assignUser(subComment.user.id)"
       style="float:right" size="sm" variant="outline-success" class="ml-4 p-1">
@@ -29,6 +31,8 @@
 <script>
 
   import router from "../../router";
+  import * as types from '../../store/mutation-types'
+
 
   export default {
 
@@ -47,14 +51,12 @@
       }
     },
     methods: {
+
       saveComment() {
         let self = this
         fetch('/api/v1/review', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          },
+          headers: types.HEADER,
           body: JSON.stringify({
             description: self.replyText,
             done: false,
@@ -71,18 +73,15 @@
                   response.status);
                 return;
               }
-              window.location.reload()
-            }
+              self.$emit('add');
+              }
           )
       },
       assignUser(userId) {
         let self = this;
-        fetch('/api/v1/task/assigned/' + self.$route.params.id + '/' + userId, {
+        fetch('/api/v1/task/' + self.$route.params.id + '/assigned/' + userId, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          },
+          headers: types.HEADER,
         })
           .then(
             function (response) {
@@ -91,8 +90,8 @@
                   response.status);
                 return;
               }
-              console.log(self.subComment.user.id)
               window.location.reload()
+
             }
           )
       },

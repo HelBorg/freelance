@@ -24,6 +24,9 @@ public class Person {
     @Column(name = "rating")
     private int rating;
 
+    @Column(name = "tasks_done")
+    private int tasksDone;
+
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 

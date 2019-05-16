@@ -12,6 +12,9 @@
 </template>
 
 <script>
+
+  import * as types from '../../store/mutation-types'
+
   export default {
 
     props: {
@@ -33,10 +36,7 @@
         let self = this;
         fetch('/api/v1/task-skill/' + self.skill.id, {
           method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          },
+          headers: types.HEADER,
         })
           .then(
             function (response) {
@@ -45,7 +45,7 @@
                   response.status);
                 return;
               }
-              window.location.reload()
+              self.$emit('remove');
             }
           );
       },
@@ -53,10 +53,7 @@
         let self = this;
         fetch('/api/v1/user-skill/' + self.skill.id, {
           method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('JWT')
-          },
+          headers: types.HEADER,
         })
           .then(
             function (response) {
@@ -65,7 +62,7 @@
                   response.status);
                 return;
               }
-              window.location.reload()
+              self.$emit('remove');
             }
           );
       }
