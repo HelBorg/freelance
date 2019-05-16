@@ -2,6 +2,8 @@ package com.freelance.project.demo.service;
 
 import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 
 public interface TaskService {
@@ -20,6 +22,12 @@ public interface TaskService {
 
     void deleteAssignAndRevertStatus(int taskId);
 
-    Pager<TaskDTO> findAll(PageAndSort pageAndSort, Filter filter);
+    Page<Task> getByAuthorId(PageRequest request, Integer id);
+
+    Page<Task> getByAssignedUserId(PageRequest request, Integer id);
+
+    Page<Task> getByCandidateId(PageRequest request, Integer id);
+
+    Page<Task> findAll(Filter filter, PageRequest request);
 
 }

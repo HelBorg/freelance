@@ -1,7 +1,7 @@
 <template>
   <div id="menu" style="float:left; width:15%">
       <b-list-group variant="light">
-        <b-list-group-item style="border-radius:0" variant="outline-primary" :to="'tasks/mine'">
+        <b-list-group-item style="border-radius:0" variant="outline-primary" :to="'tasks/my'">
           My tasks
           <b-button @click="createNewTask" size="sm" variant="success" style="float:right">+</b-button>
         </b-list-group-item>
@@ -10,6 +10,9 @@
         </b-list-group-item>
         <b-list-group-item  variant="outline-primary" :to="'tasks/in_work'">
           In work
+        </b-list-group-item>
+        <b-list-group-item variant="secondary" @click="createNewTask">
+          Create New
         </b-list-group-item>
         <b-list-group-item  variant="outline-primary" :to="'tasks/search'">
           Search

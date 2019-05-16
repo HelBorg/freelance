@@ -166,7 +166,7 @@
           if (response) {
             this.user_id = response.data.id;
           }
-          this.getUserInfo();
+          this.refreshList();
         }).catch(e => {
           this.errors.push(e);
           console.log(e);
@@ -188,7 +188,6 @@
     mounted() {
       this.getUserId();
       this.extractPageParam();
-      this.refreshList();
     }
   };
 </script>

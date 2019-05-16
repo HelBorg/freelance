@@ -17,7 +17,7 @@
                    striped
                    @row-clicked="goToUser">
             <template slot="place_in_rating" slot-scope="row">
-              {{row.item[0].place_in_rating}}
+              {{row.item.place_in_rating}}
             </template>
             <template slot="rating" slot-scope="row">
               <div>
@@ -205,7 +205,6 @@
         });
       },
       getUserInfo() {
-        console.log(this.user);
         axios.get('http://localhost:80/api/v1/person/' + this.user[0].id, {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('JWT')

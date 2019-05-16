@@ -2,15 +2,11 @@ package com.freelance.project.demo.repository.specifications;
 
 import com.freelance.project.demo.controller.SkillController;
 import com.freelance.project.demo.models.Filter;
-import com.freelance.project.demo.models.SkillFilter;
 import com.freelance.project.demo.models.Task;
-import com.freelance.project.demo.models.TaskSkill;
-import javafx.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.Join;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +17,7 @@ public class TaskSpecificationsBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(SkillController.class);
 
-    public TaskSpecificationsBuilder(Filter filter, String pageName) {
+    public TaskSpecificationsBuilder(Filter filter) {
         params = new ArrayList<>();
         paramsSkills = new ArrayList<>();
         params.add(new SearchCriteria("name", ":", filter.getFindName()));
@@ -29,7 +25,7 @@ public class TaskSpecificationsBuilder {
         params.add(new SearchCriteria("createdTime", "<=", filter.getDateTo()));
         params.add(new SearchCriteria("deadline", ">=", filter.getDueFrom()));
         params.add(new SearchCriteria("deadline", "<=", filter.getDueTo()));
-        if ((!filter.getAuthor().equals("")) & (pageName.equals("tasks"))) {
+        if (!filter.getAuthor().equals("")) {
             params.add(new SearchCriteria("author", ":", filter.getAuthor()));
         }
         params.add(new SearchCriteria("status", ":", "PUBLISH"));

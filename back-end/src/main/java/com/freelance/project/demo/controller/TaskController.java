@@ -4,12 +4,16 @@ import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.*;
 import com.freelance.project.demo.service.PersonService;
 import com.freelance.project.demo.service.TaskService;
+import org.dozer.DozerBeanMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -30,6 +35,9 @@ public class TaskController {
 
     @Autowired
     PersonService personService;
+
+    @Autowired
+    private DozerBeanMapper mapper;
 
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
@@ -45,7 +53,7 @@ public class TaskController {
         taskService.deleteAssignAndRevertStatus(taskId);
     }
 
-    @PostMapping
+    @PostMapping("/new")
     public ResponseEntity create(@AuthenticationPrincipal UserDetails userDetails) {
         logger.info("Request to create task from user: {}", userDetails);
 
@@ -81,13 +89,6 @@ public class TaskController {
         return taskService.loadTask(id);
     }
 
-    private Date dateConstructor(String date) throws ParseException {
-        return date.length() > 0 ?
-                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
-                        .parse(date.replace("T", " ").replace("Z", ""))
-                : new Date();
-    }
-
     @GetMapping
     public ResponseEntity<Pager<TaskDTO>> getAll(@RequestParam("id") Optional<Integer> id,            //user_id if needed
                                                  @RequestParam("size") Optional<Integer> pageSize,
@@ -104,40 +105,46 @@ public class TaskController {
                                                  @RequestParam("skillsFilter") Optional<String> skillsF,
                                                  @RequestParam("author") Optional<String> authorName
     ) throws ParseException {
-        //Retrieve data from request parameters and put it into Filter
-        JSONArray json = new JSONArray("[" + skillsF.orElse("") + "]");
-
-        List<SkillFilter> skills = new ArrayList<>();
-        for (int i = 0; i < json.length(); i++) {
-            if (!((JSONObject) json.get(i)).getString("name").equals("")) {
-                skills.add(new SkillFilter(((JSONObject) json.get(i)).getString("name"),
-                        ((JSONObject) json.get(i)).getInt("value")));
-            }
-        }
-
-        Date from = dateConstructor(date_from.orElse("").equals("") ?
-                "2019-01-01 00:00:00.000" : date_from.orElse(""));
-        Date to = dateConstructor(date_to.orElse("").equals("") ?
-                "" : date_to.orElse(""));
-        Date dueFrom = dateConstructor(due_from.orElse("").equals("") ?
-                "" : due_from.orElse(""));
-        Date dueTo = dateConstructor(due_to.orElse("").equals("") ?
-                "3000-01-01 00:00:00.000" : due_to.orElse(""));
-
         Sort sortS = Sort.by(sort.orElse("taskId")).descending();
         if (sortDir.orElse("des").equals("asc")) {
             sortS = sortS.ascending();
         }
-        Filter filter = new Filter(id.orElse(0), findName.orElse(""), from, to,
-                dueFrom, dueTo, authorName.orElse(""), skills, sortS, sortDir.orElse("asc"));
+
+        PageRequest request = PageRequest.of(pageNumber.orElse(0),
+                pageSize.orElse(5), sortS);
+        Page<Task> page;
+
+        switch (pageName.orElse("tasks")) {
+            case "candidate":
+                page = taskService.getByCandidateId(request, id.orElse(null));
+                break;
+            case "my":
+                page = taskService.getByAuthorId(request, id.orElse(null));
+                break;
+            case "in_work":
+                page = taskService.getByAssignedUserId(request, id.orElse(null));
+                break;
+            default:
+                Filter filter = new Filter(id.orElse(0), findName.orElse(""),
+                        date_from.orElse("2019-01-01 00:00:00.000"),
+                        date_to.orElse(""), due_from.orElse(""),
+                        due_to.orElse("3000-01-01 00:00:00.000"),
+                        authorName.orElse(""), skillsF.orElse(""), sortS, sortDir.orElse("asc"));
+                page = taskService.findAll(filter, request);
+                break;
+        }
+        boolean hasPreviousPage = request.getPageNumber() != 0;
+        boolean hasNextPage = page.getTotalPages() - 1 > request.getPageNumber();
+
+
+        List<TaskDTO> list = page.getContent().stream()
+                .map(entity -> mapper.map(entity, TaskDTO.class))
+                .collect(Collectors.toList());
         PageAndSort pageAndSort = new PageAndSort(id.orElse(0), pageName.orElse("tasks"), sortS,
                 pageNumber.orElse(0), pageSize.orElse(5));
-        Pager<TaskDTO> pager = taskService.findAll(pageAndSort, filter);
+        logger.info("Request to get tasks: {}", page);
 
-        logger.info("Request to get tasks: {}", pager);
-        logger.info("Request to filter tasks: {}", filter);
-
-        return ResponseEntity.ok().body(pager);
+        return ResponseEntity.ok().body(new Pager<>(list, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort));
     }
 
 

@@ -11,7 +11,11 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "task")
+@Table(name = "task", indexes = {
+        @Index(name = "idx_task_name", columnList = "name"),
+        @Index(name = "idx_task_due_date", columnList = "deadline"),
+        @Index(name = "idx_task_deadline", columnList = "time_created")
+})
 public class Task implements Serializable {
 
 
