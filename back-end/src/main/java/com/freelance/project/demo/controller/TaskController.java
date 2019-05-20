@@ -121,6 +121,7 @@ public class TaskController {
                                                  @RequestParam("skillsFilter") Optional<String> skillsF,
                                                  @RequestParam("author") Optional<Integer> authorName
     ) throws ParseException {
+        logger.info("skills {} 00000", skillsF);
         PageAndSort pageAndSort = new PageAndSort(sort.orElse("time_created"), sortDir.orElse("des"),
                 pageNumber.orElse(0), pageSize.orElse(5));
         PageRequest request = buildBeforeGetAll(pageAndSort);

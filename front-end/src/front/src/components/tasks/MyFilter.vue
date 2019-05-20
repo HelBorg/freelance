@@ -165,7 +165,7 @@
           due_to: '',
           selectedUser: {name: ''},
           skillsF: [
-            {id: -1, value: 0}
+            {id: 0, value: 0}
           ]
         },
         findUser: '',
@@ -204,7 +204,7 @@
       // Filter
       addSkill() {
         this.filter.skillsF.push({
-          id: -1,
+          id: 0,
           value: 0
         });
         this.show = Object(false);
@@ -232,7 +232,7 @@
         this.filter.due_from = '';
         this.filter.due_to = '';
         this.filter.skillsF = [
-          {id: -1, value: 0}
+          {id: 0, value: 0}
         ];
         this.filter.selectedUser = {name: ''};
         // Trick to reset/clear native browser form validation state

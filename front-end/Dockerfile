@@ -1,3 +1,4 @@
+RUN mvn clean install
 ## alpine linux with JRE
 FROM openjdk:8-jre-alpine
 
