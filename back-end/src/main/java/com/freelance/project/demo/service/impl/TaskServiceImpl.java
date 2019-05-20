@@ -88,7 +88,7 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public Page<Task> findAll(Filter filter, PageRequest request) {
+    public Page<Task> findAll(PageRequest request, Filter filter) {
         TaskSpecification taskSpecification = new TaskSpecification(
                 new SearchCriteria("status", ":", "PUBLISHED"));
         TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
@@ -97,21 +97,21 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Page<Task> getByCandidateId(Filter filter, PageRequest request) {
+    public Page<Task> getByCandidateId(PageRequest request, Filter filter) {
         TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
         Specification<Task> spec = builder.build();
         return taskRepository.findAll(spec, request);
     }
 
     @Override
-    public Page<Task> getByAuthorId(Filter filter, PageRequest request) {
+    public Page<Task> getByAuthorId(PageRequest request, Filter filter) {
         TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
         Specification<Task> spec = builder.build();
         return taskRepository.findAll(spec, request);
     }
 
     @Override
-    public Page<Task> getByAssignedUserId(Filter filter, PageRequest request) {
+    public Page<Task> getByAssignedUserId(PageRequest request, Filter filter) {
         TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
         Specification<Task> spec = builder.build();
         return taskRepository.findAll(spec, request);

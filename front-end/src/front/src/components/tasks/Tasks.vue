@@ -44,8 +44,7 @@
             </div>
           </b-col>
 
-          <b-col cols="3" style="font-size:small"
-                 v-if="page.get==='search'">
+          <b-col cols="3" style="font-size:small">
             <MyFilter :show="this.page.showFilter"
                       @filter="handleFilter"/>
           </b-col>

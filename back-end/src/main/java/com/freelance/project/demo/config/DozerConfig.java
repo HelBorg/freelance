@@ -99,6 +99,7 @@ public class DozerConfig {
             @Override
             protected void configure() {
                 mapping(Skill.class, SkillDTO.class)
+                        .fields(field("skillId").accessible(), field("id").accessible())
                         .fields(field("name").accessible(), field("name").accessible());
 
             }

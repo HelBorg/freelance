@@ -39,8 +39,8 @@ public class Filter {
         //Retrieve data from request parameters and put it into Filter
         JSONArray json = new JSONArray("[" + skillsF + "]");
         for (int i = 0; i < json.length(); i++) {
-            if (!((JSONObject) json.get(i)).getString("name").equals("")) {
-                skills.add(new SkillFilter(((JSONObject) json.get(i)).getString("name"),
+            if (((JSONObject) json.get(i)).getInt("id") == -1) {
+                skills.add(new SkillFilter(((JSONObject) json.get(i)).getInt("id"),
                         ((JSONObject) json.get(i)).getInt("value")));
             }
         }
@@ -66,8 +66,8 @@ public class Filter {
         //Retrieve data from request parameters and put it into Filter
         JSONArray json = new JSONArray("[" + skillsF + "]");
         for (int i = 0; i < json.length(); i++) {
-            if (!((JSONObject) json.get(i)).getString("name").equals("")) {
-                skills.add(new SkillFilter(((JSONObject) json.get(i)).getString("name"),
+            if (((JSONObject) json.get(i)).getInt("id") == -1) {
+                skills.add(new SkillFilter(((JSONObject) json.get(i)).getInt("id"),
                         ((JSONObject) json.get(i)).getInt("value")));
             }
         }
@@ -97,8 +97,8 @@ public class Filter {
 
         filterSkillsBy = new ArrayList<>();
         for (int i = 0; i < this.skills.size(); i++) {
-            for (int j = 0; j <= this.skills.get(i).getValue(); j++) {
-                filterSkillsBy.add(new SkillFilter(this.skills.get(i).getName(), map.get(j)));
+            for (int j = 0; j < this.skills.get(i).getValue(); j++) {
+                filterSkillsBy.add(new SkillFilter(this.skills.get(i).getId(), map.get(j)));
             }
         }
     }

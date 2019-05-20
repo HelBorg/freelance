@@ -76,13 +76,14 @@
               <b-col>
                 <b-form-select
                   id="input-{{index}}"
-                  v-model="skillF.name">
-                  <option v-for="skill in getSkills.skills">
+                  v-model="skillF.id">
+                  <option v-for="skill in getSkills.skills"
+                          :value="skill.id">
                     {{skill.name}}
                   </option>
                 </b-form-select>
               </b-col>
-              <b-col cols="3"> Value: {{skillF.value}}
+              <b-col cols="3"> {{skillF.value}}
               </b-col>
               <b-col cols='1'>
                 <b-button @click="deleteSkill(index)" variant="primary"> -</b-button>
@@ -164,7 +165,7 @@
           due_to: '',
           selectedUser: {name: ''},
           skillsF: [
-            {name: '', value: 0}
+            {id: -1, value: 0}
           ]
         },
         findUser: '',
@@ -203,7 +204,7 @@
       // Filter
       addSkill() {
         this.filter.skillsF.push({
-          name: '',
+          id: -1,
           value: 0
         });
         this.show = Object(false);
@@ -231,7 +232,7 @@
         this.filter.due_from = '';
         this.filter.due_to = '';
         this.filter.skillsF = [
-          {name: '', value: 0}
+          {id: -1, value: 0}
         ];
         this.filter.selectedUser = {name: ''};
         // Trick to reset/clear native browser form validation state

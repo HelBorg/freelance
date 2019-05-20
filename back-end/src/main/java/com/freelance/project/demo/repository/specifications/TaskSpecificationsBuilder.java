@@ -19,9 +19,9 @@ public class TaskSpecificationsBuilder {
     private static final Logger logger = LoggerFactory.getLogger(SkillController.class);
 
     public TaskSpecificationsBuilder(Filter filter) {
+        logger.info("filter : {}", filter);
         params = new ArrayList<>();
         paramsSkills = new ArrayList<>();
-        logger.info("f{}f", filter.getFindName());
         params.add(new SearchCriteria("name", ":", filter.getFindName()));
         params.add(new SearchCriteria("createdTime", ">=", filter.getDateFrom()));
         params.add(new SearchCriteria("createdTime", "<=", filter.getDateTo()));
@@ -32,9 +32,8 @@ public class TaskSpecificationsBuilder {
         }
         //params.add(new SearchCriteria("status", ":", "PUBLISHED"));
         if (filter.getFilterSkillsBy().size() != 0) {
-            logger.info("{}",filter.getFilterSkillsBy());
             for(SkillFilter skillFilter : filter.getFilterSkillsBy()) {
-                paramsSkills.add(new SearchCriteria(skillFilter.getName(), "skills", "=", skillFilter.getValueS()));
+                paramsSkills.add(new SearchCriteria("skills", skillFilter.getId(), "=", skillFilter.getValueS()));
             }
         }
     }
@@ -45,7 +44,6 @@ public class TaskSpecificationsBuilder {
         if (size == 0) {
             return null;
         }
-
         List<Specification> specs = isOrPredicate ? paramsSkills.stream()
                 .map(TaskSpecification::new).collect(Collectors.toList())
                 : params.stream().map(TaskSpecification::new).collect(Collectors.toList());
