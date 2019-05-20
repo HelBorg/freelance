@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -100,7 +99,7 @@ public class TaskController {
                                                  @RequestParam("due_from") Optional<String> due_from,
                                                  @RequestParam("due_to") Optional<String> due_to,
                                                  @RequestParam("skillsFilter") Optional<String> skillsF,
-                                                 @RequestParam("author") Optional<Integer> authorName
+                                                 @RequestParam("author") Optional<String> authorName
     ) throws ParseException {
         Sort sortS = Sort.by(sort.orElse("taskId")).descending();
         if (sortDir.orElse("des").equals("asc")) {
@@ -112,21 +111,21 @@ public class TaskController {
         Page<Task> page;
 
         switch (pageName.orElse("tasks")) {
-            case "candidate":
+            case "candidates":
                 page = taskService.getByCandidateId(request, id.orElse(null));
                 break;
             case "my":
-                page = taskService.getByAuthorId(request, authorName.orElse(null));
+                page = taskService.getByAuthorId(request, id.orElse(null));
                 break;
             case "in_work":
                 page = taskService.getByAssignedUserId(request, id.orElse(null));
                 break;
             default:
                 Filter filter = new Filter(id.orElse(0), findName.orElse(""),
-                        date_from.orElse("2019-01-01 00:00:00.000"),
+                        date_from.equals("") ? "2019-01-01 00:00:00.000" : date_from.get(),
                         date_to.orElse(""), due_from.orElse(""),
-                        due_to.orElse("3000-01-01 00:00:00.000"),
-                        authorName.orElse(null), skillsF.orElse(""), sortS, sortDir.orElse("asc"));
+                        due_to.equals("") ? "3000-01-01 00:00:00.000" : due_to.get(),
+                        authorName.orElse(""), skillsF.orElse(""), sortS, sortDir.orElse("asc"));
                 page = taskService.findAll(filter, request);
                 break;
         }
@@ -144,12 +143,6 @@ public class TaskController {
         return ResponseEntity.ok().body(new Pager<>(list, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort));
     }
 
-    private Date dateConstructor(String date) throws ParseException {
-        return date.length() > 0 ?
-                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
-                        .parse(date.replace("T", " ").replace("Z", ""))
-                : new Date();
-    }
 
 
 }

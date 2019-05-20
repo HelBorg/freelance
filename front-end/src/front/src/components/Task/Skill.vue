@@ -1,9 +1,9 @@
 <template>
   <b-badge variant="warning" class="ml-2 mr-2">
-    {{skill.skillName.name}} - {{skill.level}}
+    {{skill.skillName.name}} - level {{skill.level}}
 
     <span @click="deleteSkill"
-     v-if="curs == $route.params.id || status === 'IN_DESIGN'"
+     v-if="($router.currentRoute.name === 'User' && curs == $route.params.id) || status === 'IN_DESIGN'"
      class="ml-1"
      style="cursor: pointer;color:red">x
     </span>

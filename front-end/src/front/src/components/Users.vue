@@ -17,7 +17,7 @@
                    striped
                    @row-clicked="goToUser">
             <template slot="place_in_rating" slot-scope="row">
-              {{row.item.place_in_rating}}
+              {{row.item.placeInRating}}
             </template>
             <template slot="rating" slot-scope="row">
               <div>
@@ -81,6 +81,9 @@
   export default {
     name: "Users",
     components: {Navbar, Menu},
+    beforeMount() {
+      this.getUserId();
+    },
     data() {
       return {
         show: true,
@@ -218,8 +221,6 @@
         });
       }
     },
-    mounted() {
-      this.getUserId();
-    }
+
   }
 </script>

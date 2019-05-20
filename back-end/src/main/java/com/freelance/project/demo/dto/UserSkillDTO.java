@@ -6,6 +6,6 @@ import lombok.Data;
 public class UserSkillDTO {
 
     int id;
-    String level;
+    int level;
     SkillDTO skillName;
 }

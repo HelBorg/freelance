@@ -15,7 +15,7 @@ name varchar not null unique
 
 create table if not exists public.person_skill(
 person_skill_id serial primary key,
-level varchar not null,
+level integer not null,
 person_id integer not null,
 skill_id integer not null,
 foreign key (person_id) references public.person(person_id),
@@ -58,7 +58,7 @@ foreign key(task_id) references public.task(task_id)
 
 create table if not exists public.task_skill(
 task_skill_id serial  primary key,
-level varchar not null,
+level integer not null,
 task_id integer not null,
 skill_id integer not null,
 foreign key (task_id) references public.task (task_id),

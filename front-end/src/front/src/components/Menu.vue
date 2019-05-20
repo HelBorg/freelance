@@ -1,20 +1,17 @@
 <template>
   <div id="menu" style="float:left; width:15%">
       <b-list-group variant="light">
-        <b-list-group-item style="border-radius:0" variant="outline-primary" :to="'tasks/my'">
+        <b-list-group-item style="border-radius:0" variant="outline-primary"  @click="my">
           My tasks
           <b-button @click="createNewTask" size="sm" variant="success" style="float:right">+</b-button>
         </b-list-group-item>
-        <b-list-group-item  variant="outline-primary" :to="'tasks/candidates'">
+        <b-list-group-item  variant="outline-primary"  @click="candidates">
           Candidates
         </b-list-group-item>
-        <b-list-group-item  variant="outline-primary" :to="'tasks/in_work'">
+        <b-list-group-item  variant="outline-primary"  @click="inWork">
           In work
         </b-list-group-item>
-        <b-list-group-item variant="secondary" @click="createNewTask">
-          Create New
-        </b-list-group-item>
-        <b-list-group-item  variant="outline-primary" :to="'tasks/search'">
+        <b-list-group-item  variant="outline-primary"  @click="search">
           Search
         </b-list-group-item>
         <b-list-group-item variant="outline-primary" @click="users">Users</b-list-group-item>
@@ -58,6 +55,18 @@
       },
       users() {
         router.push('/users');
+      },
+      my() {
+        router.push('/tasks/my');
+      },
+      candidates() {
+        router.push('/tasks/candidates');
+      },
+      search() {
+        router.push('/tasks/search');
+      },
+      inWork() {
+        router.push('/tasks/in_work');
       }
     }
   }

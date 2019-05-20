@@ -110,7 +110,7 @@
               skillsFilter: JSON.stringify(this.filter.skillsF)
                 .replace("[", "")
                 .replace("]", ""),
-              author: this.filter.selectedUser.id
+              author: this.filter.selectedUser.name
             },
             headers: {
               Authorization: 'Bearer ' + localStorage.getItem('JWT')

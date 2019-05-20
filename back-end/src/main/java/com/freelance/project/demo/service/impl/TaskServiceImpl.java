@@ -1,5 +1,7 @@
 package com.freelance.project.demo.service.impl;
 
+import com.freelance.project.demo.controller.ReviewController;
+import com.freelance.project.demo.controller.TaskController;
 import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.*;
 import com.freelance.project.demo.repository.PersonRepository;
@@ -32,6 +34,8 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private DozerBeanMapper mapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
+
     public void deleteTask(int id) {
         taskRepository.deleteById(id);
     }
@@ -51,7 +55,7 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.deleteAssignAndRevertStatus(taskId);
     }
 
-
+    @Transactional
     public Task createNew(Person person) {
 
         Task add = new Task();
@@ -68,6 +72,7 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.save(add);
     }
 
+    @Transactional
     public void updateTask(TaskDTO task) {
 
         Task updating = taskRepository.findByTaskId(task.getId());
@@ -77,6 +82,8 @@ public class TaskServiceImpl implements TaskService {
         updating.setDescription(task.getDescription());
         updating.setDeadline(task.getDeadline());
         updating.setAuthor(updating.getAuthor());
+
+        taskRepository.save(updating);
     }
 
     @Override
@@ -102,7 +109,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Page<Task> findAll(Filter filter, PageRequest request) {
         TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
+
         Specification<Task> spec = builder.build();
+        logger.info("!!!_____{}", spec);
         return taskRepository.findAll(spec, request);
     }
 

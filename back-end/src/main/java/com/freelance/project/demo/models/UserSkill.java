@@ -17,7 +17,7 @@ public class UserSkill implements Serializable {
     private int userSkillId;
 
     @Column(name = "level", nullable = false)
-    private String level;
+    private int level;
 
     @ManyToOne
     @JoinColumn(name = "person_id")

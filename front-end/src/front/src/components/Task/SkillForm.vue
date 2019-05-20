@@ -22,11 +22,11 @@
 
       <b-form-select v-model="skill_level" style="width:20%">
         <option :value="null">Select skill level</option>
-        <option value="bad">Bad</option>
-        <option value="semi-good">semi-good</option>
-        <option value="good">good</option>
-        <option value="semi-profi">semi-profi</option>
-        <option value="profi">profi</option>
+        <option value="1">Bad</option>
+        <option value="2">semi-good</option>
+        <option value="3">good</option>
+        <option value="4">semi-profi</option>
+        <option value="5">profi</option>
       </b-form-select>
 
       <b-button @click="addSkill" variant="success" class="p-1"> Add skill</b-button>

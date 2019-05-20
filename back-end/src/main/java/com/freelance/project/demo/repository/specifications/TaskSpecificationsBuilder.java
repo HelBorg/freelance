@@ -28,7 +28,7 @@ public class TaskSpecificationsBuilder {
         if (!filter.getAuthor().equals("")) {
             params.add(new SearchCriteria("author", ":", filter.getAuthor()));
         }
-        params.add(new SearchCriteria("status", ":", "PUBLISH"));
+        params.add(new SearchCriteria("status", ":", "PUBLISHED"));
     }
 
     //Building "or" and "and" separately, "or" for skills
