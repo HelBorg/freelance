@@ -17,8 +17,6 @@ import java.util.*;
 public class Filter {
 
     private String findName;
-    private Sort sort;
-    private String sortDir;
     private Date dateFrom;
     private Date dateTo;
     private Date dueFrom;
@@ -28,17 +26,6 @@ public class Filter {
     private List<SkillFilter> skills;
     private List<SkillFilter> filterSkillsBy;  //here presented all satisfying variants
 
-
-    public Filter() throws ParseException {
-        this.findName = "";
-        this.dateFrom = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
-                .parse("2019-01-01 00:00:00.000");
-        this.dateTo = new Date();
-        this.dueFrom = new Date();
-        this.dueTo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
-                .parse("3000-01-01 00:00:00.000");
-    }
-
     private Date dateConstructor(String date) throws ParseException {
         return date.length() > 0 ?
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
@@ -47,7 +34,7 @@ public class Filter {
     }
 
     public Filter(Integer id, String findName, String dateFrom, String dateTo, String dueFrom, String dueTo,
-                  Integer author, String skillsF, Sort sort, String sortDir) throws ParseException {
+                  Integer author, String skillsF) throws ParseException {
         this.skills = new ArrayList<>();
         //Retrieve data from request parameters and put it into Filter
         JSONArray json = new JSONArray("[" + skillsF + "]");
@@ -64,8 +51,32 @@ public class Filter {
         Date due_to = dateConstructor(dueTo);
 
         this.id = id;
-        this.sort = sort;
-        this.sortDir = sortDir;
+        this.findName = findName;
+        this.dateFrom = from;
+        this.dateTo = to;
+        this.dueFrom = due_from;
+        this.dueTo = due_to;
+        this.author = author;
+        this.FilterSkillsBy();
+    }
+
+    public Filter(String findName, String dateFrom, String dateTo, String dueFrom, String dueTo,
+                  Integer author, String skillsF) throws ParseException {
+        this.skills = new ArrayList<>();
+        //Retrieve data from request parameters and put it into Filter
+        JSONArray json = new JSONArray("[" + skillsF + "]");
+        for (int i = 0; i < json.length(); i++) {
+            if (!((JSONObject) json.get(i)).getString("name").equals("")) {
+                skills.add(new SkillFilter(((JSONObject) json.get(i)).getString("name"),
+                        ((JSONObject) json.get(i)).getInt("value")));
+            }
+        }
+
+        Date from = dateConstructor(dateFrom);
+        Date to = dateConstructor(dateTo);
+        Date due_from = dateConstructor(dueFrom);
+        Date due_to = dateConstructor(dueTo);
+
         this.findName = findName;
         this.dateFrom = from;
         this.dateTo = to;

@@ -64,6 +64,49 @@
         </p>
       </b-form-group>
 
+      <p>
+        <b-form-group id="input-group-3"
+                      label="Skills:"
+                      label-for="input-3"
+                      style="margin-bottom: 20px"
+                      label-class="font-weight-bold pt-0"
+                      class="input-group">
+          <b-container fluid v-for="(skillF,index) in filter.skillsF">
+            <b-row>
+              <b-col>
+                <b-form-select
+                  id="input-{{index}}"
+                  v-model="skillF.name">
+                  <option v-for="skill in getSkills.skills">
+                    {{skill.name}}
+                  </option>
+                </b-form-select>
+              </b-col>
+              <b-col cols="3"> Value: {{skillF.value}}
+              </b-col>
+              <b-col cols='1'>
+                <b-button @click="deleteSkill(index)" variant="primary"> -</b-button>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <b-form-input id="skill-range-{{skillF.name}}" v-model="skillF.value" type="range" min="1"
+                              max="5"></b-form-input>
+              </b-col>
+              <b-col cols="1"></b-col>
+            </b-row>
+            <b-row>
+              <h1>
+              </h1>
+            </b-row>
+          </b-container>
+        </b-form-group>
+        <b-button type="addSkill"
+                  variant="success"
+                  @click="addSkill">
+          Add Skill
+        </b-button>
+      </p>
 
 
       <p>

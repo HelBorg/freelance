@@ -307,7 +307,7 @@
                 self.created_time = data.createdTime.substring(0, 10);
                 self.deadline = data.deadline.substring(0, 10);
                 self.author_id = data.author.id;
-                self.assignedUser = data.assignedUser
+                self.assignedUser = data.assignedUser;
                 self.assignedName = data.assignedUser.name;
 
               })

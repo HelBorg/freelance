@@ -29,7 +29,7 @@ public class PersonController {
                                                    @RequestParam("page") Optional<Integer> pageNumber,
                                                    @RequestParam("findName") Optional<String> findName) {
         PageAndSort pageAndSort = new PageAndSort
-                (Sort.by("rating").descending(), pageNumber.orElse(0),
+                ("rating", "des", pageNumber.orElse(0),
                         pageSize.orElse(10), findName.orElse(""));
 
         Pager<PersonDTO> pager = personService.findAll(pageAndSort);

@@ -4,10 +4,8 @@
       <Navbar/>
     </div>
     <div>
-
       <Menu></Menu>
-
-      <div style="width: 80%; float: right" v-if="show">
+      <div style="width: 80%" v-if="show">
         <p>
           <b-table id="user"
                    :items="user"

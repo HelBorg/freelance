@@ -23,11 +23,9 @@ public class TaskSpecification implements Specification<Task> {
             System.out.println("Skills specification " + criteria.getValue() + " " + criteria.getField() + "\n");
             Join<TaskSkill, Task> taskSkillJoin = root.join("taskId");
             return builder.equal(taskSkillJoin.get(criteria.getField()), criteria.getValue());
-
         } else if (criteria.getKey().equals("author")) {
             Join<Task, Person> taskAuthorJoin = root.join("author");
-            return builder.equal(taskAuthorJoin.get("name"), criteria.getValue());
-
+            return builder.equal(taskAuthorJoin.get("personId"), criteria.getValue());
         } else if (criteria.getKey().equals("createdTime") || (criteria.getKey().equals("deadline"))) {
             if (criteria.getOperation().equalsIgnoreCase(">=")) {
                 return builder.greaterThanOrEqualTo(

@@ -147,7 +147,7 @@
           )
       },
       loadSkills(){
-        let self = this
+        let self = this.skills;
         if (self.$router.currentRoute.name === 'Task') {
           fetch('/api/v1/task-skill/' + self.$route.params.id, {
             method: 'GET',

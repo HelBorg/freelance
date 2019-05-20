@@ -30,8 +30,8 @@
                           class="m-md-2"
                           size="sm"
                           text="Direction">
-                <b-dropdown-item @click="changeSortDir('des')">From old to new</b-dropdown-item>
-                <b-dropdown-item @click="changeSortDir('asc')">From new to old</b-dropdown-item>
+                <b-dropdown-item @click="changeSortDir('des')">Descending</b-dropdown-item>
+                <b-dropdown-item @click="changeSortDir('asc')">Ascending</b-dropdown-item>
               </b-dropdown>
             </div>
             <div v-if="this.show" style="font-size:small">
@@ -94,12 +94,14 @@
     },
     methods: {
       retrieveTasks() {
-        axios.get('http://localhost:80/api/v1/task', {
+        let url = this.page.get == 'search' ? 'http://localhost:80/api/v1/task':
+          'http://localhost:80/api/v1/task/' + this.page.get + "/" + this.user_id;
+
+        axios.get( url, {
             params: {
               size: this.page.pageSize,
               page: this.page.currentPage,
               pageName: this.page.get,
-              id: this.user_id,
               find_name: this.filter.find_name,
               sortDir: this.sortDir,
               sort: this.sort,

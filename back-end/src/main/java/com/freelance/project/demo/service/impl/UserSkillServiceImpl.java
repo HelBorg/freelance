@@ -32,7 +32,7 @@ public class UserSkillServiceImpl implements UserSkillService {
         return userSkillRepository.findAllByPersonId(personRepository.findByPersonId(personId)).stream()
                 .map(entity -> mapper.map(entity, UserSkillDTO.class))
                 .collect(Collectors.toList());
-    };
+    }
 
     public void deleteTaskSkill(int id){
         userSkillRepository.delete(userSkillRepository.findByUserSkillId(id));

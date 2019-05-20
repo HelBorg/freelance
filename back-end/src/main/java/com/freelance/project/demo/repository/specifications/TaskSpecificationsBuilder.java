@@ -2,6 +2,7 @@ package com.freelance.project.demo.repository.specifications;
 
 import com.freelance.project.demo.controller.SkillController;
 import com.freelance.project.demo.models.Filter;
+import com.freelance.project.demo.models.SkillFilter;
 import com.freelance.project.demo.models.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +21,22 @@ public class TaskSpecificationsBuilder {
     public TaskSpecificationsBuilder(Filter filter) {
         params = new ArrayList<>();
         paramsSkills = new ArrayList<>();
+        logger.info("f{}f", filter.getFindName());
         params.add(new SearchCriteria("name", ":", filter.getFindName()));
         params.add(new SearchCriteria("createdTime", ">=", filter.getDateFrom()));
         params.add(new SearchCriteria("createdTime", "<=", filter.getDateTo()));
         params.add(new SearchCriteria("deadline", ">=", filter.getDueFrom()));
         params.add(new SearchCriteria("deadline", "<=", filter.getDueTo()));
-        if (!filter.getAuthor().equals("")) {
+        if (!filter.getAuthor().equals(-1)) {
             params.add(new SearchCriteria("author", ":", filter.getAuthor()));
         }
-        params.add(new SearchCriteria("status", ":", "PUBLISH"));
+        //params.add(new SearchCriteria("status", ":", "PUBLISHED"));
+        if (filter.getFilterSkillsBy().size() != 0) {
+            logger.info("{}",filter.getFilterSkillsBy());
+            for(SkillFilter skillFilter : filter.getFilterSkillsBy()) {
+                paramsSkills.add(new SearchCriteria(skillFilter.getName(), "skills", "=", skillFilter.getValueS()));
+            }
+        }
     }
 
     //Building "or" and "and" separately, "or" for skills
@@ -44,7 +52,6 @@ public class TaskSpecificationsBuilder {
 
         Specification result = specs.get(0);
         for (int i = 1; i < size; i++) {
-            System.out.println("ppp " + i + "\n");
             result = isOrPredicate ? Specification.where(result).or(specs.get(i))
                     : Specification.where(result).and(specs.get(i));
         }
@@ -54,11 +61,12 @@ public class TaskSpecificationsBuilder {
     public Specification<Task> build() {
         logger.info(" build {}", params);
         logger.info(" build: {}", paramsSkills);
-        Specification<Task> spec = this.buildPartly(true);
-        Specification<Task> spec1 = this.buildPartly(false);
-        Specification<Task> spec2 = Specification.where(spec1).and(spec);
-        logger.info("build: fff{}", spec2);
-        return Specification.where(this.buildPartly(false)).and(this.buildPartly(true));
+        Specification<Task> spec = this.buildPartly(false);
+        if (paramsSkills.size() != 0) {
+            logger.info("params.size() != 0");
+            spec = Specification.where(this.buildPartly(false)).and(this.buildPartly(true));
+        }
+        return spec;
     }
 
 }
