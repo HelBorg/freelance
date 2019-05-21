@@ -63,11 +63,10 @@ public class Filter {
     public Filter(String findName, String dateFrom, String dateTo, String dueFrom, String dueTo,
                   Integer author, String skillsF) throws ParseException {
         this.skills = new ArrayList<>();
-        System.out.println("Skilllllllllllll" + skillsF + "\n\n\n");
         //Retrieve data from request parameters and put it into Filter
         JSONArray json = new JSONArray("[" + skillsF + "]");
         for (int i = 0; i < json.length(); i++) {
-            if (((JSONObject) json.get(i)).getInt("id") == 0) {
+            if (((JSONObject) json.get(i)).getInt("id") != 0) {
                 skills.add(new SkillFilter(((JSONObject) json.get(i)).getInt("id"),
                         ((JSONObject) json.get(i)).getInt("value")));
             }

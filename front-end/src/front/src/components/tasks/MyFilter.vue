@@ -78,7 +78,8 @@
                   id="input-{{index}}"
                   v-model="skillF.id">
                   <option v-for="skill in getSkills.skills"
-                          :value="skill.id">
+                          :value="skill.id"
+                          @click="change(skill.id)">
                     {{skill.name}}
                   </option>
                 </b-form-select>
@@ -134,6 +135,7 @@
       </p>
     </b-form-group>
 
+    {{indicator}}
     <b-button size="sm" type="submit" variant="primary" @click="onSubmit">Submit</b-button>
     <b-button size="sm" type="reset" variant="danger" @click="onReset">Reset</b-button>
   </b-card>
@@ -168,6 +170,7 @@
             {id: 0, value: 0}
           ]
         },
+        indicator: 0,
         findUser: '',
       }
     },
@@ -224,6 +227,9 @@
         // Reset our form values
         this.refreshFilter();
         this.$emit('filter', this.filter);
+      },
+      change(id) {
+        this.indicator = id;
       },
       refreshFilter() {
         this.filter.find_name = '';

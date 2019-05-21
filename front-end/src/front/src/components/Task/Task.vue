@@ -43,7 +43,7 @@
               </div>
             </b-modal>
 
-            <b-button v-if="status === 'ASSIGNED' && assignedUser.id === userId" @click="updateStatus" variant="primary">Apply</b-button>
+            <b-button  @click="updateStatus" variant="primary">Apply</b-button>
             <b-button v-if="status === 'ASSIGNED' && assignedUser.id === userId" @click="revertStatus" variant="primary">Decline</b-button>
 
             <b-button v-if="status === 'IN_DESIGN'" @click="saveTask" variant="primary">Save</b-button>
@@ -60,7 +60,7 @@
           <b-modal ref="commit_delete" id="commit_delete" hide-footer>
             <template slot="modal-title">You really want to delete task?</template>
             <div style="float:right">
-              <b-button @click="$refs['commit_delete'].hide();" class="mt-3">Cansel</b-button>
+              <b-button @click="$refs['commit_delete'].hide();" class="mt-3">Cancel</b-button>
               <b-button class="mt-3" v-on:click="acceptDeleteHandler" variant="danger">Delete
               </b-button>
             </div>
@@ -74,7 +74,6 @@
           </div>
           <!-->
         </div> <!--end of header-->
-
       <hr/>
 
         <!--Description area-->

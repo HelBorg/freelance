@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="secondary">
+  <b-navbar toggleable="lg" type="dark" variant="secondary" style="margin-bottom: 10px">
     <!-- Надо найти картинку-->
 
     <b-navbar-brand :to="'/home'">Web-free</b-navbar-brand>
@@ -69,7 +69,4 @@
 </script>
 
 <style scoped>
- .margin-down-10{
-   margin-bottom: 10px;
- }
 </style>

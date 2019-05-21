@@ -49,6 +49,9 @@
                    hover
                    striped
                    @row-clicked="goToUser">
+            <template slot="place_in_rating" slot-scope="row">
+              {{row.item.placeInRating}}
+            </template>
             <template slot="skills" slot-scope="row">
               <div v-for="skill in row.item.skills">
                 {{skill.skillName.name}}:{{skill.level}}

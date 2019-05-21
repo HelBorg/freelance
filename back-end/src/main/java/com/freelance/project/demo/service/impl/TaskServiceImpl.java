@@ -98,22 +98,30 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Page<Task> getByCandidateId(PageRequest request, Filter filter) {
+        TaskSpecification taskSpecification = new TaskSpecification(
+                new SearchCriteria("candidateId", ":", filter.getId()));
+        TaskSpecification taskSpecification2 = new TaskSpecification(
+                new SearchCriteria("status", ":", "PUBLISHED"));
         TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
-        Specification<Task> spec = builder.build();
+        Specification<Task> spec = Specification.where(builder.build()).and(taskSpecification).and(taskSpecification2);
         return taskRepository.findAll(spec, request);
     }
 
     @Override
     public Page<Task> getByAuthorId(PageRequest request, Filter filter) {
+        TaskSpecification taskSpecification = new TaskSpecification(
+                new SearchCriteria("author", ":", filter.getId()));
         TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
-        Specification<Task> spec = builder.build();
+        Specification<Task> spec = Specification.where(builder.build()).and(taskSpecification);
         return taskRepository.findAll(spec, request);
     }
 
     @Override
     public Page<Task> getByAssignedUserId(PageRequest request, Filter filter) {
+        TaskSpecification taskSpecification = new TaskSpecification(
+                new SearchCriteria("assignedUserId", ":", filter.getId()));
         TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
-        Specification<Task> spec = builder.build();
+        Specification<Task> spec = Specification.where(builder.build()).and(taskSpecification);
         return taskRepository.findAll(spec, request);
     }
 
