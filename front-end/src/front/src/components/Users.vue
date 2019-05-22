@@ -4,10 +4,8 @@
       <Navbar/>
     </div>
     <div>
-
       <Menu></Menu>
-
-      <div style="width: 80%; float: right" v-if="show">
+      <div style="width: 80%" v-if="show">
         <p>
           <b-table id="user"
                    :items="user"
@@ -52,7 +50,7 @@
                    striped
                    @row-clicked="goToUser">
             <template slot="place_in_rating" slot-scope="row">
-              {{filter.currentPage*filter.pageSize + row.index + 1}}
+              {{row.item.placeInRating}}
             </template>
             <template slot="skills" slot-scope="row">
               <div v-for="skill in row.item.skills">
@@ -100,7 +98,7 @@
         findUser: '',
         fields: {
           place_in_rating: {
-            name: 'place',
+            name: 'placeInRating',
             label: 'Place in rating'
           },
           name: {

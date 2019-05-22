@@ -64,6 +64,51 @@
         </p>
       </b-form-group>
 
+      <p>
+        <b-form-group id="input-group-3"
+                      label="Skills:"
+                      label-for="input-3"
+                      style="margin-bottom: 20px"
+                      label-class="font-weight-bold pt-0"
+                      class="input-group">
+          <b-container fluid v-for="(skillF,index) in filter.skillsF">
+            <b-row>
+              <b-col>
+                <b-form-select
+                  id="input-{{index}}"
+                  v-model="skillF.id">
+                  <option v-for="skill in getSkills.skills"
+                          :value="skill.id"
+                          @click="change(skill.id)">
+                    {{skill.name}}
+                  </option>
+                </b-form-select>
+              </b-col>
+              <b-col cols="3"> {{skillF.value}}
+              </b-col>
+              <b-col cols='1'>
+                <b-button @click="deleteSkill(index)" variant="primary"> -</b-button>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <b-form-input id="skill-range-{{skillF.name}}" v-model="skillF.value" type="range" min="1"
+                              max="5"></b-form-input>
+              </b-col>
+              <b-col cols="1"></b-col>
+            </b-row>
+            <b-row>
+              <h1>
+              </h1>
+            </b-row>
+          </b-container>
+        </b-form-group>
+        <b-button type="addSkill"
+                  variant="success"
+                  @click="addSkill">
+          Add Skill
+        </b-button>
+      </p>
 
 
       <p>
@@ -90,6 +135,7 @@
       </p>
     </b-form-group>
 
+    {{indicator}}
     <b-button size="sm" type="submit" variant="primary" @click="onSubmit">Submit</b-button>
     <b-button size="sm" type="reset" variant="danger" @click="onReset">Reset</b-button>
   </b-card>
@@ -121,9 +167,10 @@
           due_to: '',
           selectedUser: {name: ''},
           skillsF: [
-            {name: '', value: 0}
+            {id: 0, value: 0}
           ]
         },
+        indicator: 0,
         findUser: '',
       }
     },
@@ -160,7 +207,7 @@
       // Filter
       addSkill() {
         this.filter.skillsF.push({
-          name: '',
+          id: 0,
           value: 0
         });
         this.show = Object(false);
@@ -181,6 +228,9 @@
         this.refreshFilter();
         this.$emit('filter', this.filter);
       },
+      change(id) {
+        this.indicator = id;
+      },
       refreshFilter() {
         this.filter.find_name = '';
         this.filter.date_from = '';
@@ -188,7 +238,7 @@
         this.filter.due_from = '';
         this.filter.due_to = '';
         this.filter.skillsF = [
-          {name: '', value: 0}
+          {id: 0, value: 0}
         ];
         this.filter.selectedUser = {name: ''};
         // Trick to reset/clear native browser form validation state

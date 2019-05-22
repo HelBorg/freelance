@@ -1,26 +1,22 @@
 package com.freelance.project.demo.service.impl;
 
-import com.freelance.project.demo.controller.ReviewController;
-import com.freelance.project.demo.controller.TaskController;
 import com.freelance.project.demo.dto.TaskDTO;
 import com.freelance.project.demo.models.*;
 import com.freelance.project.demo.repository.PersonRepository;
 import com.freelance.project.demo.repository.TaskRepository;
+import com.freelance.project.demo.repository.specifications.SearchCriteria;
+import com.freelance.project.demo.repository.specifications.TaskSpecification;
 import com.freelance.project.demo.repository.specifications.TaskSpecificationsBuilder;
 import com.freelance.project.demo.service.TaskService;
 import org.dozer.DozerBeanMapper;
-import org.omg.PortableInterceptor.INACTIVE;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -34,7 +30,6 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private DozerBeanMapper mapper;
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
 
     public void deleteTask(int id) {
         taskRepository.deleteById(id);
@@ -74,7 +69,6 @@ public class TaskServiceImpl implements TaskService {
 
     @Transactional
     public void updateTask(TaskDTO task) {
-
         Task updating = taskRepository.findByTaskId(task.getId());
 
         updating.setName(task.getName());
@@ -91,29 +85,45 @@ public class TaskServiceImpl implements TaskService {
         return mapper.map(taskRepository.findByTaskId(id), TaskDTO.class);
     }
 
-    @Override
-    public Page<Task> getByCandidateId(PageRequest request, Integer id) {
-        return taskRepository.findAllByCandidateId(id, request);
-    }
 
     @Override
-    public Page<Task> getByAuthorId(PageRequest request, Integer id) {
-        return taskRepository.findAllByAuthor(id, request);
-    }
-
-    @Override
-    public Page<Task> getByAssignedUserId(PageRequest request, Integer id) {
-        return taskRepository.findAllByAssignedUser(id, request);
-    }
-
-    @Override
-    public Page<Task> findAll(Filter filter, PageRequest request) {
+    public Page<Task> findAll(PageRequest request, Filter filter) {
+        TaskSpecification taskSpecification = new TaskSpecification(
+                new SearchCriteria("status", ":", "PUBLISHED"));
         TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
-
-        Specification<Task> spec = builder.build();
-        logger.info("!!!_____{}", spec);
+        Specification<Task> spec = Specification.where(builder.build()).and(taskSpecification);
         return taskRepository.findAll(spec, request);
     }
+
+    @Override
+    public Page<Task> getByCandidateId(PageRequest request, Filter filter) {
+        TaskSpecification taskSpecification = new TaskSpecification(
+                new SearchCriteria("candidateId", ":", filter.getId()));
+        TaskSpecification taskSpecification2 = new TaskSpecification(
+                new SearchCriteria("status", ":", "PUBLISHED"));
+        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
+        Specification<Task> spec = Specification.where(builder.build()).and(taskSpecification).and(taskSpecification2);
+        return taskRepository.findAll(spec, request);
+    }
+
+    @Override
+    public Page<Task> getByAuthorId(PageRequest request, Filter filter) {
+        TaskSpecification taskSpecification = new TaskSpecification(
+                new SearchCriteria("author", ":", filter.getId()));
+        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
+        Specification<Task> spec = Specification.where(builder.build()).and(taskSpecification);
+        return taskRepository.findAll(spec, request);
+    }
+
+    @Override
+    public Page<Task> getByAssignedUserId(PageRequest request, Filter filter) {
+        TaskSpecification taskSpecification = new TaskSpecification(
+                new SearchCriteria("assignedUserId", ":", filter.getId()));
+        TaskSpecificationsBuilder builder = new TaskSpecificationsBuilder(filter);
+        Specification<Task> spec = Specification.where(builder.build()).and(taskSpecification);
+        return taskRepository.findAll(spec, request);
+    }
+
 
     private String selectNextTaskStatus(String status) {
         LinkedList<String> statuses = new LinkedList<>();

@@ -12,21 +12,28 @@ public class PageAndSort implements Serializable {
     private int currentPage;
     private int pageSize;
     private String findName;
-    private String pageName; //parameter for tasks
     private int personId; //extra parameter
 
-    public PageAndSort(int personId, String pageName, Sort sort, int currentPage, int pageSize) {
+    public PageAndSort(int personId, String sort, String sortDir, int currentPage, int pageSize) {
         this.personId = personId;
-        this.sort = sort;
+        this.sort = Sort.by(sort).descending();
+        if (sortDir.equals("asc")) {this.sort = this.sort.ascending();}
         this.currentPage = currentPage;
         this.pageSize = pageSize;
-        this.pageName = pageName;
     }
 
-    public PageAndSort(Sort sort, int currentPage, int pageSize, String findName) {
-        this.sort = sort;
+    public PageAndSort(String sort, String sortDir, int currentPage, int pageSize, String findName) {
+        this.sort = Sort.by(sort).descending();
+        if (sortDir.equals("asc")) {this.sort = this.sort.ascending();}
         this.currentPage = currentPage;
         this.pageSize = pageSize;
         this.findName = findName;
+    }
+
+    public PageAndSort(String sort, String sortDir, int currentPage, int pageSize) {
+        this.sort = Sort.by(sort).descending();
+        if (sortDir.equals("asc")) {this.sort = this.sort.ascending();}
+        this.currentPage = currentPage;
+        this.pageSize = pageSize;
     }
 }

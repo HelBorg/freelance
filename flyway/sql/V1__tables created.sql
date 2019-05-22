@@ -4,6 +4,7 @@ name varchar unique,
 password varchar not null,
 role varchar not null,
 rating integer not null,
+place_in_rating integer not null,
 email varchar not null unique,
 tasks_done integer
 );

@@ -20,7 +20,7 @@ public class TaskSkill implements Serializable {
     private int level;
 
     @ManyToOne
-    @JoinColumn(name = "task_id")
+    @JoinColumn(name = "task_id", referencedColumnName = "task_id")
     private Task taskId;
 
     @ManyToOne

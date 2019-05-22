@@ -1,5 +1,6 @@
 package com.freelance.project.demo.service.impl;
 
+import com.freelance.project.demo.controller.TaskController;
 import com.freelance.project.demo.dto.TaskSkillDTO;
 import com.freelance.project.demo.dto.UserSkillDTO;
 import com.freelance.project.demo.models.Person;
@@ -10,6 +11,8 @@ import com.freelance.project.demo.repository.TaskRepository;
 import com.freelance.project.demo.repository.TaskSkillRepository;
 import com.freelance.project.demo.service.TaskSkillService;
 import org.dozer.DozerBeanMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +34,9 @@ public class TaskSkillServiceImpl implements TaskSkillService {
     @Autowired
     private DozerBeanMapper mapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
+
+
     public List<TaskSkillDTO> findAllForTask (int taskId){
         return taskSkillRepository.findAllByTaskId(taskRepository.findByTaskId(taskId)).stream()
                 .map(entity -> mapper.map(entity, TaskSkillDTO.class))
@@ -42,12 +48,10 @@ public class TaskSkillServiceImpl implements TaskSkillService {
     }
 
     public void addNewTaskSkill(TaskSkillDTO taskSkillDTO, int taskId) {
-
         TaskSkill newTaskSkill = new TaskSkill();
         newTaskSkill.setTaskId(taskRepository.findByTaskId(taskId));
         newTaskSkill.setLevel(taskSkillDTO.getLevel());
         newTaskSkill.setSkillId(skillRepository.findSkillByName(taskSkillDTO.getSkillName().getName()));
-
         taskSkillRepository.save(newTaskSkill);
 
     }

@@ -20,14 +20,13 @@ public class TaskSpecification implements Specification<Task> {
     public Predicate toPredicate
             (Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         if (criteria.getKey().equals("skills")) {
-            System.out.println("Skills specification " + criteria.getValue() + " " + criteria.getField() + "\n");
-            Join<TaskSkill, Task> taskSkillJoin = root.join("taskId");
-            return builder.equal(taskSkillJoin.get(criteria.getField()), criteria.getValue());
-
+            Join<Task, TaskSkill> taskSkillJoin = root.join("taskSkills");
+            Predicate skillValue = builder.lessThanOrEqualTo(taskSkillJoin.get("level"), (int) criteria.getValue());
+            Predicate skillId = builder.equal(taskSkillJoin.get("skillId"), criteria.getId());
+            return builder.and(skillId, skillValue);
         } else if (criteria.getKey().equals("author")) {
             Join<Task, Person> taskAuthorJoin = root.join("author");
-            return builder.equal(taskAuthorJoin.get("name"), criteria.getValue());
-
+            return builder.equal(taskAuthorJoin.get("personId"), criteria.getValue());
         } else if (criteria.getKey().equals("createdTime") || (criteria.getKey().equals("deadline"))) {
             if (criteria.getOperation().equalsIgnoreCase(">=")) {
                 return builder.greaterThanOrEqualTo(
@@ -36,7 +35,14 @@ public class TaskSpecification implements Specification<Task> {
                 return builder.lessThanOrEqualTo(
                         root.<Date>get(criteria.getKey()), (Date) criteria.getValue());
             }
+        } else if (criteria.getKey().equals("candidateId")) {
+            Join<Task, Person> taskCandidateJoin = root.join("candidateTasks");
+            return builder.equal(taskCandidateJoin.get("personId"), criteria.getValue());
+        } else if (criteria.getKey().equals("assignedUserId")) {
+            Join<Task, Person> taskAssignedUser = root.join("assignedUser");
+            return builder.equal(taskAssignedUser.get("personId"), criteria.getValue());
         }
+        query.distinct(true);
         return builder.like(root.get(criteria.getKey()), "%" + criteria.getValue() + "%");
     }
 }

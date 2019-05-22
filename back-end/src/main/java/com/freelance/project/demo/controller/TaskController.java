@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -85,13 +84,25 @@ public class TaskController {
         return taskService.loadTask(taskId);
     }
 
+    public PageRequest buildBeforeGetAll(PageAndSort pageAndSort) {
+        return PageRequest.of(pageAndSort.getCurrentPage(), pageAndSort.getPageSize(), pageAndSort.getSort());
+    }
+
+    public ResponseEntity<Pager<TaskDTO>> buildAfterGetAll(Page<Task> page, PageRequest request, PageAndSort pageAndSort) {
+        boolean hasPreviousPage = request.getPageNumber() != 0;
+        boolean hasNextPage = page.getTotalPages() - 1 > request.getPageNumber();
+        List<TaskDTO> list = page.getContent().stream()
+                .map(entity -> mapper.map(entity, TaskDTO.class))
+                .collect(Collectors.toList());
+        logger.info("Request to get tasks: {}", page);
+        return ResponseEntity.ok().body(new Pager<>(list, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort));
+    }
+
     @GetMapping
-    public ResponseEntity<Pager<TaskDTO>> getAll(@RequestParam("id") Optional<Integer> id,            //user_id if needed
-                                                 @RequestParam("size") Optional<Integer> pageSize,
+    public ResponseEntity<Pager<TaskDTO>> getAll(@RequestParam("size") Optional<Integer> pageSize,
                                                  @RequestParam("page") Optional<Integer> pageNumber,
                                                  @RequestParam("sort") Optional<String> sort,
                                                  @RequestParam("sortDir") Optional<String> sortDir,
-                                                 @RequestParam("pageName") Optional<String> pageName,
                                                  //Filter
                                                  @RequestParam("find_name") Optional<String> findName,
                                                  @RequestParam("date_from") Optional<String> date_from,
@@ -99,50 +110,98 @@ public class TaskController {
                                                  @RequestParam("due_from") Optional<String> due_from,
                                                  @RequestParam("due_to") Optional<String> due_to,
                                                  @RequestParam("skillsFilter") Optional<String> skillsF,
-                                                 @RequestParam("author") Optional<String> authorName
+                                                 @RequestParam("author") Optional<Integer> authorName
     ) throws ParseException {
-        Sort sortS = Sort.by(sort.orElse("taskId")).descending();
-        if (sortDir.orElse("des").equals("asc")) {
-            sortS = sortS.ascending();
-        }
-
-        PageRequest request = PageRequest.of(pageNumber.orElse(0),
-                pageSize.orElse(5), sortS);
-        Page<Task> page;
-
-        switch (pageName.orElse("tasks")) {
-            case "candidates":
-                page = taskService.getByCandidateId(request, id.orElse(null));
-                break;
-            case "my":
-                page = taskService.getByAuthorId(request, id.orElse(null));
-                break;
-            case "in_work":
-                page = taskService.getByAssignedUserId(request, id.orElse(null));
-                break;
-            default:
-                Filter filter = new Filter(id.orElse(0), findName.orElse(""),
-                        date_from.equals("") ? "2019-01-01 00:00:00.000" : date_from.get(),
-                        date_to.orElse(""), due_from.orElse(""),
-                        due_to.equals("") ? "3000-01-01 00:00:00.000" : due_to.get(),
-                        authorName.orElse(""), skillsF.orElse(""), sortS, sortDir.orElse("asc"));
-                page = taskService.findAll(filter, request);
-                break;
-        }
-        boolean hasPreviousPage = request.getPageNumber() != 0;
-        boolean hasNextPage = page.getTotalPages() - 1 > request.getPageNumber();
-
-
-        List<TaskDTO> list = page.getContent().stream()
-                .map(entity -> mapper.map(entity, TaskDTO.class))
-                .collect(Collectors.toList());
-        PageAndSort pageAndSort = new PageAndSort(id.orElse(0), pageName.orElse("tasks"), sortS,
+        logger.info("skills {} 00000", skillsF.get());
+        PageAndSort pageAndSort = new PageAndSort(sort.orElse("time_created"), sortDir.orElse("des"),
                 pageNumber.orElse(0), pageSize.orElse(5));
-        logger.info("Request to get tasks: {}", page);
-
-        return ResponseEntity.ok().body(new Pager<>(list, hasPreviousPage, hasNextPage, page.getTotalPages(), pageAndSort));
+        PageRequest request = buildBeforeGetAll(pageAndSort);
+        Page<Task> page = taskService.findAll(request, new Filter(findName.orElse(""),
+                date_from.orElse("").equals("") ? "2019-01-01 00:00:00.000" : date_from.get(),
+                date_to.orElse(""), due_from.orElse(""),
+                due_to.orElse("").equals("") ? "3000-01-01 00:00:00.000" : due_to.get(),
+                authorName.orElse(-1), skillsF.orElse("")));
+        return buildAfterGetAll(page, request, pageAndSort);
     }
 
+    @GetMapping("/candidates/{id}")
+    public ResponseEntity<Pager<TaskDTO>> getAllByCandidateId(@PathVariable int id,
+                                                              @RequestParam("size") Optional<Integer> pageSize,
+                                                              @RequestParam("page") Optional<Integer> pageNumber,
+                                                              @RequestParam("sort") Optional<String> sort,
+                                                              @RequestParam("sortDir") Optional<String> sortDir,
+                                                              //Filter
+                                                              @RequestParam("find_name") Optional<String> findName,
+                                                              @RequestParam("date_from") Optional<String> date_from,
+                                                              @RequestParam("date_to") Optional<String> date_to,
+                                                              @RequestParam("due_from") Optional<String> due_from,
+                                                              @RequestParam("due_to") Optional<String> due_to,
+                                                              @RequestParam("skillsFilter") Optional<String> skillsF,
+                                                              @RequestParam("author") Optional<Integer> authorName
+    ) throws ParseException {
+        PageAndSort pageAndSort = new PageAndSort(id,
+                sort.orElse("time_created"), sortDir.orElse("des"),
+                pageNumber.orElse(0), pageSize.orElse(5));
+        PageRequest request = buildBeforeGetAll(pageAndSort);
+        Page<Task> page = taskService.getByCandidateId(request, new Filter(id, findName.orElse(""),
+                date_from.orElse("").equals("") ? "2019-01-01 00:00:00.000" : date_from.get(),
+                date_to.orElse(""), due_from.orElse(""),
+                due_to.orElse("").equals("") ? "3000-01-01 00:00:00.000" : due_to.get(),
+                authorName.orElse(-1), skillsF.orElse("")));
+        return buildAfterGetAll(page, request, pageAndSort);
+    }
 
+    @GetMapping("/in_work/{id}")
+    public ResponseEntity<Pager<TaskDTO>> getAllByAssignedUserId(@PathVariable int id,
+                                                                 @RequestParam("size") Optional<Integer> pageSize,
+                                                                 @RequestParam("page") Optional<Integer> pageNumber,
+                                                                 @RequestParam("sort") Optional<String> sort,
+                                                                 @RequestParam("sortDir") Optional<String> sortDir,
+                                                                 //Filter
+                                                                 @RequestParam("find_name") Optional<String> findName,
+                                                                 @RequestParam("date_from") Optional<String> date_from,
+                                                                 @RequestParam("date_to") Optional<String> date_to,
+                                                                 @RequestParam("due_from") Optional<String> due_from,
+                                                                 @RequestParam("due_to") Optional<String> due_to,
+                                                                 @RequestParam("skillsFilter") Optional<String> skillsF,
+                                                                 @RequestParam("author") Optional<Integer> authorName
+    ) throws ParseException {
+        PageAndSort pageAndSort = new PageAndSort(id,
+                sort.orElse("time_created"), sortDir.orElse("des"),
+                pageNumber.orElse(0), pageSize.orElse(5));
+        PageRequest request = buildBeforeGetAll(pageAndSort);
+        Page<Task> page = taskService.getByAssignedUserId(request, new Filter(id, findName.orElse(""),
+                date_from.orElse("").equals("") ? "2019-01-01 00:00:00.000" : date_from.get(),
+                date_to.orElse(""), due_from.orElse(""),
+                due_to.orElse("").equals("") ? "3000-01-01 00:00:00.000" : due_to.get(),
+                authorName.orElse(-1), skillsF.orElse("")));
+        return buildAfterGetAll(page, request, pageAndSort);
+    }
 
+    @GetMapping("/my/{id}")
+    public ResponseEntity<Pager<TaskDTO>> getAllByAuthorId(@PathVariable int id,
+                                                                 @RequestParam("size") Optional<Integer> pageSize,
+                                                                 @RequestParam("page") Optional<Integer> pageNumber,
+                                                                 @RequestParam("sort") Optional<String> sort,
+                                                                 @RequestParam("sortDir") Optional<String> sortDir,
+                                                                 //Filter
+                                                                 @RequestParam("find_name") Optional<String> findName,
+                                                                 @RequestParam("date_from") Optional<String> date_from,
+                                                                 @RequestParam("date_to") Optional<String> date_to,
+                                                                 @RequestParam("due_from") Optional<String> due_from,
+                                                                 @RequestParam("due_to") Optional<String> due_to,
+                                                                 @RequestParam("skillsFilter") Optional<String> skillsF,
+                                                                 @RequestParam("author") Optional<Integer> authorName
+    ) throws ParseException {
+        PageAndSort pageAndSort = new PageAndSort(id,
+                sort.orElse("time_created"), sortDir.orElse("des"),
+                pageNumber.orElse(0), pageSize.orElse(5));
+        PageRequest request = buildBeforeGetAll(pageAndSort);
+        Page<Task> page = taskService.getByAuthorId(request, new Filter(id, findName.orElse(""),
+                date_from.orElse("").equals("") ? "2019-01-01 00:00:00.000" : date_from.get(),
+                date_to.orElse(""), due_from.orElse(""),
+                due_to.orElse("").equals("") ? "3000-01-01 00:00:00.000" : due_to.get(),
+                authorName.orElse(-1), skillsF.orElse("")));
+        return buildAfterGetAll(page, request, pageAndSort);
+    }
 }

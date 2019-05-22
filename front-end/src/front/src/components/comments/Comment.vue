@@ -8,10 +8,6 @@
       <span class="text-muted small">commented {{comment.createdTime.substring(0, 10)}}</span>
 
       <b-button
-        v-if="(comment.user.id !== authorId &&
-                  currentUserId === authorId) && (
-                  status === 'PUBLISHED' ||
-                  status === 'ASSIGNED')"
         @click="assignUser(comment.user.id)" style="float:right" variant="outline-success" class="ml-3 p-1">
         Assign this user
       </b-button>
@@ -139,7 +135,7 @@
           )
       },
       addSubHandler(){
-        let self = this;
+        let self = this
         self.loadSubComments()
         self.reloadSubComments()
       }

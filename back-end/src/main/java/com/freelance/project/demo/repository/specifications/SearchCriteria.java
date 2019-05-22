@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class SearchCriteria {
     private String key;
-    private String field; //for skills
+    private Integer id; //for skills
     private String operation;
     private Object value;
 
@@ -15,11 +15,10 @@ public class SearchCriteria {
         this.value = value;
     }
 
-    public SearchCriteria(String key, String field, String operation, Object value) {
+    public SearchCriteria(String key, Integer id, String operation, Object value) {
         this.key = key;
-        this.field = field;
+        this.id = id;
         this.operation = operation;
         this.value = value;
-        System.out.println(this.value);
     }
 }

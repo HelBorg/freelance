@@ -26,6 +26,9 @@ public class Person {
     @Column(name = "rating")
     private int rating;
 
+    @Column(name = "place_in_rating", nullable = false)
+    private int placeInRating;
+
     @Column(name = "tasks_done")
     private int tasksDone;
 

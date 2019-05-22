@@ -50,17 +50,14 @@ public class PersonServiceImpl implements PersonService {
     }
 
     public PersonDTO getById(int id) {
-        PersonDTO person = mapper.map(personRepository.findByPersonId(id), PersonDTO.class);
-        person.setPlaceInRating(personRepository.countRaiting(person.getId()));
-
-        return person;
+        return mapper.map(personRepository.findByPersonId(id), PersonDTO.class);
     }
 
     public void updateRating(int id, int rate) {
         Person updated = personRepository.findByPersonId(id);
         updated.setRating(updated.getRating() + rate);
         updated.setTasksDone(updated.getTasksDone() + 1);
-
+        updated.setPlaceInRating(personRepository.countRaiting(updated.getRating()) + 1);
         personRepository.save(updated);
     }
 
@@ -75,7 +72,7 @@ public class PersonServiceImpl implements PersonService {
         person.setRating(0);
         person.setRole("user");
         person.setUserSkills(Collections.EMPTY_LIST);
-
+        person.setPlaceInRating(personRepository.countRaiting(0) + 1);
         personRepository.save(person);
     }
 }

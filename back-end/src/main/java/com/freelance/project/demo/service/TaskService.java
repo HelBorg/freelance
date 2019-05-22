@@ -22,12 +22,12 @@ public interface TaskService {
 
     void deleteAssignAndRevertStatus(int taskId);
 
-    Page<Task> getByAuthorId(PageRequest request, Integer id);
+    Page<Task> getByAuthorId(PageRequest request, Filter filter);
 
-    Page<Task> getByAssignedUserId(PageRequest request, Integer id);
+    Page<Task> getByAssignedUserId(PageRequest request, Filter filter);
 
-    Page<Task> getByCandidateId(PageRequest request, Integer id);
+    Page<Task> getByCandidateId(PageRequest request, Filter filter);
 
-    Page<Task> findAll(Filter filter, PageRequest request);
+    Page<Task> findAll(PageRequest request, Filter filter);
 
 }
