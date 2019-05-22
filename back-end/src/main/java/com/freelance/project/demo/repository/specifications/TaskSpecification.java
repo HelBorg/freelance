@@ -21,7 +21,7 @@ public class TaskSpecification implements Specification<Task> {
             (Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         if (criteria.getKey().equals("skills")) {
             Join<Task, TaskSkill> taskSkillJoin = root.join("taskSkills");
-            Predicate skillValue = builder.equal(taskSkillJoin.get("level"), criteria.getValue());
+            Predicate skillValue = builder.lessThanOrEqualTo(taskSkillJoin.get("level"), (int) criteria.getValue());
             Predicate skillId = builder.equal(taskSkillJoin.get("skillId"), criteria.getId());
             return builder.and(skillId, skillValue);
         } else if (criteria.getKey().equals("author")) {

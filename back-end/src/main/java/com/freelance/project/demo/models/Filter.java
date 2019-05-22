@@ -24,7 +24,6 @@ public class Filter {
     private Integer id; //my id for filtering
     private Integer author;
     private List<SkillFilter> skills;
-    private List<SkillFilter> filterSkillsBy;  //here presented all satisfying variants
 
     private Date dateConstructor(String date) throws ParseException {
         return date.length() > 0 ?
@@ -57,7 +56,6 @@ public class Filter {
         this.dueFrom = due_from;
         this.dueTo = due_to;
         this.author = author;
-        this.FilterSkillsBy();
     }
 
     public Filter(String findName, String dateFrom, String dateTo, String dueFrom, String dueTo,
@@ -83,23 +81,5 @@ public class Filter {
         this.dueFrom = due_from;
         this.dueTo = due_to;
         this.author = author;
-        this.FilterSkillsBy();
-    }
-
-    //Создаем список skill-значение, которые нам подходят
-    private void FilterSkillsBy() {
-        Map<Integer, String> map = new HashMap<>();
-        map.put(0, "bad");
-        map.put(1, "semi-good");
-        map.put(2, "good");
-        map.put(3, "semi-profi");
-        map.put(4, "profi");
-
-        filterSkillsBy = new ArrayList<>();
-        for (int i = 0; i < this.skills.size(); i++) {
-            for (int j = 0; j < this.skills.get(i).getValue(); j++) {
-                filterSkillsBy.add(new SkillFilter(this.skills.get(i).getId(), map.get(j)));
-            }
-        }
     }
 }

@@ -31,9 +31,9 @@ public class TaskSpecificationsBuilder {
             params.add(new SearchCriteria("author", ":", filter.getAuthor()));
         }
         //params.add(new SearchCriteria("status", ":", "PUBLISHED"));
-        if (filter.getFilterSkillsBy().size() != 0) {
-            for(SkillFilter skillFilter : filter.getFilterSkillsBy()) {
-                paramsSkills.add(new SearchCriteria("skills", skillFilter.getId(), "=", skillFilter.getValueS()));
+        if (filter.getSkills().size() != 0) {
+            for(SkillFilter skillFilter : filter.getSkills()) {
+                paramsSkills.add(new SearchCriteria("skills", skillFilter.getId(), "<=", skillFilter.getValue()));
             }
         }
     }
